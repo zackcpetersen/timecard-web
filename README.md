@@ -1,4 +1,5 @@
 # timecard-web
+Timecard app for employee time tracking and project management
 
 ## Project setup
 ```
