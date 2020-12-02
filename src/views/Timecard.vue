@@ -1,6 +1,5 @@
 <template>
     <v-container fill-height>
-
             <v-col>
             <v-row justify="center">
                 <p>Welcome {{ user }}!</p>
@@ -11,27 +10,29 @@
 
                 <v-form ref="form" v-model="valid" lazy-validation>
                     <v-row justify="center" class="mb-2 mt-8">
-                        <v-btn color="purple" style="width: 13em;" v-model="clockIn" ripple @click="clockIn = !clockIn" x-large raised rounded outlined>
-                            {{ activeClock }}
+                        <v-btn color="secondary" style="width: 13em;" v-model="clockIn" ripple @click="clockIn = !clockIn" x-large rounded text elevation="3">
+                            <v-row justify="start"><v-col cols="auto"><v-icon color="primary">{{ activeClock.icon }}</v-icon></v-col></v-row>
+                            <v-row><v-col cols="auto">{{ activeClock.text }}</v-col></v-row>
                         </v-btn>
                     </v-row>
 
                     <v-row justify="center" class="mb-2">
-                        <v-btn color="purple" style="width: 13em;" v-if="clockIn" v-model="pause" ripple @click="pause = !pause" x-large raised rounded outlined>
-                            {{ activePause }}
+                        <v-btn color="secondary" style="width: 13em;" v-if="clockIn" v-model="pause" ripple @click="pause = !pause" x-large rounded text elevation="3">
+                            <v-row justify="start"><v-col cols="auto"><v-icon color="primary">{{ activePause.icon }}</v-icon></v-col></v-row>
+                            <v-row><v-col cols="auto">{{ activePause.text }}</v-col></v-row>
                         </v-btn>
                     </v-row>
 
                     <v-row justify="center" class="mb-2">
-                        <v-btn color="blue" style="width: 13em;" v-if="clockIn" ripple x-large raised rounded outlined>
-                            <v-icon class="mr-3">mdi-image-multiple-outline</v-icon>
-                            Upload Images
+                        <v-btn color="secondary" style="width: 13em;" v-if="clockIn" ripple x-large rounded text elevation="3">
+                            <v-row justify="start"><v-col cols="auto"><v-icon color="primary">{{ imagesBtn.icon }}</v-icon></v-col></v-row>
+                            <v-row><v-col>{{ imagesBtn.text }}</v-col></v-row>
                         </v-btn>
                     </v-row>
 
                     <v-row justify="center">
                         <v-col cols="auto">
-                            <v-select :items="projects" v-if="clockIn" label="Select Project" class="my-10"></v-select>
+                            <v-select :items="projects" v-if="clockIn" label="Select Project" class=""></v-select>
                         </v-col>
                     </v-row>
                 </v-form>
@@ -48,7 +49,8 @@
                 user: 'Zack',
                 clockIn: false,
                 pause: false,
-                projects: ['Home Remodel', 'Hotel RL', 'Park City Restaurant']
+                projects: ['Home Remodel', 'Hotel RL', 'Park City Restaurant'],
+                imagesBtn: {text: 'Add Images', icon: 'mdi-image-multiple-outline'}
             }
         },
         methods: {
@@ -62,10 +64,10 @@
                 if (this.pause && this.clockIn === false) {
                     this.togglePause()
                 }
-                return this.clockIn ? 'Clock-Out' : 'Clock-In'
+                return this.clockIn ? {text: 'Clock-Out', icon: 'mdi-stop-circle-outline'} : {text: 'Clock-In', icon: 'mdi-clock-outline'}
             },
             activePause () {
-                return this.pause ? 'Unpause' : 'Pause'
+                return this.pause ? {text: 'Resume', icon: 'mdi-play-circle-outline'} : {text: 'Pause', icon: 'mdi-pause-circle-outline'}
             },
             formattedDate() {
                 const today = new Date()

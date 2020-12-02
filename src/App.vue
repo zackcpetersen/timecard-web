@@ -13,7 +13,7 @@
 </template>
 
 <script>
-import Timecard from "@/components/Timecard"
+import Timecard from "@/views/Timecard"
 import NavDrawer from "@/components/NavDrawer"
 
 export default {
