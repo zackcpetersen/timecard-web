@@ -1,7 +1,8 @@
 import Vue from 'vue'
 import VueRouter from "vue-router"
 
-import Timecard from "@/views/Timecard";
+import Login from "@/views/Login"
+import Timecard from "@/views/Timecard"
 
 Vue.use(VueRouter)
 
@@ -11,28 +12,33 @@ const routes = [
         name: 'Timecard',
         component: Timecard
     },
+    {
+        path: '/login/',
+        name: 'Login',
+        component: Login
+    },
     // {
-    //     path: '/projects',
+    //     path: '/projects/',
     //     name: 'ProjectList',
     //     component: ProjectList
     // },
     // {
-    //     path: '/projects/:id',
+    //     path: '/projects/:id/',
     //     name: 'ProjectView',
     //     component: ProjectView
     // },
     // {
-    //     path: '/entries',
+    //     path: '/entries/',
     //     name: 'Entries',
     //     component: Entries
     // },
     // {
-    //     path: '/user',
+    //     path: '/user/',
     //     name: 'User',
     //     component: User
     // },
     // {
-    //     path: '/admin',
+    //     path: '/admin/',
     //     name: 'Admin',
     //     component: Admin
     // }

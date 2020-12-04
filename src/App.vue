@@ -6,19 +6,19 @@
         <v-app-bar app fixed>
             <v-app-bar-nav-icon x-large @click.stop="drawer = !drawer" />
         </v-app-bar>
-        <v-content>
-            <Timecard />
-        </v-content>
+        <v-main>
+            <v-container fill-height>
+                <router-view></router-view>
+            </v-container>
+        </v-main>
     </v-app>
 </template>
 
 <script>
-import Timecard from "@/views/Timecard"
 import NavDrawer from "@/components/NavDrawer"
 
 export default {
     components: {
-        Timecard,
         NavDrawer
     },
 
