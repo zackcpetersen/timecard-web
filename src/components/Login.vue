@@ -12,7 +12,8 @@
                         v-model="email"
                         :rules="emailRules"
                         placeholder="Email Address"
-                        required>
+                        required
+                        @input="btnColor = 'primary'">
                     </v-text-field>
 
                     <v-text-field
@@ -21,12 +22,32 @@
                         v-model="password"
                         :rules="passwordRules"
                         placeholder="Password"
-                        required>
+                        required
+                        @input="btnColor = 'primary'">
                     </v-text-field>
 
-                    <v-btn @click="submitForm">Login</v-btn>
-
+                    <v-btn @click="submitForm" :color="btnColor" class="mt-3">Login</v-btn>
                 </v-form>
+
+                <v-snackbar
+                    v-model="snackbar.show"
+                    :color="snackbar.color"
+                    :timeout="snackbar.timeout"
+                    :multi-line="true"
+                    absolute
+                    shaped
+                    style="margin-top: 7em;"
+                >
+                    <span class="error--text">{{ snackbar.error }}</span>
+                    <template v-slot:action="{ attrs }">
+                        <v-btn
+                            color="red"
+                            text
+                            @click="snackbar = false"
+                            v-bind="attrs"
+                        >Close</v-btn>
+                    </template>
+                </v-snackbar>
             </v-card-text>
         </v-card>
     </v-row>
@@ -49,7 +70,14 @@ export default {
                 v => !!v || 'Password is required',
                 v => v.length <= 99 || 'Password must be less than 99 characters',
                 v => (v || '').indexOf(' ') < 0 || 'No spaces are allowed'
-            ]
+            ],
+            btnColor: 'primary',
+            snackbar: {
+                show: false,
+                error: '',
+                timeout: 4000,
+                color: 'white',
+            }
         }
     },
     computed: {
@@ -65,9 +93,21 @@ export default {
                     username: this.email,
                     password: this.password
                 }).catch(error => {
-                    this.error = error
+                    if (error.response) {
+                        if (error.response.status === 400) {
+                            this.snackbar.error = 'Invalid Email or Password'
+                            this.snackbar.show = true
+                            this.btnColor = 'error'
+                        }
+                    } else {
+                        this.snackbar.error = error
+                        this.snackbar.show = true
+                    }
                 })
             }
+        },
+        resetValidation() {
+            this.$refs.form.resetValidation()
         }
     }
 }
