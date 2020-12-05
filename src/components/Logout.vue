@@ -1,5 +1,5 @@
 <template>
-    <v-btn @click="logout" color="error"><v-icon>{{ icon }}</v-icon> Logout</v-btn>
+    <v-btn @click="logout" color="error"><v-icon class="mr-2">{{ icon }}</v-icon> Logout</v-btn>
 </template>
 
 <script>
