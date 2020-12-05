@@ -39,10 +39,10 @@ export default {
             drawer: true,
             pages: [
                 { title: 'Track Time', icon: 'mdi-clock', route: 'Timecard'},
-                { title: 'Projects', icon: 'mdi-home-variant', route: 'Projects'},
-                { title: 'Entries', icon: 'mdi-format-list-text', route: 'Entries'},
-                { title: 'User Options', icon: 'mdi-account', route: 'User'},
-                { title: 'Admin', icon: 'mdi-cog', route: 'Admin'}
+                { title: 'Projects', icon: 'mdi-home-variant', route: ''},
+                { title: 'Entries', icon: 'mdi-format-list-text', route: ''},
+                { title: 'User Options', icon: 'mdi-account', route: ''},
+                { title: 'Admin', icon: 'mdi-cog', route: ''}
             ],
             right: null,
             user: {
