@@ -4,7 +4,7 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex'
-import Timecard from '@/components/Timecard'
+import timecard from '@/components/timecard'
 
 export default {
     methods: {
@@ -35,7 +35,7 @@ export default {
         this.fetchProjects()
     },
     components: {
-        timecard: Timecard
+        timecard: timecard
     },
 }
 </script>

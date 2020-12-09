@@ -8,16 +8,16 @@ Vue.use(VueRouter)
 const routes = [
     {
         path: '/',
-        name: 'Timecard',
-        component: () => import('@/views/Timecard'),
+        name: 'timecard',
+        component: () => import('@/views/timecard'),
         meta: {
             requiresAuth: true
         }
     },
     {
         path: '/login/',
-        name: 'Login',
-        component: () => import('@/views/Login'),
+        name: 'login',
+        component: () => import('@/views/login'),
         meta: {
             layout: 'simple'
         }
@@ -76,7 +76,7 @@ router.beforeEach((to, from, next) => {
             next()
             return
         }
-        next({ name: 'Login' })
+        next({ name: 'login' })
     } else {
         next()
     }

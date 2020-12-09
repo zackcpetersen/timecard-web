@@ -13,7 +13,7 @@
                 </v-list-item-title>
 
                 <v-list-item-subtitle>
-                    Timecard
+                    timecard
                 </v-list-item-subtitle>
             </v-list-item-content>
         </v-list-item>
@@ -38,7 +38,7 @@ export default {
         return {
             drawer: true,
             pages: [
-                { title: 'Track Time', icon: 'mdi-clock', route: 'Timecard'},
+                { title: 'Track Time', icon: 'mdi-clock', route: 'timecard'},
                 { title: 'Projects', icon: 'mdi-home-variant', route: ''},
                 { title: 'Entries', icon: 'mdi-format-list-text', route: ''},
                 { title: 'User Options', icon: 'mdi-account', route: ''},

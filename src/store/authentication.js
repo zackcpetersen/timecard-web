@@ -21,7 +21,7 @@ const actions = {
                 axios.defaults.headers.common.Authorization = token
                 commit('SET_AUTH_TOKEN', token)
                 commit('SET_AUTH_SUCCESS')
-                router.push({ name: 'Timecard' })
+                router.push({ name: 'timecard' })
             }).catch(error => {
                 commit('SET_AUTH_ERROR')
                 localStorage.removeItem('user-token')
@@ -35,7 +35,7 @@ const actions = {
             delete axios.defaults.headers.common.Authorization
             resolve()
         }).then(() => {
-            router.push({ name: 'Login' })
+            router.push({ name: 'login' })
         })
     }
 }

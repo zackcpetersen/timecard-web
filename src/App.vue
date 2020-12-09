@@ -1,7 +1,7 @@
 <template>
     <v-app>
         <v-navigation-drawer v-model="drawer" app temporary v-if="layout">
-            <NavDrawer />
+            <navDrawer />
         </v-navigation-drawer>
         <v-app-bar app fixed v-if="layout">
             <v-row>
@@ -9,7 +9,7 @@
                 <v-app-bar-nav-icon class="ml-5" x-large @click.stop="drawer = !drawer" />
                 </v-row>
                 <v-row align-content="center" justify="end">
-                    <Logout class="mr-5"></Logout>
+                    <logout class="mr-5"></logout>
                 </v-row>
             </v-row>
         </v-app-bar>
@@ -22,8 +22,8 @@
 </template>
 
 <script>
-import NavDrawer from "@/components/NavDrawer"
-import Logout from '@/components/Logout'
+import navDrawer from "@/components/navDrawer"
+import logout from '@/components/logout'
 
 export default {
     computed: {
@@ -32,8 +32,8 @@ export default {
         }
     },
     components: {
-        Logout,
-        NavDrawer
+        logout: logout,
+        navDrawer: navDrawer
     },
     data: () => ({
         drawer: false

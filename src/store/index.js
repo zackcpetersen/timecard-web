@@ -4,7 +4,7 @@ import Vuex from 'vuex'
 import auth from './authentication'
 import entries from '@/store/entries'
 import projects from '@/store/projects'
-// import Login from "@/views/Login";
+// import login from "@/views/login";
 
 Vue.use(Vuex)
 
