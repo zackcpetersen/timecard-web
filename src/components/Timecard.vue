@@ -41,10 +41,23 @@
             </v-row>
 
             <v-row justify="center" class="mb-2">
-                <v-btn color="secondary" style="width: 13em;" v-if="clockedIn" ripple x-large rounded text elevation="3">
+                <v-btn @click="onButtonClick"
+                       color="secondary"
+                       style="width: 13em;"
+                       v-if="clockedIn && projectImage"
+                       :loading="loading"
+                       elevation="3"
+                       ripple x-large rounded text>
                     <v-row justify="start"><v-col cols="auto"><v-icon color="primary">{{ imagesBtn.icon }}</v-icon></v-col></v-row>
-                    <v-row><v-col>{{ imagesBtn.text }}</v-col></v-row>
+                    <v-row><v-col>{{ buttonText }}</v-col></v-row>
                 </v-btn>
+                <input
+                    ref="uploader"
+                    type="file"
+                    accept="image/*"
+                    @change="onFileChanged"
+                    hidden
+                >
             </v-row>
 
             <v-row justify="center">
@@ -90,11 +103,13 @@
             clockedInData: {text: 'Clock-In', icon: 'mdi-clock-outline'},
             pausedData: {text: 'Resume', icon: 'mdi-play-circle-outline'},
             unPausedData: {text: 'Pause', icon: 'mdi-pause-circle-outline'},
+            imagesBtn: {text: 'Add Images', icon: 'mdi-image-multiple-outline'},
             clockIn: this.clockedIn,
             pause: this.paused,
-            imagesBtn: {text: 'Add Images', icon: 'mdi-image-multiple-outline'},
             project: '',
             error: '',
+            loading: false,
+            selectedFile: null,
             snackbar: {
                 show: false,
                 error: this.error,
@@ -109,7 +124,8 @@
             startPause: 'startPause',
             endPause: 'endPause',
             endTime: 'endTime',
-            updateEntry: 'updateEntry'
+            updateEntry: 'updateEntry',
+            addImage: 'addProjectImage'
         }),
         clockInToggle () {
             if (!this.clockedIn) {
@@ -138,6 +154,26 @@
                 })
             }
         },
+        onButtonClick () {
+            this.loading = true
+            window.addEventListener('focus', () => {
+                this.loading = false
+            }, { once: true })
+            this.$refs.uploader.click()
+        },
+        onFileChanged(e) {
+            this.selectedFile = e.target.files[0]
+            if (this.selectedFile) {
+                const imgData = new FormData()
+                imgData.append('image', this.selectedFile)
+                imgData.append('name', this.selectedFile.name)
+                imgData.append('project', this.entry.project)
+                this.addImage(imgData).then(() => {})
+                    .catch(error => {
+                        this.error = error
+                    })
+            }
+        }
     },
     computed: {
         ...mapGetters({
@@ -154,6 +190,9 @@
                 return this.entry.time_paused
             }
             return null
+        },
+        projectImage () {
+            return !!this.entry.project
         },
         startTimeFormatted () {
             const time = new Date(this.entry.start_time)
@@ -179,6 +218,9 @@
             set (project) {
                 this.project = project
             }
+        },
+        buttonText () {
+            return this.selectedFile ? this.selectedFile.name : this.imagesBtn.text
         },
         formattedDate() {
             const today = new Date()

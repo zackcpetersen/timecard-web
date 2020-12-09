@@ -2,7 +2,8 @@ import axios from "@/axios"
 
 const state = {
     currentProject: {},
-    projects: []
+    projects: [],
+    projectImages: []
 }
 
 const getters = {
@@ -16,12 +17,19 @@ const actions = {
             .then(response => {
                 commit('SET_PROJECTS', response.data)
             })
+    },
+    async addProjectImage ({ commit }, imageData) {
+        await axios.post('/project-images/', imageData)
+            .then(response => {
+                commit('ADD_PROJECT_IMAGE', response.data)
+            })
     }
 }
 
 const mutations = {
     SET_PROJECTS: (state, projects) => (state.projects = projects),
-    SET_CURRENT_PROJECT: (state, project) => (state.currentProject = project)
+    SET_CURRENT_PROJECT: (state, project) => (state.currentProject = project),
+    ADD_PROJECT_IMAGE: (state, img) => (state.projectImages.push(img))
 }
 
 export default {
