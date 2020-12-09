@@ -2,15 +2,19 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 
 import auth from './authentication'
+import entries from '@/store/entries'
+import projects from '@/store/projects'
 // import Login from "@/views/Login";
 
 Vue.use(Vuex)
 
-const store = new Vuex.Store({
+export default new Vuex.Store({
     modules: {
         auth,
+        entries,
+        projects
         // Login
     }
 })
 
-export default store
+// export default store

@@ -1,28 +1,47 @@
 <template>
     <v-col>
         <v-row justify="center">
-            <p>Welcome {{ user }}!</p>
+            <p v-if="entry.user">Welcome {{ entry.user.first_name }}!</p>
+            <p v-else>Welcome!</p>
         </v-row>
         <v-row justify="center">
             <p>Today is {{ formattedDate }}</p>
         </v-row>
         <v-form ref="form" v-model="valid" lazy-validation>
             <v-row justify="center" class="mb-2 mt-8">
-                <v-btn color="secondary" style="width: 13em;" v-model="clockIn" ripple @click="clockIn = !clockIn" x-large rounded text elevation="3">
+                <v-btn color="secondary"
+                       style="width: 13em;"
+                       v-model="clockedIn"
+                       @click="clockInToggle"
+                       ripple x-large rounded text
+                       elevation="3">
                     <v-row justify="start"><v-col cols="auto"><v-icon color="primary">{{ activeClock.icon }}</v-icon></v-col></v-row>
                     <v-row><v-col cols="auto">{{ activeClock.text }}</v-col></v-row>
                 </v-btn>
             </v-row>
+            <v-row justify="center">
+                <p v-if="clockedIn">Clocked In: {{ startTimeFormatted }}</p>
+            </v-row>
 
             <v-row justify="center" class="mb-2">
-                <v-btn color="secondary" style="width: 13em;" v-if="clockIn" v-model="pause" ripple @click="pause = !pause" x-large rounded text elevation="3">
+                <v-btn color="secondary"
+                       style="width: 13em;"
+                       v-if="clockedIn"
+                       v-model="paused"
+                       @click="pauseToggle"
+                       ripple x-large rounded text
+                       elevation="3">
                     <v-row justify="start"><v-col cols="auto"><v-icon color="primary">{{ activePause.icon }}</v-icon></v-col></v-row>
                     <v-row><v-col cols="auto">{{ activePause.text }}</v-col></v-row>
                 </v-btn>
             </v-row>
+            <v-row justify="center">
+                <p v-if="paused">Paused: {{ pauseTimeFormatted }}</p>
+                <p v-if="timePaused">Pause Duration: {{ timePausedFormatted }}</p>
+            </v-row>
 
             <v-row justify="center" class="mb-2">
-                <v-btn color="secondary" style="width: 13em;" v-if="clockIn" ripple x-large rounded text elevation="3">
+                <v-btn color="secondary" style="width: 13em;" v-if="clockedIn" ripple x-large rounded text elevation="3">
                     <v-row justify="start"><v-col cols="auto"><v-icon color="primary">{{ imagesBtn.icon }}</v-icon></v-col></v-row>
                     <v-row><v-col>{{ imagesBtn.text }}</v-col></v-row>
                 </v-btn>
@@ -30,7 +49,13 @@
 
             <v-row justify="center">
                 <v-col cols="auto">
-                    <v-select :items="projects" v-if="clockIn" label="Select Project" class=""></v-select>
+                    <v-select v-if="clockedIn"
+                              v-model="activeProject"
+                              :items="projects"
+                              item-text="name"
+                              item-value="id"
+                              label="Select Project"
+                    ></v-select>
                 </v-col>
             </v-row>
         </v-form>
@@ -38,38 +63,126 @@
 </template>
 
 <script>
-export default {
+    import {mapActions, mapGetters} from 'vuex'
+
+    export default {
     data () {
         return {
             valid: true,
-            user: 'Zack',
-            clockIn: false,
-            pause: false,
-            projects: ['Home Remodel', 'Hotel RL', 'Park City Restaurant'],
-            imagesBtn: {text: 'Add Images', icon: 'mdi-image-multiple-outline'}
+            clockedOutData: {text: 'Clock-Out', icon: 'mdi-stop-circle-outline'},
+            clockedInData: {text: 'Clock-In', icon: 'mdi-clock-outline'},
+            pausedData: {text: 'Resume', icon: 'mdi-play-circle-outline'},
+            unPausedData: {text: 'Pause', icon: 'mdi-pause-circle-outline'},
+            clockIn: this.clockedIn,
+            pause: this.paused,
+            imagesBtn: {text: 'Add Images', icon: 'mdi-image-multiple-outline'},
+            project: '',
+            error: ''
         }
     },
     methods: {
-        togglePause () {
-            // This may not be necessary
-            this.pause = !this.pause
-        }
+        ...mapActions({
+            startTime: 'startTime',
+            startPause: 'startPause',
+            endPause: 'endPause',
+            endTime: 'endTime',
+            updateEntry: 'updateEntry'
+        }),
+        clockInToggle () {
+            if (!this.clockedIn) {
+                this.startTime({}).then(() => {
+                    // this.clockIn = true
+                }).catch(error => {
+                    this.error = error
+                    console.log(this.error)
+                })
+            } else {
+                this.endTime().then(() => {
+                    // this.clockIn = false
+                }).catch(error => {
+                    this.error = error
+                    console.log(this.error)
+                })
+            }
+        },
+        pauseToggle () {
+            if (!this.paused) {
+                this.startPause({}).then(() => {
+                    // this.paused = true
+                }).catch(error => {
+                    this.error = error
+                    console.log(error)
+                })
+            } else {
+                this.endPause({}).then(() => {
+                    // this.paused = false
+                }).catch(error => {
+                    this.error = error
+                    console.log(error)
+                })
+            }
+        },
     },
     computed: {
-        activeClock () {
-            if (this.pause && this.clockIn === false) {
-                this.togglePause()
+        ...mapGetters({
+            currentProject: 'getCurrentProject'
+        }),
+        clockedIn () {
+            console.log(!!this.entry.start_time && !this.entry.end_time)
+            return !!this.entry.start_time && !this.entry.end_time
+        },
+        paused () {
+            return !!this.entry.start_pause && !this.entry.end_pause
+        },
+        timePaused () {
+            if (this.entry.time_paused) {
+                return this.entry.time_paused
             }
-            return this.clockIn ? {text: 'Clock-Out', icon: 'mdi-stop-circle-outline'} : {text: 'Clock-In', icon: 'mdi-clock-outline'}
+            return null
+        },
+        startTimeFormatted () {
+            const time = new Date(this.entry.start_time)
+            return time.toLocaleTimeString()
+        },
+        pauseTimeFormatted () {
+            const time = new Date(this.entry.start_pause)
+            return time.toLocaleTimeString()
+        },
+        timePausedFormatted () {
+            return new Date(this.entry.time_paused * 1000).toISOString().substr(11, 8)
+        },
+        activeClock () {
+            return this.clockedIn ? this.clockedOutData : this.clockedInData
         },
         activePause () {
-            return this.pause ? {text: 'Resume', icon: 'mdi-play-circle-outline'} : {text: 'Pause', icon: 'mdi-pause-circle-outline'}
+            return this.paused ? this.pausedData : this.unPausedData
+        },
+        activeProject: {
+            get () {
+                return this.projects.filter(proj => proj.id === this.entry.project)[0]
+            },
+            set (project) {
+                this.project = project
+            }
         },
         formattedDate() {
             const today = new Date()
             const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
             return today.toLocaleDateString('en-US', options)
         }
+    },
+    watch: {
+        project () {
+            const projectData = {
+                'project': this.project,
+                'id': this.entry.id
+            }
+            this.updateEntry(projectData)
+        },
+    },
+    props: {
+        entry: Object,
+        projects: Array
     }
 }
 </script>
