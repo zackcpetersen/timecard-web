@@ -11,7 +11,7 @@
             <v-row justify="center" class="mb-2 mt-8">
                 <v-btn color="secondary"
                        style="width: 13em;"
-                       v-model="clockedIn"
+                       v-model="clockIn"
                        @click="clockInToggle"
                        ripple x-large rounded text
                        elevation="3">
@@ -36,8 +36,8 @@
                 </v-btn>
             </v-row>
             <v-row justify="center">
-                <p v-if="paused">Paused: {{ pauseTimeFormatted }}</p>
-                <p v-if="timePaused">Pause Duration: {{ timePausedFormatted }}</p>
+                <p v-if="paused && clockedIn">Paused: {{ pauseTimeFormatted }}</p>
+                <p v-if="timePaused && clockedIn">Pause Duration: {{ timePausedFormatted }}</p>
             </v-row>
 
             <v-row justify="center" class="mb-2">
@@ -59,6 +59,23 @@
                 </v-col>
             </v-row>
         </v-form>
+        <v-snackbar
+            v-model="snackbar.show"
+            :color="snackbar.color"
+            :timeout="snackbar.timeout"
+            :multi-line="true"
+            shaped
+        >
+            <span class="error--text">{{ error }}</span>
+            <template v-slot:action="{ attrs }">
+                <v-btn
+                    color="red"
+                    text
+                    @click="snackbar = false"
+                    v-bind="attrs"
+                >Close</v-btn>
+            </template>
+        </v-snackbar>
     </v-col>
 </template>
 
@@ -77,7 +94,13 @@
             pause: this.paused,
             imagesBtn: {text: 'Add Images', icon: 'mdi-image-multiple-outline'},
             project: '',
-            error: ''
+            error: '',
+            snackbar: {
+                show: false,
+                error: this.error,
+                timeout: 4000,
+                color: 'white',
+            }
         }
     },
     methods: {
@@ -91,34 +114,27 @@
         clockInToggle () {
             if (!this.clockedIn) {
                 this.startTime({}).then(() => {
-                    // this.clockIn = true
+
                 }).catch(error => {
                     this.error = error
-                    console.log(this.error)
                 })
             } else {
                 this.endTime().then(() => {
-                    // this.clockIn = false
                 }).catch(error => {
                     this.error = error
-                    console.log(this.error)
                 })
             }
         },
         pauseToggle () {
             if (!this.paused) {
-                this.startPause({}).then(() => {
-                    // this.paused = true
-                }).catch(error => {
-                    this.error = error
-                    console.log(error)
+                this.startPause({}).then(() => {})
+                    .catch(error => {
+                        this.error = error
                 })
             } else {
-                this.endPause({}).then(() => {
-                    // this.paused = false
-                }).catch(error => {
-                    this.error = error
-                    console.log(error)
+                this.endPause({}).then(() => {})
+                    .catch(error => {
+                        this.error = error
                 })
             }
         },
@@ -128,7 +144,6 @@
             currentProject: 'getCurrentProject'
         }),
         clockedIn () {
-            console.log(!!this.entry.start_time && !this.entry.end_time)
             return !!this.entry.start_time && !this.entry.end_time
         },
         paused () {
@@ -179,6 +194,11 @@
             }
             this.updateEntry(projectData)
         },
+        error () {
+            if (this.error) {
+                this.snackbar.show = true
+            }
+        }
     },
     props: {
         entry: Object,

@@ -15,31 +15,31 @@ const actions = {
         await axios.post('/start-time/', user)
             .then(response => {
                 commit('ADD_ENTRY', response.data)
+                commit('SET_CURRENT_ENTRY', response.data)
             })
     },
     async startPause ({ commit }, user) {
         await axios.post('/start-pause/', user)
             .then(response => {
-                commit('SET_CURRENT_ENTRY', response.data)
+                commit('UPDATE_CURRENT_ENTRY', response.data)
             })
     },
     async endPause ({ commit }, user) {
         await axios.post('/end-pause/', user)
             .then(response => {
-                commit('SET_CURRENT_ENTRY', response.data)
+                commit('UPDATE_CURRENT_ENTRY', response.data)
             })
     },
     async endTime ({ commit }, user) {
         await axios.post('/end-time/', user)
-            .then(response => {
-                commit('SET_CURRENT_ENTRY', response.data)
+            .then(() => {
+                commit('REMOVE_CURRENT_ENTRY')
             })
     },
     async updateEntry ({ commit }, updatedEntry) {
         await axios.put(`/entries/${updatedEntry.id}/`, updatedEntry)
             .then(response => {
-                commit('UPDATE_ENTRY', response.data)
-                console.log(updatedEntry)
+                commit('UPDATE_CURRENT_ENTRY', response.data)
             })
     },
     async fetchEntries ({ commit }, filters) {
@@ -51,19 +51,16 @@ const actions = {
 }
 
 const mutations = {
-    ADD_ENTRY: (state, entry) => state.entries.unshift(entry),
+    ADD_ENTRY: (state, entry) => state.entries.push(entry),
     SET_ENTRIES: (state, entries) => {
         state.entries = entries
-        const lastEntry = entries[entries.length - 1]
-        state.currentEntry = lastEntry
+        state.currentEntry = entries.reduce((a, b) => a.id > b.id ? a : b)
     },
     SET_CURRENT_ENTRY: (state, entry) => (state.currentEntry = entry),
-    UPDATE_ENTRY: (state, updatedEntry) => {
-        const index = state.entries.findIndex(entry => entry.id === updatedEntry.id)
-        if (index !== -1) {
-            state.entries.splice(index, 1, updatedEntry)
-        }
-    }
+    UPDATE_CURRENT_ENTRY: (state, updatedEntry) => {
+        state.currentEntry = updatedEntry
+    },
+    REMOVE_CURRENT_ENTRY : state => state.currentEntry = {}
 }
 
 export default {

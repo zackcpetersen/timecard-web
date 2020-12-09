@@ -21,7 +21,10 @@ export default {
         }),
         entry () {
             const lastEntry = this.getCurrentEntry
-            if (lastEntry.end_time) {
+            const today = new Date().toDateString()
+            const startDay = new Date(lastEntry.start_time).toDateString()
+
+            if (lastEntry.end_time && (today !== startDay)) {
                 return {}
             }
             return lastEntry
