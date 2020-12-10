@@ -4,7 +4,7 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex'
-import timecard from '@/components/timecard'
+import timecard from '@/components/timecard/index'
 
 export default {
     methods: {

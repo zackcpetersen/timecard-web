@@ -23,7 +23,7 @@
 
 <script>
 import navDrawer from "@/components/navDrawer"
-import logout from '@/components/logout'
+import logout from '@/components/auth/logout'
 
 export default {
     computed: {
