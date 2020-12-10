@@ -29,8 +29,6 @@
             ></projectSelect>
 
         </v-form>
-
-        <snackbar :error="error"></snackbar>
     </v-col>
 </template>
 
@@ -38,7 +36,6 @@
 import clockInOut from '@/components/timecard/clockInOut'
 import pause from '@/components/timecard/pause'
 import projectSelect from '@/components/timecard/projectSelect'
-import snackbar from '@/components/snackbar'
 import uploadImage from '@/components/timecard/uploadImage'
 
 export default {
@@ -67,7 +64,6 @@ export default {
         clockInOut: clockInOut,
         pause: pause,
         projectSelect: projectSelect,
-        snackbar: snackbar,
         uploadImage: uploadImage
     },
     props: {

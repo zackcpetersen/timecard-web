@@ -6,16 +6,18 @@
         :multi-line="true"
         shaped
         app
-        elevation="12"
+        elevation="3"
     >
-        <span class="error--text">{{ error }}</span>
+        <v-icon class="mr-6">{{ snackbar.icon }}</v-icon>
+        <span class="white--text text-subtitle-1">{{ snackbar.heading }}</span>
+        <br>
+        <span class="black--text">{{ snackbar.message }}</span>
         <template v-slot:action="{ attrs }">
             <v-btn
-                color="red"
                 text
                 @click="show = false"
                 v-bind="attrs"
-            >Close</v-btn>
+            ><v-icon color="black">{{ icon }}</v-icon></v-btn>
         </template>
     </v-snackbar>
 </template>
@@ -24,17 +26,18 @@
 export default {
     data () {
         return {
-            timeout: 4000,
-            color: 'white'
+            timeout: 7000,
+            color: 'red',
+            icon: 'mdi-close'
         }
     },
     computed: {
         show () {
-            return !!this.error;
+            return this.snackbar.show
         }
     },
     props: {
-        error: String,
+        snackbar: Object
     }
 }
 </script>

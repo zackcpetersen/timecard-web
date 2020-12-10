@@ -4,7 +4,7 @@ import Vuex from 'vuex'
 import auth from './authentication'
 import entries from '@/store/entries'
 import projects from '@/store/projects'
-// import login from "@/views/login";
+import snackbar from '@/store/snackbar'
 
 Vue.use(Vuex)
 
@@ -12,9 +12,7 @@ export default new Vuex.Store({
     modules: {
         auth,
         entries,
-        projects
-        // Login
+        projects,
+        snackbar
     }
 })
-
-// export default store
