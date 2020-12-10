@@ -53,10 +53,7 @@ export default {
                 imgData.append('image', this.selectedFile)
                 imgData.append('name', this.selectedFile.name)
                 imgData.append('project', this.entry.project)
-                this.addImage(imgData).then(() => {})
-                    .catch(error => {
-                        this.error = error
-                    })
+                this.addImage(imgData)
             }
         }
     },

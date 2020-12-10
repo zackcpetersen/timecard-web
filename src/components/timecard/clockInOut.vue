@@ -35,16 +35,9 @@ export default {
         }),
         clockInToggle () {
             if (!this.clockedIn) {
-                this.startTime({}).then(() => {
-
-                }).catch(error => {
-                    this.error = error
-                })
+                this.startTime({})
             } else {
-                this.endTime().then(() => {
-                }).catch(error => {
-                    this.error = error
-                })
+                this.endTime()
             }
         },
     },

@@ -30,15 +30,9 @@ export default {
         }),
         pauseToggle () {
             if (!this.paused) {
-                this.startPause({}).then(() => {})
-                    .catch(error => {
-                        this.error = error
-                    })
+                this.startPause({})
             } else {
-                this.endPause({}).then(() => {})
-                    .catch(error => {
-                        this.error = error
-                    })
+                this.endPause({})
             }
         }
     },
