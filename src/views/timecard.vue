@@ -15,19 +15,19 @@ export default {
     },
     computed: {
         ...mapGetters({
-            getCurrentEntry: 'getCurrentEntry',
+            currentEntry: 'getCurrentEntry',
             getEntries: 'getEntries',
             projects: 'getProjects'
         }),
         entry () {
-            const lastEntry = this.getCurrentEntry
             const today = new Date().toDateString()
-            const startDay = new Date(lastEntry.start_time).toDateString()
+            const startDay = new Date(this.currentEntry.start_time).toDateString()
 
-            if (lastEntry.end_time && (today !== startDay)) {
-                return {}
+            if (this.currentEntry.end_time || (today !== startDay)) {
+                this.$store.commit('SET_CURRENT_ENTRY', {})
+                return this.currentEntry
             }
-            return lastEntry
+            return this.currentEntry
         }
     },
     created () {

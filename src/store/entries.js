@@ -54,6 +54,7 @@ const mutations = {
     ADD_ENTRY: (state, entry) => state.entries.push(entry),
     SET_ENTRIES: (state, entries) => {
         state.entries = entries
+        // Set currentEntry to last entry in project list
         state.currentEntry = entries.reduce((a, b) => a.id > b.id ? a : b)
     },
     SET_CURRENT_ENTRY: (state, entry) => (state.currentEntry = entry),

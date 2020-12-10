@@ -17,74 +17,38 @@
                    :entry="entry"
                    :paused="paused"
             ></pause>
-            <v-row justify="center" class="mb-2">
-                <uploadImage
-                    v-if="clockedIn && entryProject"
-                    :entry="entry"
-                />
-            </v-row>
 
-            <v-row justify="center">
-                <v-col cols="auto">
-                    <v-select v-if="clockedIn"
-                              v-model="activeProject"
-                              :items="projects"
-                              item-text="name"
-                              item-value="id"
-                              label="Select Project"
-                    ></v-select>
-                </v-col>
-            </v-row>
+            <uploadImage
+                v-if="clockedIn && entryProject"
+                :entry="entry"
+            />
+
+            <projectSelect :clockedIn="clockedIn"
+                           :projects="projects"
+                           :entry="entry"
+            ></projectSelect>
+
         </v-form>
-        <v-snackbar
-            v-model="snackbar.show"
-            :color="snackbar.color"
-            :timeout="snackbar.timeout"
-            :multi-line="true"
-            shaped
-        >
-            <span class="error--text">{{ error }}</span>
-            <template v-slot:action="{ attrs }">
-                <v-btn
-                    color="red"
-                    text
-                    @click="snackbar = false"
-                    v-bind="attrs"
-                >Close</v-btn>
-            </template>
-        </v-snackbar>
+
+        <snackbar :error="error"></snackbar>
     </v-col>
 </template>
 
 <script>
-import {mapActions, mapGetters} from 'vuex'
 import clockInOut from '@/components/timecard/clockInOut'
 import pause from '@/components/timecard/pause'
+import projectSelect from '@/components/timecard/projectSelect'
+import snackbar from '@/components/snackbar'
 import uploadImage from '@/components/timecard/uploadImage'
 
 export default {
     data () {
         return {
             valid: true,
-            project: '',
             error: '',
-            snackbar: {
-                show: false,
-                error: this.error,
-                timeout: 4000,
-                color: 'white',
-            }
         }
     },
-    methods: {
-        ...mapActions({
-            updateEntry: 'updateEntry'
-        }),
-    },
     computed: {
-        ...mapGetters({
-            currentProject: 'getCurrentProject'
-        }),
         clockedIn () {
             return !!this.entry.start_time && !this.entry.end_time
         },
@@ -94,37 +58,16 @@ export default {
         entryProject () {
             return !!this.entry.project
         },
-        activeProject: {
-            get () {
-                return this.projects.filter(proj => proj.id === this.entry.project)[0]
-            },
-            set (project) {
-                this.project = project
-            }
-        },
         formattedDate() {
-            const today = new Date()
             const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-            return today.toLocaleDateString('en-US', options)
-        }
-    },
-    watch: {
-        project () {
-            const projectData = {
-                'project': this.project,
-                'id': this.entry.id
-            }
-            this.updateEntry(projectData)
-        },
-        error () {
-            if (this.error) {
-                this.snackbar.show = true
-            }
+            return new Date().toLocaleDateString('en-US', options)
         }
     },
     components: {
         clockInOut: clockInOut,
         pause: pause,
+        projectSelect: projectSelect,
+        snackbar: snackbar,
         uploadImage: uploadImage
     },
     props: {

@@ -1,21 +1,23 @@
 <template>
     <div>
-        <v-btn @click="selectImage"
-               color="secondary"
-               style="min-width: 13em;"
-               :loading="loading"
-               elevation="3"
-               ripple x-large rounded text>
-            <v-row justify="start"><v-col cols="auto"><v-icon color="primary">{{ imagesBtn.icon }}</v-icon></v-col></v-row>
-            <v-row><v-col>{{ buttonText }}</v-col></v-row>
-        </v-btn>
-        <input
-            ref="file"
-            type="file"
-            accept="image/*"
-            @change="uploadFile"
-            hidden
-        >
+        <v-row justify="center" class="mb-2">
+            <v-btn @click="selectImage"
+                   color="secondary"
+                   style="min-width: 13em;"
+                   :loading="loading"
+                   elevation="3"
+                   ripple x-large rounded text>
+                <v-row justify="start"><v-col cols="auto"><v-icon color="primary">{{ imagesBtn.icon }}</v-icon></v-col></v-row>
+                <v-row><v-col>{{ buttonText }}</v-col></v-row>
+            </v-btn>
+            <input
+                ref="file"
+                type="file"
+                accept="image/*"
+                @change="uploadFile"
+                hidden
+            >
+        </v-row>
     </div>
 </template>
 
