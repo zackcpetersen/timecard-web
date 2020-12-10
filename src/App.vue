@@ -16,24 +16,31 @@
         <v-main>
             <v-container fill-height>
                 <router-view />
+                <snackbar :snackbar="this.currentSnackbar"></snackbar>
             </v-container>
         </v-main>
     </v-app>
 </template>
 
 <script>
-import navDrawer from "@/components/navDrawer"
+import { mapGetters } from 'vuex'
 import logout from '@/components/auth/logout'
+import navDrawer from '@/components/navDrawer'
+import snackbar from '@/components/snackbar'
 
 export default {
     computed: {
+        ...mapGetters({
+            currentSnackbar: 'getSnackbarMessage'
+        }),
         layout () {
             return (this.$route.meta.layout !== 'simple')
         }
     },
     components: {
         logout: logout,
-        navDrawer: navDrawer
+        navDrawer: navDrawer,
+        snackbar: snackbar
     },
     data: () => ({
         drawer: false
