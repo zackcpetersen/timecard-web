@@ -13,19 +13,19 @@
                 </v-list-item-title>
 
                 <v-list-item-subtitle>
-                    Timecard
+                    timecard
                 </v-list-item-subtitle>
             </v-list-item-content>
         </v-list-item>
         <v-divider class="mt-3"></v-divider>
-        <v-list nav shaped>
-            <v-list-item v-for="item in items" :key="item.title">
+        <v-list flat nav>
+            <v-list-item v-for="page in pages" :key="page.title" :to="{ name: page.route }" exact>
                 <v-list-item-icon>
-                    <v-icon medium color="purple">{{ item.icon }}</v-icon>
+                    <v-icon medium color="purple">{{ page.icon }}</v-icon>
                 </v-list-item-icon>
 
                 <v-list-item-content>
-                    <v-list-item-title>{{ item.title }}</v-list-item-title>
+                    <v-list-item-title>{{ page.title }}</v-list-item-title>
                 </v-list-item-content>
             </v-list-item>
         </v-list>
@@ -37,12 +37,12 @@ export default {
     data () {
         return {
             drawer: true,
-            items: [
-                { title: 'Track Time', icon: 'mdi-clock' },
-                { title: 'Projects', icon: 'mdi-home-variant'},
-                { title: 'Entries', icon: 'mdi-format-list-text'},
-                { title: 'User Options', icon: 'mdi-account' },
-                { title: 'Admin', icon: 'mdi-cog'}
+            pages: [
+                { title: 'Track Time', icon: 'mdi-clock', route: 'timecard'},
+                { title: 'Projects', icon: 'mdi-home-variant', route: ''},
+                { title: 'Entries', icon: 'mdi-format-list-text', route: ''},
+                { title: 'User Options', icon: 'mdi-account', route: ''},
+                { title: 'Admin', icon: 'mdi-cog', route: ''}
             ],
             right: null,
             user: {
