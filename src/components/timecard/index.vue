@@ -13,23 +13,10 @@
                 :entry="entry"
             ></clockInOut>
 
-            <v-row justify="center" class="mb-2">
-                <v-btn color="secondary"
-                       style="width: 13em;"
-                       v-if="clockedIn"
-                       v-model="paused"
-                       @click="pauseToggle"
-                       ripple x-large rounded text
-                       elevation="3">
-                    <v-row justify="start"><v-col cols="auto"><v-icon color="primary">{{ activePause.icon }}</v-icon></v-col></v-row>
-                    <v-row><v-col cols="auto">{{ activePause.text }}</v-col></v-row>
-                </v-btn>
-            </v-row>
-            <v-row justify="center">
-                <p v-if="paused && clockedIn">Paused: {{ pauseTimeFormatted }}</p>
-                <p v-if="timePaused && clockedIn">Pause Duration: {{ timePausedFormatted }}</p>
-            </v-row>
-
+            <pause :clockedIn="clockedIn"
+                   :entry="entry"
+                   :paused="paused"
+            ></pause>
             <v-row justify="center" class="mb-2">
                 <uploadImage
                     v-if="clockedIn && entryProject"
@@ -72,15 +59,13 @@
 <script>
 import {mapActions, mapGetters} from 'vuex'
 import clockInOut from '@/components/timecard/clockInOut'
+import pause from '@/components/timecard/pause'
 import uploadImage from '@/components/timecard/uploadImage'
 
 export default {
     data () {
         return {
             valid: true,
-            pausedData: {text: 'Resume', icon: 'mdi-play-circle-outline'},
-            unPausedData: {text: 'Pause', icon: 'mdi-pause-circle-outline'},
-            pause: this.paused,
             project: '',
             error: '',
             snackbar: {
@@ -93,23 +78,8 @@ export default {
     },
     methods: {
         ...mapActions({
-            startPause: 'startPause',
-            endPause: 'endPause',
             updateEntry: 'updateEntry'
         }),
-        pauseToggle () {
-            if (!this.paused) {
-                this.startPause({}).then(() => {})
-                    .catch(error => {
-                        this.error = error
-                })
-            } else {
-                this.endPause({}).then(() => {})
-                    .catch(error => {
-                        this.error = error
-                })
-            }
-        }
     },
     computed: {
         ...mapGetters({
@@ -121,24 +91,8 @@ export default {
         paused () {
             return !!this.entry.start_pause && !this.entry.end_pause
         },
-        timePaused () {
-            if (this.entry.time_paused) {
-                return this.entry.time_paused
-            }
-            return null
-        },
         entryProject () {
             return !!this.entry.project
-        },
-        pauseTimeFormatted () {
-            const time = new Date(this.entry.start_pause)
-            return time.toLocaleTimeString()
-        },
-        timePausedFormatted () {
-            return new Date(this.entry.time_paused * 1000).toISOString().substr(11, 8)
-        },
-        activePause () {
-            return this.paused ? this.pausedData : this.unPausedData
         },
         activeProject: {
             get () {
@@ -170,6 +124,7 @@ export default {
     },
     components: {
         clockInOut: clockInOut,
+        pause: pause,
         uploadImage: uploadImage
     },
     props: {
