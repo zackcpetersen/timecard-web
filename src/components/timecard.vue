@@ -41,23 +41,10 @@
             </v-row>
 
             <v-row justify="center" class="mb-2">
-                <v-btn @click="onButtonClick"
-                       color="secondary"
-                       style="width: 13em;"
-                       v-if="clockedIn && projectImage"
-                       :loading="loading"
-                       elevation="3"
-                       ripple x-large rounded text>
-                    <v-row justify="start"><v-col cols="auto"><v-icon color="primary">{{ imagesBtn.icon }}</v-icon></v-col></v-row>
-                    <v-row><v-col>{{ buttonText }}</v-col></v-row>
-                </v-btn>
-                <input
-                    ref="uploader"
-                    type="file"
-                    accept="image/*"
-                    @change="onFileChanged"
-                    hidden
-                >
+                <uploadImage
+                    v-if="clockedIn && entryProject"
+                    :entry="entry"
+                />
             </v-row>
 
             <v-row justify="center">
@@ -93,9 +80,10 @@
 </template>
 
 <script>
-    import {mapActions, mapGetters} from 'vuex'
+import {mapActions, mapGetters} from 'vuex'
+import uploadImage from '@/components/uploadImage'
 
-    export default {
+export default {
     data () {
         return {
             valid: true,
@@ -103,13 +91,10 @@
             clockedInData: {text: 'Clock-In', icon: 'mdi-clock-outline'},
             pausedData: {text: 'Resume', icon: 'mdi-play-circle-outline'},
             unPausedData: {text: 'Pause', icon: 'mdi-pause-circle-outline'},
-            imagesBtn: {text: 'Add Images', icon: 'mdi-image-multiple-outline'},
             clockIn: this.clockedIn,
             pause: this.paused,
             project: '',
             error: '',
-            loading: false,
-            selectedFile: null,
             snackbar: {
                 show: false,
                 error: this.error,
@@ -124,8 +109,7 @@
             startPause: 'startPause',
             endPause: 'endPause',
             endTime: 'endTime',
-            updateEntry: 'updateEntry',
-            addImage: 'addProjectImage'
+            updateEntry: 'updateEntry'
         }),
         clockInToggle () {
             if (!this.clockedIn) {
@@ -153,26 +137,6 @@
                         this.error = error
                 })
             }
-        },
-        onButtonClick () {
-            this.loading = true
-            window.addEventListener('focus', () => {
-                this.loading = false
-            }, { once: true })
-            this.$refs.uploader.click()
-        },
-        onFileChanged(e) {
-            this.selectedFile = e.target.files[0]
-            if (this.selectedFile) {
-                const imgData = new FormData()
-                imgData.append('image', this.selectedFile)
-                imgData.append('name', this.selectedFile.name)
-                imgData.append('project', this.entry.project)
-                this.addImage(imgData).then(() => {})
-                    .catch(error => {
-                        this.error = error
-                    })
-            }
         }
     },
     computed: {
@@ -191,7 +155,7 @@
             }
             return null
         },
-        projectImage () {
+        entryProject () {
             return !!this.entry.project
         },
         startTimeFormatted () {
@@ -219,9 +183,6 @@
                 this.project = project
             }
         },
-        buttonText () {
-            return this.selectedFile ? this.selectedFile.name : this.imagesBtn.text
-        },
         formattedDate() {
             const today = new Date()
             const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
@@ -241,6 +202,9 @@
                 this.snackbar.show = true
             }
         }
+    },
+    components: {
+        uploadImage: uploadImage
     },
     props: {
         entry: Object,
