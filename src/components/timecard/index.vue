@@ -8,24 +8,10 @@
             <p>Today is {{ formattedDate }}</p>
         </v-row>
         <v-form ref="form" v-model="valid" lazy-validation>
-<!--            <v-row justify="center" class="mb-2 mt-8">-->
-<!--                <v-btn color="secondary"-->
-<!--                       style="width: 13em;"-->
-<!--                       v-model="clockIn"-->
-<!--                       @click="clockInToggle"-->
-<!--                       ripple x-large rounded text-->
-<!--                       elevation="3">-->
-<!--                    <v-row justify="start"><v-col cols="auto"><v-icon color="primary">{{ activeClock.icon }}</v-icon></v-col></v-row>-->
-<!--                    <v-row><v-col cols="auto">{{ activeClock.text }}</v-col></v-row>-->
-<!--                </v-btn>-->
-                <clockInOut
-                    :clockedIn="clockedIn"
-                    :entry="entry"
-                />
-<!--            </v-row>-->
-<!--            <v-row justify="center">-->
-<!--                <p v-if="clockedIn">Clocked In: {{ startTimeFormatted }}</p>-->
-<!--            </v-row>-->
+            <clockInOut
+                :clockedIn="clockedIn"
+                :entry="entry"
+            ></clockInOut>
 
             <v-row justify="center" class="mb-2">
                 <v-btn color="secondary"
@@ -94,7 +80,6 @@ export default {
             valid: true,
             pausedData: {text: 'Resume', icon: 'mdi-play-circle-outline'},
             unPausedData: {text: 'Pause', icon: 'mdi-pause-circle-outline'},
-            // clockIn: this.clockedIn,
             pause: this.paused,
             project: '',
             error: '',
@@ -112,20 +97,6 @@ export default {
             endPause: 'endPause',
             updateEntry: 'updateEntry'
         }),
-        // clockInToggle () {
-        //     if (!this.clockedIn) {
-        //         this.startTime({}).then(() => {
-        //
-        //         }).catch(error => {
-        //             this.error = error
-        //         })
-        //     } else {
-        //         this.endTime().then(() => {
-        //         }).catch(error => {
-        //             this.error = error
-        //         })
-        //     }
-        // },
         pauseToggle () {
             if (!this.paused) {
                 this.startPause({}).then(() => {})
@@ -159,10 +130,6 @@ export default {
         entryProject () {
             return !!this.entry.project
         },
-        // startTimeFormatted () {
-        //     const time = new Date(this.entry.start_time)
-        //     return time.toLocaleTimeString()
-        // },
         pauseTimeFormatted () {
             const time = new Date(this.entry.start_pause)
             return time.toLocaleTimeString()
