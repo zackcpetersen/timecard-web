@@ -24,11 +24,10 @@
             />
 
             <projectSelect :clockedIn="clockedIn"
-                           :projects="projects"
                            :entry="entry"
             ></projectSelect>
         </v-form>
-        <imageList :images="entry.entry_images"></imageList>
+        <imageList :entryId="entry.id"></imageList>
     </v-col>
 </template>
 
@@ -69,7 +68,6 @@ export default {
     },
     props: {
         entry: Object,
-        projects: Array
     }
 }
 </script>
