@@ -27,13 +27,14 @@
                            :projects="projects"
                            :entry="entry"
             ></projectSelect>
-
         </v-form>
+        <imageList :images="entry.entry_images"></imageList>
     </v-col>
 </template>
 
 <script>
 import clockInOut from '@/components/timecard/clockInOut'
+import imageList from '@/components/timecard/imageList'
 import pause from '@/components/timecard/pause'
 import projectSelect from '@/components/timecard/projectSelect'
 import uploadImage from '@/components/timecard/uploadImage'
@@ -61,6 +62,7 @@ export default {
     },
     components: {
         clockInOut: clockInOut,
+        imageList: imageList,
         pause: pause,
         projectSelect: projectSelect,
         uploadImage: uploadImage
