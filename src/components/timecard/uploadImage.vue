@@ -32,7 +32,7 @@ export default {
     },
     methods: {
         ...mapActions({
-            addImage: 'addProjectImage'
+            addImage: 'addImage'
         }),
         selectImage () {
             this.$refs.file.click()
