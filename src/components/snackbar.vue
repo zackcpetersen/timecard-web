@@ -28,12 +28,18 @@ export default {
         return {
             timeout: 7000,
             color: 'red',
-            icon: 'mdi-close'
+            icon: 'mdi-close',
         }
     },
     computed: {
-        show () {
-            return this.snackbar.show
+        show: {
+            get () {
+                return this.snackbar.show
+            },
+            set (val) {
+                this.snackbar.show = val
+            }
+
         }
     },
     props: {

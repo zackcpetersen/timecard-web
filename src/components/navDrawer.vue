@@ -28,11 +28,18 @@
                     <v-list-item-title>{{ page.title }}</v-list-item-title>
                 </v-list-item-content>
             </v-list-item>
+            <v-divider class="mb-3"></v-divider>
+
+            <v-list-item-content>
+                <logout></logout>
+            </v-list-item-content>
         </v-list>
     </v-container>
 </template>
 
 <script>
+import logout from '@/components/auth/logout'
+
 export default {
     data () {
         return {
@@ -51,6 +58,9 @@ export default {
                 initials: 'ZP'
             },
         }
+    },
+    components: {
+        'logout': logout
     }
 }
 </script>

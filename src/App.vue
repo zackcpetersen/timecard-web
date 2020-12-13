@@ -1,7 +1,7 @@
 <template>
     <v-app>
         <v-navigation-drawer v-model="drawer" app temporary v-if="layout">
-            <navDrawer />
+            <nav-drawer />
         </v-navigation-drawer>
         <v-app-bar app fixed v-if="layout">
             <v-row>
@@ -9,7 +9,6 @@
                 <v-app-bar-nav-icon class="ml-5" x-large @click.stop="drawer = !drawer" />
                 </v-row>
                 <v-row align-content="center" justify="end">
-                    <logout class="mr-5"></logout>
                 </v-row>
             </v-row>
         </v-app-bar>
@@ -24,7 +23,6 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import logout from '@/components/auth/logout'
 import navDrawer from '@/components/navDrawer'
 import snackbar from '@/components/snackbar'
 
@@ -38,9 +36,8 @@ export default {
         }
     },
     components: {
-        logout: logout,
-        navDrawer: navDrawer,
-        snackbar: snackbar
+        'nav-drawer': navDrawer,
+        'snackbar': snackbar
     },
     data: () => ({
         drawer: false

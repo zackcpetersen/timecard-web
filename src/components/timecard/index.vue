@@ -8,32 +8,39 @@
             <p>Today is {{ formattedDate }}</p>
         </v-row>
         <v-form ref="form" v-model="valid" lazy-validation>
-            <clockInOut
+            <clock-in-out
                 :clockedIn="clockedIn"
                 :entry="entry"
-            ></clockInOut>
-
-            <pause :clockedIn="clockedIn"
-                   :entry="entry"
-                   :paused="paused"
-            ></pause>
-
-            <uploadImage
-                v-if="clockedIn && entryProject"
-                :entry="entry"
-            />
-
-            <projectSelect :clockedIn="clockedIn"
-                           :projects="projects"
-                           :entry="entry"
-            ></projectSelect>
-
+            ></clock-in-out>
+            <v-expand-transition group>
+                <pause v-if="clockedIn"
+                       :clockedIn="clockedIn"
+                       :entry="entry"
+                       :paused="paused"
+                ></pause>
+            </v-expand-transition>
+            <v-expand-transition group>
+                <upload-image
+                    v-if="clockedIn && entryProject"
+                    :entry="entry"
+                ></upload-image>
+            </v-expand-transition>
+            <v-expand-transition group>
+                <project-select v-if="clockedIn"
+                                :clockedIn="clockedIn"
+                               :entry="entry"
+                ></project-select>
+            </v-expand-transition>
         </v-form>
+        <v-expand-transition group>
+            <image-list :entryId="entry.id"></image-list>
+        </v-expand-transition>
     </v-col>
 </template>
 
 <script>
 import clockInOut from '@/components/timecard/clockInOut'
+import imageList from '@/components/timecard/imageList'
 import pause from '@/components/timecard/pause'
 import projectSelect from '@/components/timecard/projectSelect'
 import uploadImage from '@/components/timecard/uploadImage'
@@ -60,14 +67,14 @@ export default {
         }
     },
     components: {
-        clockInOut: clockInOut,
-        pause: pause,
-        projectSelect: projectSelect,
-        uploadImage: uploadImage
+        'clock-in-out': clockInOut,
+        'image-list': imageList,
+        'pause': pause,
+        'project-select': projectSelect,
+        'upload-image': uploadImage
     },
     props: {
         entry: Object,
-        projects: Array
     }
 }
 </script>

@@ -1,5 +1,5 @@
 <template>
-    <timecard :entry="entry" :projects="projects"></timecard>
+    <timecard :entry="entry"></timecard>
 </template>
 
 <script>
@@ -10,7 +10,8 @@ export default {
     methods: {
         ...mapActions({
             fetchEntries: 'fetchEntries',
-            fetchProjects: 'fetchProjects'
+            fetchProjects: 'fetchProjects',
+            fetchProjectImages: 'fetchProjectImages'
         })
     },
     computed: {
@@ -33,9 +34,10 @@ export default {
     created () {
         this.fetchEntries()
         this.fetchProjects()
+        this.fetchProjectImages()
     },
     components: {
-        timecard: timecard
+        'timecard': timecard
     },
 }
 </script>

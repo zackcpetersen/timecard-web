@@ -15,7 +15,7 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 
 export default {
     data () {
@@ -33,8 +33,11 @@ export default {
             },
             set (project) {
                 this.project = project
-            }
+            },
         },
+        ...mapGetters({
+            projects: 'getProjects'
+        })
     },
     methods: {
         ...mapActions({
@@ -53,7 +56,6 @@ export default {
     props: {
         entry: Object,
         clockedIn: Boolean,
-        projects: Array
     }
 }
 </script>

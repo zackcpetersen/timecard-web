@@ -2,7 +2,8 @@ import axios from '@/axios'
 
 const state = {
     currentEntry: {},
-    entries : []
+    entries : [],
+    currentEntryImages: []
 }
 
 const getters = {
