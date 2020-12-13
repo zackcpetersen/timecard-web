@@ -8,26 +8,26 @@
             <p>Today is {{ formattedDate }}</p>
         </v-row>
         <v-form ref="form" v-model="valid" lazy-validation>
-            <clockInOut
+            <clock-in-out
                 :clockedIn="clockedIn"
                 :entry="entry"
-            ></clockInOut>
+            ></clock-in-out>
 
             <pause :clockedIn="clockedIn"
                    :entry="entry"
                    :paused="paused"
             ></pause>
 
-            <uploadImage
+            <upload-image
                 v-if="clockedIn && entryProject"
                 :entry="entry"
-            />
+            ></upload-image>
 
-            <projectSelect :clockedIn="clockedIn"
+            <project-select :clockedIn="clockedIn"
                            :entry="entry"
-            ></projectSelect>
+            ></project-select>
         </v-form>
-        <imageList :entryId="entry.id"></imageList>
+        <image-list :entryId="entry.id"></image-list>
     </v-col>
 </template>
 
@@ -60,11 +60,11 @@ export default {
         }
     },
     components: {
-        clockInOut: clockInOut,
-        imageList: imageList,
-        pause: pause,
-        projectSelect: projectSelect,
-        uploadImage: uploadImage
+        'clock-in-out': clockInOut,
+        'image-list': imageList,
+        'pause': pause,
+        'project-select': projectSelect,
+        'upload-image': uploadImage
     },
     props: {
         entry: Object,

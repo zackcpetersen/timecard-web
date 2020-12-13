@@ -60,7 +60,7 @@ export default {
         }
     },
     components: {
-        logout: logout
+        'logout': logout
     }
 }
 </script>

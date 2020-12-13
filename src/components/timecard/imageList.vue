@@ -30,7 +30,7 @@
                                     ></v-img>
                                 </v-col>
                             </v-row>
-                            <imageEditModal :image="img" :active="active"></imageEditModal>
+                            <image-edit-modal :image="img" :active="active"></image-edit-modal>
                         </v-card>
                     </v-slide-item>
                 </v-slide-group>
@@ -62,7 +62,7 @@ export default {
         entryId: Number
     },
     components: {
-        imageEditModal: imageEditModal
+        'image-edit-modal': imageEditModal
     }
 }
 </script>

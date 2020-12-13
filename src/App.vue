@@ -1,7 +1,7 @@
 <template>
     <v-app>
         <v-navigation-drawer v-model="drawer" app temporary v-if="layout">
-            <navDrawer />
+            <nav-drawer />
         </v-navigation-drawer>
         <v-app-bar app fixed v-if="layout">
             <v-row>
@@ -36,8 +36,8 @@ export default {
         }
     },
     components: {
-        navDrawer: navDrawer,
-        snackbar: snackbar
+        'nav-drawer': navDrawer,
+        'snackbar': snackbar
     },
     data: () => ({
         drawer: false

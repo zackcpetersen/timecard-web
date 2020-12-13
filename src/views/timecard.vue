@@ -37,7 +37,7 @@ export default {
         this.fetchProjectImages()
     },
     components: {
-        timecard: timecard
+        'timecard': timecard
     },
 }
 </script>
