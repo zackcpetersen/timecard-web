@@ -12,22 +12,29 @@
                 :clockedIn="clockedIn"
                 :entry="entry"
             ></clock-in-out>
-
-            <pause :clockedIn="clockedIn"
-                   :entry="entry"
-                   :paused="paused"
-            ></pause>
-
-            <upload-image
-                v-if="clockedIn && entryProject"
-                :entry="entry"
-            ></upload-image>
-
-            <project-select :clockedIn="clockedIn"
-                           :entry="entry"
-            ></project-select>
+            <v-expand-transition group>
+                <pause v-if="clockedIn"
+                       :clockedIn="clockedIn"
+                       :entry="entry"
+                       :paused="paused"
+                ></pause>
+            </v-expand-transition>
+            <v-expand-transition group>
+                <upload-image
+                    v-if="clockedIn && entryProject"
+                    :entry="entry"
+                ></upload-image>
+            </v-expand-transition>
+            <v-expand-transition group>
+                <project-select v-if="clockedIn"
+                                :clockedIn="clockedIn"
+                               :entry="entry"
+                ></project-select>
+            </v-expand-transition>
         </v-form>
-        <image-list :entryId="entry.id"></image-list>
+        <v-expand-transition group>
+            <image-list :entryId="entry.id"></image-list>
+        </v-expand-transition>
     </v-col>
 </template>
 

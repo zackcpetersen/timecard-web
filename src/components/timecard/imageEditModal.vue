@@ -3,10 +3,11 @@
         v-model="activeImg"
         persistent
         max-width="600px"
+        transition="slide-y-reverse-transition"
     >
         <v-card>
             <v-card-title>
-                <span class="headline">Edit Image Details</span>
+                <span class="headline">Edit Details</span>
             </v-card-title>
             <v-card-text>
                 <v-container>
