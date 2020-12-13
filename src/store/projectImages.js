@@ -32,7 +32,7 @@ const actions = {
 }
 
 const mutations = {
-    ADD_IMAGE: (state, img) => (state.images.push(img)),
+    ADD_IMAGE: (state, img) => (state.images.unshift(img)),
     SET_IMAGES: (state, images) => (state.images = images),
     UPDATE_IMAGE: (state, updatedImage) => {
         const oldImageIndex = state.images.findIndex(img => img.id === updatedImage.id)
