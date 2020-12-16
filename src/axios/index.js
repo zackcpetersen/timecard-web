@@ -1,5 +1,5 @@
 import Axios from 'axios'
-import { failedSnackbar } from '@/mixins/snackbar-messages'
+import { failedSnackbar, successfulSnackbar } from '@/mixins/snackbar-messages'
 
 const axios = Axios.create({
     baseURL: 'http://127.0.0.1:8000/api/'
@@ -7,6 +7,9 @@ const axios = Axios.create({
 
 axios.interceptors.response.use(response => {
     // if (response.config.showSuccessfulSnackbar) {}
+    if (response.config.method === 'delete') {
+        successfulSnackbar({ heading: 'Deleted Successfully' })
+    }
     return response
 }, error => {
     if (error.response) {

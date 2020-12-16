@@ -13,8 +13,10 @@
             </v-btn>
         </v-row>
         <v-row justify="center">
-            <p v-if="paused && clockedIn">Paused: {{ pauseTimeFormatted }}</p>
-            <p v-if="timePaused && clockedIn">Pause Duration: {{ timePausedFormatted }}</p>
+            <p v-if="paused && clockedIn" class="mb-0">Paused: {{ pauseTimeFormatted }}</p>
+        </v-row>
+        <v-row justify="center">
+            <p v-if="timePaused && clockedIn">Total Pause Time: {{ timePausedFormatted }}</p>
         </v-row>
     </div>
 </template>

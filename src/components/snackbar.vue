@@ -1,7 +1,7 @@
 <template>
     <v-snackbar
         v-model="show"
-        :color="color"
+        :color="snackbar.color"
         :timeout="timeout"
         :multi-line="true"
         shaped
@@ -17,7 +17,7 @@
                 text
                 @click="show = false"
                 v-bind="attrs"
-            ><v-icon color="black">{{ icon }}</v-icon></v-btn>
+            ><v-icon color="black">{{ closeIcon }}</v-icon></v-btn>
         </template>
     </v-snackbar>
 </template>
@@ -27,8 +27,7 @@ export default {
     data () {
         return {
             timeout: 7000,
-            color: 'red',
-            icon: 'mdi-close',
+            closeIcon: 'mdi-close',
         }
     },
     computed: {
