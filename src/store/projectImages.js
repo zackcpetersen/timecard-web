@@ -28,6 +28,12 @@ const actions = {
             .then(response => {
                 commit('UPDATE_IMAGE', response.data)
             })
+    },
+    async deleteImage ({ commit }, imageId) {
+        await axios.delete(`/project-images/${imageId}/`)
+            .then(() => {
+                commit('REMOVE_IMAGE', imageId)
+            })
     }
 }
 
@@ -37,7 +43,8 @@ const mutations = {
     UPDATE_IMAGE: (state, updatedImage) => {
         const oldImageIndex = state.images.findIndex(img => img.id === updatedImage.id)
         state.images[oldImageIndex] = updatedImage
-    }
+    },
+    REMOVE_IMAGE: (state, imageId) => (state.images = state.images.filter(image => image.id !== imageId))
 }
 
 export default {

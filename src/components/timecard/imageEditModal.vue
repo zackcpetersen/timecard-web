@@ -7,7 +7,10 @@
     >
         <v-card>
             <v-card-title>
-                <span class="headline">Edit Details</span>
+                <v-row justify="space-between">
+                    <span class="headline ml-5">Edit Details</span>
+                    <v-btn @click="imgDelete" class="mr-6 white--text" color="red">REMOVE</v-btn>
+                </v-row>
             </v-card-title>
             <v-card-text>
                 <v-container>
@@ -52,7 +55,8 @@ export default {
     },
     methods: {
         ...mapActions({
-            updateImage: 'updateImage'
+            updateImage: 'updateImage',
+            deleteImage: 'deleteImage'
         }),
         updateImg () {
             this.activeImg = false
@@ -65,6 +69,9 @@ export default {
                 imgData['description'] = this.imgDesc
             }
             this.updateImage(imgData)
+        },
+        imgDelete () {
+            this.deleteImage(this.image.id)
         }
     },
     computed: {
