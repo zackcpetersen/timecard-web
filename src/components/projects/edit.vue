@@ -2,25 +2,26 @@
     <v-dialog
         v-model="showModal"
         persistent
-        max-width="600px"
+        max-width="800px"
         transition="slide-y-reverse-transition"
     >
         <v-card>
             <v-card-title>
-                <v-row justify="space-between">
-                    <span class="headline ml-5">Edit Project</span>
+                <v-row justify-lg="space-between" justify-sm="center">
+                    <span class="headline">Edit Project Details</span>
                 </v-row>
             </v-card-title>
             <v-card-text>
                 <v-container>
                     <v-row>
                         <v-col cols="12">
-                            <v-text-field label="Name" v-model="projName"></v-text-field>
-                            <v-textarea label="Description" outlined rows="3" v-model="projDesc"></v-textarea>
-                            <!-- TODO add image button-->
+                            <v-text-field label="Name" v-model="name"></v-text-field>
+                            <v-textarea label="Description" outlined rows="3" v-model="description"></v-textarea>
+                            <image-list :images="images"></image-list>
                         </v-col>
                     </v-row>
                     <v-row justify="center">
+                        <v-btn @click="projDelete" class="white--text" color="red">REMOVE</v-btn>
                         <v-btn
                             color="blue darken-1"
                             text
@@ -30,7 +31,7 @@
                             color="blue darken-1"
                             text
                             @click="submit"
-                            v-if="!!name && !!description"
+                            v-if="saveEnabled"
                         >Update</v-btn>
                     </v-row>
                 </v-container>
@@ -41,48 +42,66 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex'
+import imageList from '@/components/imageList'
 
 export default {
     data () {
         return {
-            name: '',
-            description: ''
+            projName: '',
+            projDesc: ''
             // TODO add rules as mixin!
         }
     },
     computed: {
         ...mapGetters({
-            project: 'getCurrentProject'
+            project: 'getCurrentProject',
         }),
-        projName: {
+        saveEnabled () {
+            return this.name !== this.projName || this.description !== this.projDesc
+        },
+        images () {
+            return this.project.project_images
+        },
+        name: {
             get () {
                 return this.project.name
             },
             set (val) {
-                this.name = val
+                this.projName = val
             }
         },
-        projDesc: {
+        description: {
             get () {
                 return this.project.description
             },
             set (val) {
-                this.description = val
+                this.projDesc = val
             }
+        }
+    },
+    watch: {
+        project () {
+            this.projName = this.name
+            this.projDesc = this.description
 
         }
     },
     methods: {
         ...mapActions({
-            updateProject: 'updateProject'
+            updateProject: 'updateProject',
+            deleteProject: 'deleteProject'
         }),
         closeModal () {
             this.$emit('status', false)
         },
+        projDelete () {
+            this.deleteProject(this.project.id)
+                .then(this.closeModal())
+        },
         submit () {
             const projData = {
-                'name': this.name,
-                'description': this.description,
+                'name': this.projName,
+                'description': this.projDesc,
                 'id': this.project.id
             }
             this.updateProject(projData)
@@ -91,6 +110,9 @@ export default {
     },
     props: {
         showModal: Boolean
+    },
+    components: {
+        'image-list': imageList
     }
 }
 </script>

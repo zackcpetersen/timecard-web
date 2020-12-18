@@ -28,6 +28,12 @@ const actions = {
             .then(response => {
                 commit('UPDATE_PROJECT', response.data)
             })
+    },
+    async deleteProject ({ commit }, projId) {
+        await axios.delete(`/projects/${projId}/`)
+            .then(() => {
+                commit('REMOVE_PROJECT', projId)
+            })
     }
 }
 
@@ -40,7 +46,8 @@ const mutations = {
         if (index !== -1) {
             state.projects.splice(index, 1, updatedProject)
         }
-    }
+    },
+    REMOVE_PROJECT: (state, projId) => (state.projects = state.projects.filter(proj => proj.id !== projId))
 }
 
 export default {

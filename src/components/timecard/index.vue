@@ -33,14 +33,15 @@
             </v-expand-transition>
         </v-form>
         <v-expand-transition group>
-            <image-list :entryId="entry.id"></image-list>
+            <image-list :images="images"></image-list>
         </v-expand-transition>
     </v-col>
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 import clockInOut from '@/components/timecard/clockInOut'
-import imageList from '@/components/timecard/imageList'
+import imageList from '@/components/imageList'
 import pause from '@/components/timecard/pause'
 import projectSelect from '@/components/timecard/projectSelect'
 import uploadImage from '@/components/timecard/uploadImage'
@@ -52,6 +53,12 @@ export default {
         }
     },
     computed: {
+        ...mapGetters({
+            getProjectImagesByEntry: 'getProjectImagesByEntry'
+        }),
+        images () {
+            return this.getProjectImagesByEntry(this.entry.id)
+        },
         clockedIn () {
             return !!this.entry.start_time && !this.entry.end_time
         },

@@ -1,13 +1,15 @@
 import axios from "@/axios"
 
 const state = {
+    currentImage: {},
     images: []
 }
 
 const getters = {
     getProjectImagesByEntry: (state) => (entryId) => {
         return state.images.filter(image => image.entry === entryId)
-    }
+    },
+    getCurrentImage: state => state.currentImage
 }
 
 const actions = {
@@ -44,7 +46,8 @@ const mutations = {
         const oldImageIndex = state.images.findIndex(img => img.id === updatedImage.id)
         state.images[oldImageIndex] = updatedImage
     },
-    REMOVE_IMAGE: (state, imageId) => (state.images = state.images.filter(image => image.id !== imageId))
+    REMOVE_IMAGE: (state, imageId) => (state.images = state.images.filter(image => image.id !== imageId)),
+    SET_CURRENT_IMAGE: (state, image) => (state.currentImage = image)
 }
 
 export default {
