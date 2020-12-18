@@ -50,7 +50,8 @@ export default {
         return {
             imgName: '',
             imgDesc: '',
-            activeImg: false
+            activeImg: false,
+            // TODO add rules!
         }
     },
     methods: {
