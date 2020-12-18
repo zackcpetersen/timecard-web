@@ -22,7 +22,7 @@
             <v-expand-transition group>
                 <upload-image
                     v-if="clockedIn && entryProject"
-                    :entry="entry"
+                    :imgData="entryImgData"
                 ></upload-image>
             </v-expand-transition>
             <v-expand-transition group>
@@ -33,17 +33,18 @@
             </v-expand-transition>
         </v-form>
         <v-expand-transition group>
-            <image-list :entryId="entry.id"></image-list>
+            <image-list :images="images" :allowFeatured="false"></image-list>
         </v-expand-transition>
     </v-col>
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 import clockInOut from '@/components/timecard/clockInOut'
-import imageList from '@/components/timecard/imageList'
+import imageList from '@/components/images/imageList'
 import pause from '@/components/timecard/pause'
 import projectSelect from '@/components/timecard/projectSelect'
-import uploadImage from '@/components/timecard/uploadImage'
+import uploadImage from '@/components/images/uploadImage'
 
 export default {
     data () {
@@ -52,6 +53,12 @@ export default {
         }
     },
     computed: {
+        ...mapGetters({
+            getImagesByEntry: 'getImagesByEntry'
+        }),
+        images () {
+            return this.getImagesByEntry(this.entry.id)
+        },
         clockedIn () {
             return !!this.entry.start_time && !this.entry.end_time
         },
@@ -64,6 +71,13 @@ export default {
         formattedDate() {
             const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
             return new Date().toLocaleDateString('en-US', options)
+        },
+        entryImgData () {
+            return {
+                'project': this.entry.project,
+                'type': 'entry',
+                'entryId': this.entry.id
+            }
         }
     },
     components: {

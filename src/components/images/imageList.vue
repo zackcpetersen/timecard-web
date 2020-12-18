@@ -13,17 +13,17 @@
                 <v-slide-group
                     v-model="model"
                     class="pa-4"
+                    show-arrows="desktop"
                 >
 
                     <v-slide-item
                         v-for="img in images"
                         :key="img.id"
-                        v-slot="{ active, toggle }"
                     >
                         <v-expand-x-transition>
                         <v-card
                             class="ma-2 pa-1"
-                            @click="toggle"
+                            @click="modalStatus(true, img)"
                         >
                             <v-row>
                                 <v-col cols="12">
@@ -36,37 +36,42 @@
 
                                 </v-col>
                             </v-row>
-                            <image-edit-modal :image="img" :active="active"></image-edit-modal>
                         </v-card>
                         </v-expand-x-transition>
                     </v-slide-item>
                 </v-slide-group>
             </v-sheet>
         </v-row>
+        <image-edit-modal :active="showModal" :allowFeatured="allowFeatured" @status="modalStatus"></image-edit-modal>
     </div>
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
-import imageEditModal from '@/components/timecard/imageEditModal'
+import { mapMutations } from 'vuex'
+import imageEditModal from '@/components/images/imageEditModal'
 
 export default {
     data () {
         return {
             model: null,
-            dialog: false
+            dialog: false,
+            showModal: false,
         }
     },
-    computed: {
-        ...mapGetters({
-            getProjectImagesByEntry: 'getProjectImagesByEntry'
+    methods: {
+        ...mapMutations({
+            setCurrentImage: 'SET_CURRENT_IMAGE'
         }),
-        images () {
-            return this.getProjectImagesByEntry(this.entryId)
+        modalStatus (status, image=null) {
+            if (image) {
+                this.setCurrentImage(image)
+            }
+            this.showModal = status
         }
     },
     props: {
-        entryId: Number
+        images: Array,
+        allowFeatured: Boolean
     },
     components: {
         'image-edit-modal': imageEditModal

@@ -7,9 +7,9 @@
     >
         <v-card>
             <v-card-title>
-                <v-row justify="space-between">
-                    <span class="headline ml-5">Edit Details</span>
-                    <v-btn @click="imgDelete" class="mr-6 white--text" color="red">REMOVE</v-btn>
+                <v-row justify="space-between" align="center">
+                    <span class="headline">Edit Image</span>
+                    <v-btn @click="imgDelete" class="white--text" color="red">REMOVE</v-btn>
                 </v-row>
             </v-card-title>
             <v-card-text>
@@ -18,6 +18,7 @@
                         <v-col cols="12">
                             <v-text-field label="Name" v-model="name"></v-text-field>
                             <v-textarea label="Description" outlined rows="3" v-model="description"></v-textarea>
+                            <v-checkbox v-if="allowFeatured" v-model="featured" :label="featuredLabel"></v-checkbox>
                             <v-card class="pa-2" elevation="3">
                                 <v-img :src="image.image" aspect-ratio="1" contain max-height="400"></v-img>
                             </v-card>
@@ -27,7 +28,7 @@
                         <v-btn
                             color="blue darken-1"
                             text
-                            @click="activeImg = false"
+                            @click="closeModal"
                         >Close</v-btn>
                         <v-btn
                             color="blue darken-1"
@@ -43,14 +44,17 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 
 export default {
     data () {
         return {
             imgName: '',
             imgDesc: '',
-            activeImg: false
+            imgFeatured: '',
+            activeImg: false,
+            featuredLabel: 'Featured Image (Shown on project list - only one per project)'
+            // TODO add rules!
         }
     },
     methods: {
@@ -59,8 +63,6 @@ export default {
             deleteImage: 'deleteImage'
         }),
         updateImg () {
-            this.activeImg = false
-
             let imgData = {id: this.image.id}
             if (this.imgName) {
                 imgData['name'] = this.imgName
@@ -68,13 +70,23 @@ export default {
             if (this.imgDesc) {
                 imgData['description'] = this.imgDesc
             }
+            if (this.imgFeatured) {
+                imgData['featured'] = this.imgFeatured
+            }
             this.updateImage(imgData)
+                .then(this.closeModal())
         },
         imgDelete () {
             this.deleteImage(this.image.id)
+        },
+        closeModal () {
+            this.$emit('status', false)
         }
     },
     computed: {
+        ...mapGetters({
+            image: 'getCurrentImage'
+        }),
         name: {
             get () {
                 return this.image.name
@@ -91,18 +103,33 @@ export default {
                 this.imgDesc = newDesc
             }
         },
+        featured: {
+            get () {
+                return this.image.featured
+            },
+            set (val) {
+                this.imgFeatured = val
+            }
+        },
         saveEnabled () {
-            return !!this.imgName || !!this.imgDesc
+            return this.name !== this.imgName
+                || this.description !== this.imgDesc
+                || this.featured !== this.imgFeatured
         }
     },
     watch: {
+        image () {
+            this.imgName = this.name
+            this.imgDesc = this.description
+            this.imgFeatured = this.featured
+        },
         active () {
             this.activeImg = this.active
         }
     },
     props: {
-        image: Object,
-        active: Boolean
+        active: Boolean,
+        allowFeatured: Boolean
     }
 }
 </script>

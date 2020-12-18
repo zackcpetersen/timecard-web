@@ -8,7 +8,7 @@ Vue.use(VueRouter)
 const routes = [
     {
         path: '/',
-        name: 'timecard',
+        name: 'Timecard',
         component: () => import('@/views/timecard'),
         meta: {
             requiresAuth: true
@@ -19,17 +19,18 @@ const routes = [
         name: 'login',
         component: () => import('@/views/login'),
         meta: {
-            layout: 'simple'
+            layout: 'simple',
+            requiresAuth: false
         }
     },
-    // {
-    //     path: '/projects/',
-    //     name: 'ProjectList',
-    //     component: ProjectList,
-    //     meta: {
-    //         requiresAuth: true
-    //     }
-    // },
+    {
+        path: '/projects/',
+        name: 'Projects',
+        component: () => import('@/views/projects'),
+        meta: {
+            requiresAuth: true
+        }
+    },
     // {
     //     path: '/projects/:id/',
     //     name: 'ProjectView',
