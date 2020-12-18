@@ -8,7 +8,7 @@
             <v-col cols="12" lg="7" v-for="project in projects" :key="project.id">
                 <v-card shaped @click="updateProject(project)">
                     <div class="d-flex flex-no-wrap justify-space-between align-center">
-                        <div class="mx-5">
+                        <div class="mx-lg-5">
                             <v-card-title class="headline">
                                 {{ project.name }}
                             </v-card-title>
@@ -16,8 +16,8 @@
                                 {{ project.description }}
                             </v-card-subtitle>
                         </div>
-                        <v-avatar class="ma-3 mr-10" size="125" rounded v-if="project.project_images.length">
-                            <v-img :src="featuredImage(project)"></v-img>
+                        <v-avatar class="mr-lg-5 mr-3 my-3" size="100" rounded v-if="project.project_images.length">
+                            <v-img :src="featuredImage(project)" aspect-ratio="1"></v-img>
                         </v-avatar>
                     </div>
                 </v-card>

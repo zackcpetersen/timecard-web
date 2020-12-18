@@ -103,18 +103,33 @@ export default {
                 this.imgDesc = newDesc
             }
         },
+        featured: {
+            get () {
+                return this.image.featured
+            },
+            set (val) {
+                this.imgFeatured = val
+            }
+        },
         saveEnabled () {
-            return !!this.imgName || !!this.imgDesc
+            return this.name !== this.imgName
+                || this.description !== this.imgDesc
+                || this.featured !== this.imgFeatured
         }
     },
     watch: {
+        image () {
+            this.imgName = this.name
+            this.imgDesc = this.description
+            this.imgFeatured = this.featured
+        },
         active () {
             this.activeImg = this.active
         }
     },
     props: {
-        image: Object,
-        active: Boolean
+        active: Boolean,
+        allowFeatured: Boolean
     }
 }
 </script>
