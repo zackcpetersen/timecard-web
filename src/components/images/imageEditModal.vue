@@ -7,9 +7,9 @@
     >
         <v-card>
             <v-card-title>
-                <v-row justify="space-between">
-                    <span class="headline ml-5">Edit Image Details</span>
-                    <v-btn @click="imgDelete" class="mr-6 white--text" color="red">REMOVE</v-btn>
+                <v-row justify="space-between" align="center">
+                    <span class="headline">Edit Image</span>
+                    <v-btn @click="imgDelete" class="white--text" color="red">REMOVE</v-btn>
                 </v-row>
             </v-card-title>
             <v-card-text>

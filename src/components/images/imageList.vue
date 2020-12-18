@@ -42,13 +42,13 @@
                 </v-slide-group>
             </v-sheet>
         </v-row>
-        <image-edit-modal :active="showModal" :allowFeatured="true" @status="modalStatus"></image-edit-modal>
+        <image-edit-modal :active="showModal" :allowFeatured="allowFeatured" @status="modalStatus"></image-edit-modal>
     </div>
 </template>
 
 <script>
 import { mapMutations } from 'vuex'
-import imageEditModal from '@/components/timecard/imageEditModal'
+import imageEditModal from '@/components/images/imageEditModal'
 
 export default {
     data () {
@@ -70,7 +70,8 @@ export default {
         }
     },
     props: {
-        images: Array
+        images: Array,
+        allowFeatured: Boolean
     },
     components: {
         'image-edit-modal': imageEditModal

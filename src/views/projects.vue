@@ -9,7 +9,8 @@ import projects from '@/components/projects/index'
 export default {
     methods: {
         ...mapActions({
-            fetchProjects: 'fetchProjects'
+            fetchProjects: 'fetchProjects',
+            fetchProjectImages: 'fetchProjectImages'
         })
     },
     computed: {
@@ -19,6 +20,7 @@ export default {
     },
     created () {
         this.fetchProjects()
+        this.fetchProjectImages()
     },
     components: {
         'projects': projects

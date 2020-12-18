@@ -6,8 +6,11 @@ const state = {
 }
 
 const getters = {
-    getProjectImagesByEntry: (state) => (entryId) => {
+    getImagesByEntry: (state) => (entryId) => {
         return state.images.filter(image => image.entry === entryId)
+    },
+    getImagesByProject: (state) => (projId) => {
+        return state.images.filter(image => image.project == projId)
     },
     getCurrentImage: state => state.currentImage
 }

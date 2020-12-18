@@ -40,17 +40,19 @@ export default {
         uploadFile(e) {
             this.selectedFile = e.target.files[0]
             if (this.selectedFile) {
-                const imgData = new FormData()
-                imgData.append('image', this.selectedFile)
-                imgData.append('name', this.selectedFile.name)
-                imgData.append('project', this.entry.project)
-                imgData.append('entry', this.entry.id)
-                this.addImage(imgData)
+                const submitData = new FormData()
+                submitData.append('image', this.selectedFile)
+                submitData.append('name', this.selectedFile.name)
+                submitData.append('project', this.imgData.project)
+                if (this.imgData.type === 'entry') {
+                    submitData.append('entry', this.imgData.entryId)
+                }
+                this.addImage(submitData)
             }
         }
     },
     props: {
-        entry: Object
+        imgData: Object,
     }
 }
 </script>

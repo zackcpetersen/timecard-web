@@ -7,8 +7,9 @@
     >
         <v-card>
             <v-card-title>
-                <v-row justify-lg="space-between" justify-sm="center">
-                    <span class="headline">Edit Project Details</span>
+                <v-row justify="space-between" align="center">
+                    <span class="headline">Edit Project</span>
+                    <v-btn @click="projDelete" class="white--text" color="red">REMOVE</v-btn>
                 </v-row>
             </v-card-title>
             <v-card-text>
@@ -17,11 +18,11 @@
                         <v-col cols="12">
                             <v-text-field label="Name" v-model="name"></v-text-field>
                             <v-textarea label="Description" outlined rows="3" v-model="description"></v-textarea>
-                            <image-list :images="images"></image-list>
+                            <upload-image :imgData="projImgData" class="mb-5"></upload-image>
+                            <image-list :images="images" :allowFeatured="true"></image-list>
                         </v-col>
                     </v-row>
                     <v-row justify="center">
-                        <v-btn @click="projDelete" class="white--text" color="red">REMOVE</v-btn>
                         <v-btn
                             color="blue darken-1"
                             text
@@ -42,7 +43,8 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex'
-import imageList from '@/components/imageList'
+import imageList from '@/components/images/imageList'
+import uploadImage from '@/components/images/uploadImage'
 
 export default {
     data () {
@@ -55,12 +57,13 @@ export default {
     computed: {
         ...mapGetters({
             project: 'getCurrentProject',
+            getImagesByProject: 'getImagesByProject'
         }),
         saveEnabled () {
             return this.name !== this.projName || this.description !== this.projDesc
         },
         images () {
-            return this.project.project_images
+            return this.getImagesByProject(this.project.id)
         },
         name: {
             get () {
@@ -76,6 +79,11 @@ export default {
             },
             set (val) {
                 this.projDesc = val
+            }
+        },
+        projImgData () {
+            return {
+                'project': this.project.id,
             }
         }
     },
@@ -112,7 +120,8 @@ export default {
         showModal: Boolean
     },
     components: {
-        'image-list': imageList
+        'image-list': imageList,
+        'upload-image': uploadImage
     }
 }
 </script>
