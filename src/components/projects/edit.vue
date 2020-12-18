@@ -16,8 +16,23 @@
                 <v-container>
                     <v-row>
                         <v-col cols="12">
-                            <v-text-field label="Name" v-model="name"></v-text-field>
-                            <v-textarea label="Description" outlined rows="3" v-model="description"></v-textarea>
+                            <v-form ref="form" v-model="valid">
+                                <v-text-field
+                                    label="Name"
+                                    v-model="name"
+                                    :rules="nameRules"
+                                    counter="50"
+                                    class="mb-3"
+                                ></v-text-field>
+                                <v-textarea
+                                    label="Description"
+                                    outlined
+                                    rows="3"
+                                    v-model="description"
+                                    :rules="descriptionRules"
+                                    counter="250"
+                                ></v-textarea>
+                            </v-form>
                             <upload-image :imgData="projImgData" class="mb-5"></upload-image>
                             <image-list :images="images" :allowFeatured="true"></image-list>
                         </v-col>
@@ -43,6 +58,7 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex'
+import { rules } from '@/mixins/rules'
 import imageList from '@/components/images/imageList'
 import uploadImage from '@/components/images/uploadImage'
 
@@ -50,8 +66,8 @@ export default {
     data () {
         return {
             projName: '',
-            projDesc: ''
-            // TODO add rules as mixin!
+            projDesc: '',
+            valid: true
         }
     },
     computed: {
@@ -107,18 +123,21 @@ export default {
                 .then(this.closeModal())
         },
         submit () {
-            const projData = {
-                'name': this.projName,
-                'description': this.projDesc,
-                'id': this.project.id
+            if (this.$refs.form.validate()) {
+                const projData = {
+                    'name': this.projName,
+                    'description': this.projDesc,
+                    'id': this.project.id
+                }
+                this.updateProject(projData)
+                    .then(this.closeModal())
             }
-            this.updateProject(projData)
-                .then(this.closeModal())
         }
     },
     props: {
         showModal: Boolean
     },
+    mixins: [rules],
     components: {
         'image-list': imageList,
         'upload-image': uploadImage
