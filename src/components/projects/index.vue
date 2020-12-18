@@ -64,9 +64,6 @@ export default {
             return featured.image
         }
     },
-    computed: {
-
-    },
     props: {
         projects: Array
     },
