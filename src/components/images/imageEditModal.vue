@@ -16,9 +16,25 @@
                 <v-container>
                     <v-row>
                         <v-col cols="12">
-                            <v-text-field label="Name" v-model="name"></v-text-field>
-                            <v-textarea label="Description" outlined rows="3" v-model="description"></v-textarea>
-                            <v-checkbox v-if="allowFeatured" v-model="featured" :label="featuredLabel"></v-checkbox>
+                            <v-form ref="form" v-model="valid">
+                                <v-text-field
+                                    label="Name"
+                                    v-model="name"
+                                    counter="50"
+                                    :rules="nameRules"
+                                    class="mb-3"
+                                ></v-text-field>
+                                <v-textarea
+                                    label="Description"
+                                    outlined
+                                    rows="3"
+                                    v-model="description"
+                                    counter="250"
+                                    :rules="descriptionRules"
+                                    class="mb-3"
+                                    placeholder="Describe your image"></v-textarea>
+                                <v-checkbox v-if="allowFeatured" v-model="featured" :label="featuredLabel"></v-checkbox>
+                            </v-form>
                             <v-card class="pa-2" elevation="3">
                                 <v-img :src="image.image" aspect-ratio="1" contain max-height="400"></v-img>
                             </v-card>
@@ -45,6 +61,7 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex'
+import { rules } from '@/mixins/rules'
 
 export default {
     data () {
@@ -53,8 +70,8 @@ export default {
             imgDesc: '',
             imgFeatured: '',
             activeImg: false,
-            featuredLabel: 'Featured Image (Shown on project list - only one per project)'
-            // TODO add rules!
+            featuredLabel: 'Featured Image (Shown on project list - only one per project)',
+            valid: true
         }
     },
     methods: {
@@ -63,18 +80,20 @@ export default {
             deleteImage: 'deleteImage'
         }),
         updateImg () {
-            let imgData = {id: this.image.id}
-            if (this.imgName) {
-                imgData['name'] = this.imgName
+            if (this.$refs.form.validate()) {
+                let imgData = {id: this.image.id}
+                if (this.imgName) {
+                    imgData['name'] = this.imgName
+                }
+                if (this.imgDesc) {
+                    imgData['description'] = this.imgDesc
+                }
+                if (this.imgFeatured) {
+                    imgData['featured'] = this.imgFeatured
+                }
+                this.updateImage(imgData)
+                    .then(this.closeModal())
             }
-            if (this.imgDesc) {
-                imgData['description'] = this.imgDesc
-            }
-            if (this.imgFeatured) {
-                imgData['featured'] = this.imgFeatured
-            }
-            this.updateImage(imgData)
-                .then(this.closeModal())
         },
         imgDelete () {
             this.deleteImage(this.image.id)
@@ -127,6 +146,7 @@ export default {
             this.activeImg = this.active
         }
     },
+    mixins: [rules],
     props: {
         active: Boolean,
         allowFeatured: Boolean

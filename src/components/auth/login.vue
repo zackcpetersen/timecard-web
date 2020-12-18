@@ -2,7 +2,7 @@
     <v-row justify="center">
         <v-card elevation="12" outlined shaped style="width: 80%">
 
-            <v-card-title><p>Login</p></v-card-title>
+            <v-card-title>Login</v-card-title>
 
             <v-card-text>
                 <v-form v-model="valid" ref="form" @submit.prevent="submitForm">
@@ -55,6 +55,7 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex'
+import { rules } from '@/mixins/rules'
 
 export default {
     data () {
@@ -62,15 +63,6 @@ export default {
             valid: true,
             email: '',
             password: '',
-            emailRules: [
-                v => !!v || 'E-mail is required',
-                v => /.+@.+/.test(v) || 'E-mail must be valid'
-            ],
-            passwordRules: [
-                v => !!v || 'Password is required',
-                v => v.length <= 99 || 'Password must be less than 99 characters',
-                v => (v || '').indexOf(' ') < 0 || 'No spaces are allowed'
-            ],
             btnColor: 'primary',
             snackbar: {
                 show: false,
@@ -105,10 +97,8 @@ export default {
                     }
                 })
             }
-        },
-        resetValidation() {
-            this.$refs.form.resetValidation()
         }
-    }
+    },
+    mixins: [rules]
 }
 </script>

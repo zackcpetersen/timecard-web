@@ -15,8 +15,23 @@
                 <v-container>
                     <v-row>
                         <v-col cols="12">
-                            <v-text-field label="Name" v-model="name"></v-text-field>
-                            <v-textarea label="Description" outlined rows="3" v-model="description"></v-textarea>
+                            <v-form ref="form" v-model="valid">
+                                <v-text-field
+                                    label="Name"
+                                    v-model="name"
+                                    counter="50"
+                                    :rules="nameRules"
+                                    class="mb-3"
+                                ></v-text-field>
+                                <v-textarea
+                                    label="Description"
+                                    outlined
+                                    rows="3"
+                                    v-model="description"
+                                    counter="250"
+                                    :rules="descriptionRules"
+                                ></v-textarea>
+                            </v-form>
                         </v-col>
                     </v-row>
                     <v-row justify="center">
@@ -40,13 +55,14 @@
 
 <script>
 import { mapActions } from 'vuex'
+import { rules } from '@/mixins/rules'
 
 export default {
     data () {
         return {
             name: '',
-            description: ''
-            // TODO add rules as mixin!
+            description: '',
+            valid: true
         }
     },
     methods: {
@@ -57,14 +73,17 @@ export default {
             this.$emit('status', false)
         },
         submit () {
-            const projData = {
-                'name': this.name,
-                'description': this.description
+            if (this.$refs.form.validate()) {
+                const projData = {
+                    'name': this.name,
+                    'description': this.description
+                }
+                this.createProject(projData)
+                    .then(this.closeModal())
             }
-            this.createProject(projData)
-                .then(this.closeModal())
         }
     },
+    mixins: [rules],
     props: {
         showModal: Boolean
     }

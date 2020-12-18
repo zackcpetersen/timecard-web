@@ -27,6 +27,11 @@ import navDrawer from '@/components/navDrawer'
 import snackbar from '@/components/snackbar'
 
 export default {
+    data () {
+        return {
+            drawer: false
+        }
+    },
     computed: {
         ...mapGetters({
             currentSnackbar: 'getSnackbarMessage'
@@ -38,9 +43,6 @@ export default {
     components: {
         'nav-drawer': navDrawer,
         'snackbar': snackbar
-    },
-    data: () => ({
-        drawer: false
-    }),
+    }
 }
 </script>
