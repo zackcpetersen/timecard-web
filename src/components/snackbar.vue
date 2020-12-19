@@ -3,22 +3,31 @@
         v-model="show"
         :color="snackbar.color"
         :timeout="timeout"
-        :multi-line="true"
         shaped
-        app
         elevation="3"
+        transition="slide-y-reverse-transition"
     >
-        <v-icon class="mr-6">{{ snackbar.icon }}</v-icon>
-        <span class="white--text text-subtitle-1">{{ snackbar.heading }}</span>
-        <br>
-        <span class="black--text">{{ snackbar.message }}</span>
-        <template v-slot:action="{ attrs }">
+        <v-row align="center" justify="space-between" dense>
+            <v-col cols="1">
+                <v-row justify="center" dense>
+                    <v-icon>{{ snackbar.icon }}</v-icon>
+                </v-row>
+            </v-col>
+            <v-col cols="8">
+                <v-row dense>
+                    <span class="white--text text-subtitle-1 font-weight-bold">{{ snackbar.heading }}</span>
+                    <span class="white--text">{{ snackbar.content }}</span>
+                </v-row>
+            </v-col>
+            <v-col cols="1">
+                <v-row justify="center" dense>
             <v-btn
                 text
                 @click="show = false"
-                v-bind="attrs"
-            ><v-icon color="black">{{ closeIcon }}</v-icon></v-btn>
-        </template>
+            ><v-icon>{{ closeIcon }}</v-icon></v-btn>
+                </v-row>
+            </v-col>
+        </v-row>
     </v-snackbar>
 </template>
 
