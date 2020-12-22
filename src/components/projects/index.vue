@@ -1,31 +1,35 @@
 <template>
-    <v-container>
-            <div class="d-flex flex-no-wrap justify-space-around align-center mb-5">
+        <v-card class="py-5 rounded-lg" outlined>
+            <v-card-title class="d-flex flex-no-wrap justify-sm-space-between justify-space-around align-center mx-md-10 mx-sm-1">
                 <span class="text-h3">Projects</span>
                 <v-btn @click="createModalStatus(true)" color="green" fab><v-icon color="white">{{ createIcon }}</v-icon></v-btn>
-            </div>
-        <v-row dense justify="center">
-            <v-col cols="12" lg="7" v-for="project in projects" :key="project.id">
-                <v-card shaped @click="updateProject(project)">
-                    <div class="d-flex flex-no-wrap justify-space-between align-center">
-                        <div class="mx-lg-5">
-                            <v-card-title class="headline">
-                                {{ project.name }}
-                            </v-card-title>
-                            <v-card-subtitle>
-                                {{ project.description }}
-                            </v-card-subtitle>
-                        </div>
-                        <v-avatar class="mr-lg-5 mr-3 my-3" size="100" rounded v-if="project.project_images.length">
-                            <v-img :src="featuredImage(project)" aspect-ratio="1"></v-img>
-                        </v-avatar>
-                    </div>
-                </v-card>
-            </v-col>
-        </v-row>
-        <create-project :showModal="projectCreateModal" @status="createModalStatus"></create-project>
-        <edit-project :showModal="projectEditModal" @status="editModalStatus"></edit-project>
-    </v-container>
+            </v-card-title>
+           
+            <v-divider class="my-5"></v-divider>
+            <v-card-text>
+                <v-row dense justify="center">
+                    <v-col cols="12" md="7" v-for="project in projects" :key="project.id">
+                        <v-card @click="updateProject(project)" class="rounded-md">
+                            <div class="d-flex flex-no-wrap justify-space-between align-center">
+                                <div class="mx-md-5">
+                                    <v-card-title class="headline">
+                                        {{ project.name }}
+                                    </v-card-title>
+                                    <v-card-subtitle>
+                                        {{ project.description }}
+                                    </v-card-subtitle>
+                                </div>
+                                <v-avatar class="mr-md-5 mr-3 my-3" size="100" rounded v-if="project.project_images.length">
+                                    <v-img :src="featuredImage(project)" aspect-ratio="1"></v-img>
+                                </v-avatar>
+                            </div>
+                        </v-card>
+                    </v-col>
+                </v-row>
+            </v-card-text>
+            <create-project :showModal="projectCreateModal" @status="createModalStatus"></create-project>
+            <edit-project :showModal="projectEditModal" @status="editModalStatus"></edit-project>
+        </v-card>
 </template>
 
 <script>
