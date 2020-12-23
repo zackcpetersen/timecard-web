@@ -19,7 +19,7 @@
                                         {{ project.description }}
                                     </v-card-subtitle>
                                 </div>
-                                <v-avatar class="mr-md-5 mr-3 my-3" size="100" rounded v-if="project.project_images.length">
+                                <v-avatar class="mr-md-5 mr-3 my-3" size="80" rounded v-if="project.project_images.length">
                                     <v-img :src="featuredImage(project)" aspect-ratio="1"></v-img>
                                 </v-avatar>
                             </div>
@@ -30,6 +30,7 @@
             <create-project :showModal="projectCreateModal" @status="createModalStatus"></create-project>
             <edit-project :showModal="projectEditModal" @status="editModalStatus"></edit-project>
         </v-card>
+    </v-row>
 </template>
 
 <script>

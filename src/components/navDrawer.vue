@@ -47,7 +47,7 @@ export default {
             pages: [
                 { title: 'Track Time', icon: 'mdi-clock', route: 'Timecard'},
                 { title: 'Projects', icon: 'mdi-home-variant', route: 'Projects'},
-                { title: 'Entries', icon: 'mdi-format-list-text', route: ''},
+                { title: 'Entries', icon: 'mdi-format-list-text', route: 'Entries'},
                 { title: 'User Options', icon: 'mdi-account', route: ''},
                 { title: 'Admin', icon: 'mdi-cog', route: ''}
             ],
