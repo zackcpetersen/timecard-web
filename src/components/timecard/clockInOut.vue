@@ -24,7 +24,7 @@ export default {
     data () {
         return {
             clockIn: this.clockedIn,
-            clockedInData: {text: 'Clock-In', icon: 'mdi-clock-outline'},
+            clockedInData: {text: 'Clock-In', icon: 'mdi-clock-time-nine-outline'},
             clockedOutData: {text: 'Clock-Out', icon: 'mdi-stop-circle-outline'},
         }
     },

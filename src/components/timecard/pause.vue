@@ -40,8 +40,8 @@ export default {
     },
     computed: {
         timePaused () {
-            if (this.entry.time_paused) {
-                return this.entry.time_paused
+            if (this.entry.time_paused_secs) {
+                return this.entry.time_paused_secs
             }
             return null
         },
@@ -50,7 +50,7 @@ export default {
             return time.toLocaleTimeString()
         },
         timePausedFormatted () {
-            return new Date(this.entry.time_paused * 1000).toISOString().substr(11, 8)
+            return new Date(this.entry.time_paused_secs * 1000).toISOString().substr(11, 8)
         },
         activePause () {
             return this.paused ? this.pausedData : this.unPausedData
