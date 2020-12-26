@@ -107,7 +107,6 @@ export default {
         project () {
             this.projName = this.name
             this.projDesc = this.description
-
         }
     },
     methods: {

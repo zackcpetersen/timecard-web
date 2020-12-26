@@ -39,14 +39,14 @@ const routes = [
     //         requiresAuth: true
     //     }
     // },
-    // {
-    //     path: '/entries/',
-    //     name: 'Entries',
-    //     component: Entries,
-    //     meta: {
-    //         requiresAuth: true
-    //     }
-    // },
+    {
+        path: '/entries/',
+        name: 'Entries',
+        component: () => import('@/views/entries'),
+        meta: {
+            requiresAuth: true
+        }
+    },
     // {
     //     path: '/user/',
     //     name: 'User',

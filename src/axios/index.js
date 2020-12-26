@@ -1,5 +1,6 @@
 import Axios from 'axios'
 import { failedSnackbar, successfulSnackbar } from '@/mixins/snackbar-messages'
+import store from '@/store/index'
 
 const axios = Axios.create({
     baseURL: 'http://127.0.0.1:8000/api/'
@@ -15,21 +16,21 @@ axios.interceptors.response.use(response => {
     if (error.response) {
         switch (error.response.status) {
             case 401:
-                if (error.response.config && !error.response.config.__isRetryRequest) {
-                    // TODO need to test this one
-                    this.logout()
-                }
+                store.dispatch('authLogout', {})
+                break
+            case 403:
+                store.dispatch('authLogout', {})
                 break
             case 404:
                 failedSnackbar({ heading: error.message, content: error.response.config.url })
                 break
             case 400:
-                if (error.response.data.non_field_errors.length) {
+                if (error.response.data.non_field_errors) {
                     console.log(error.response.data.non_field_errors[0])
                     failedSnackbar({ heading: 'Login Failed', content: error.response.data.non_field_errors[0]})
                     return Promise.reject(error)
                 }
-                failedSnackbar({ heading: error.message })
+                failedSnackbar({ heading: error.message, content: error.response.data })
                 return Promise.reject(error)
             case 409:
                 console.log(error.message)
