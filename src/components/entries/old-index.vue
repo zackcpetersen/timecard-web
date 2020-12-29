@@ -15,7 +15,7 @@
                             <div class="d-flex flex-no-wrap justify-space-between align-center">
                                 <div style="max-width: 50%">
                                     <v-card-title class="headline d-block">
-                                        <span>{{ fullName(entry) }}</span>
+                                        <span>{{ entryUser(entry) }}</span>
                                     </v-card-title>
                                     <v-card-subtitle>
                                         <span class="d-block">{{ entryProject(entry) }}</span>
@@ -52,6 +52,7 @@
 <script>
 import { mapMutations } from 'vuex'
 import editEntry from '@/components/entries/edit'
+import entryConstants from '@/constants/entries'
 
 export default {
     data () {
@@ -67,7 +68,7 @@ export default {
         editModalStatus (value) {
             this.entryEditModal = value
         },
-        fullName (entry) {
+        entryUser (entry) {
             return entry.user.first_name + ' ' + entry.user.last_name[0] + '.'
         },
         formattedDate (entry) {
@@ -102,26 +103,7 @@ export default {
             }
         },
         status (status) {
-            // TODO could run unclosed entry check here and update db
-            const statusData = {}
-
-            if (status === 'approved') {
-                statusData['type'] = 'Approved'
-                statusData['color'] = 'green'
-            } else if (status === 'needs_approval') {
-                statusData['type'] = 'Needs Approval'
-                statusData['color'] = 'warning'
-            } else if (status === 'flagged') {
-                statusData['type'] = 'Flagged'
-                statusData['color'] = 'error'
-            } else if (status === 'active') {
-                statusData['type'] = 'Active'
-                statusData['color'] = 'primary'
-            } else {
-                statusData['type'] = status
-                statusData['color'] = 'black'
-            }
-            return statusData
+            return entryConstants.status(status)
         }
     },
     props: {
