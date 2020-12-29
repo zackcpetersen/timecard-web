@@ -30,7 +30,7 @@ const entryConstants = {
         const localeTime = timestamp.toLocaleTimeString()
         return localeDate + ' ' + localeTime
     },
-    timePausedFormatted (time_paused) {
+    durationFormatted (time_paused) {
         return new Date(time_paused * 1000).toISOString().substr(11, 8)
     },
 }

@@ -44,7 +44,7 @@ export default {
             return !!this.entry.time_paused_secs
         },
         pauseTimeFormatted () {
-            return entryConstants.localeTime(this.entry.startPause)
+            return entryConstants.localeTime(this.entry.start_pause)
         },
         durationFormatted () {
             return entryConstants.durationFormatted(this.entry.time_paused_secs)

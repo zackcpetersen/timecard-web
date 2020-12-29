@@ -1,9 +1,12 @@
 <template>
     <v-row justify="center">
-        <v-card class="rounded-lg">
+        <v-card class="rounded-lg" max-width="95%">
             <v-card-title>
+                <v-col cols="12" md="6">
                 Entries
+                </v-col>
                 <v-spacer></v-spacer>
+                <v-col cols="12" md="6">
                 <v-text-field
                     v-model="search"
                     append-icon="mdi-magnify"
@@ -11,6 +14,7 @@
                     single-line
                     hide-details
                 ></v-text-field>
+                </v-col>
             </v-card-title>
             <v-data-table
                 v-model="selected"
@@ -34,10 +38,21 @@
                         status="approved"
                         color="success"
                         btnText="Approve Entries"
+                        @entriesUpdated="clearStatus"
+                    ></entry-status>
+                    <entry-status
+                        :selected="selected"
+                        status="flagged"
+                        color="error"
+                        btnText="Flag Entries"
+                        @entriesUpdated="clearStatus"
                     ></entry-status>
                 </template>
                 <template v-slot:item.status="{ item }">
                     <span :class="`${status(item.status).color}--text`">{{ status(item.status).type }}</span>
+                </template>
+                <template v-slot:item.project="{ item }">
+                    <span class="d-block text-truncate" style="max-width: 100px">{{ item.project }}</span>
                 </template>
                 <template v-slot:item.actions="{ item }">
                     <v-icon small class="mr-2" @click="editEntry(item)">mdi-pencil</v-icon>
@@ -79,7 +94,7 @@ export default {
             this.editModalStatus(true)
         },
         durationFormatted (time_paused) {
-            return entryConstants.timePausedFormatted(time_paused)
+            return entryConstants.durationFormatted(time_paused)
         },
         status (status) {
             return entryConstants.status(status)
@@ -89,6 +104,9 @@ export default {
         },
         fullName (entry) {
             return entry.user.first_name + ' ' + entry.user.last_name
+        },
+        clearStatus () {
+            this.selected = []
         }
     },
     computed: {
@@ -117,7 +135,7 @@ export default {
                 formattedEntry['user'] = this.fullName(entry)
                 formattedEntry['date'] = entryDate.toLocaleDateString()
                 formattedEntry['start_time'] = entryDate.toLocaleTimeString()
-                formattedEntry['end_time'] = new Date(entry.end_time).toLocaleTimeString()
+                formattedEntry['end_time'] = entry.end_time ? new Date(entry.end_time).toLocaleTimeString() : null
                 formattedEntry['time_paused'] = this.durationFormatted(entry.time_paused_secs)
                 formattedEntry['time_worked'] = this.durationFormatted(entry.time_worked_secs)
                 formattedEntry['project'] = entry.project_name

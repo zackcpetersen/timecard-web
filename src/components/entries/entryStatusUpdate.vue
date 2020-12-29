@@ -2,7 +2,7 @@
     <v-btn
         v-if="selected.length"
         @click="updateEntries"
-        class="ml-4"
+        class="ml-4 mb-2"
         :color="color"
     >{{ btnText }}</v-btn>
 </template>
@@ -18,8 +18,15 @@ export default {
         updateEntries () {
             // could pass loading = true to parent
             const newEntries = { entries: [], status: this.status }
-            this.selected.forEach(entry => newEntries.entries.push(entry.id))
-            this.entryStatusUpdate(newEntries)
+            this.selected.forEach(entry => {
+                if (entry.end_time) {
+                    newEntries.entries.push(entry.id)
+                }
+            })
+            if (newEntries.entries.length) {
+                this.entryStatusUpdate(newEntries)
+                    .then(this.$emit('entriesUpdated'))
+            }
         }
     },
     props: {
