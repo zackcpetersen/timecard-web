@@ -43,6 +43,12 @@ const actions = {
                 commit('UPDATE_CURRENT_ENTRY', response.data)
             })
     },
+    async entryStatusUpdate ({ commit }, entries) {
+        await axios.post('/entry-status/', entries)
+            .then(response => {
+                commit('UPDATE_ENTRY_STATUSES', response.data)
+            })
+    },
     async fetchEntries ({ commit }, filters) {
         await axios.post('/filter-entries/', filters)
             .then(response => {
@@ -61,8 +67,9 @@ const mutations = {
         }
     },
     SET_CURRENT_ENTRY: (state, entry) => (state.currentEntry = entry),
-    UPDATE_CURRENT_ENTRY: (state, updatedEntry) => {
-        state.currentEntry = updatedEntry
+    UPDATE_CURRENT_ENTRY: (state, updatedEntry) => {state.currentEntry = updatedEntry},
+    UPDATE_ENTRY_STATUSES: (state, updatedEntries) => {
+        state.entries.map(existing => updatedEntries.find(updated => updated.id === existing.id) || existing)
     },
     REMOVE_CURRENT_ENTRY : state => state.currentEntry = {}
 }
