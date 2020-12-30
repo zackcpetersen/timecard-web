@@ -1,93 +1,88 @@
 <template>
-    <v-row justify="center">
-        <v-col cols="12" md="10">
-            <v-row justify="space-around" class="px-5">
-                <v-col cols="10" sm="6" md="4" lg="3">
-                    <update-date v-model="startDate" label="Start Date" icon="mdi-calendar"></update-date>
-                    <v-spacer></v-spacer>
-                </v-col>
-                <v-col cols="10" sm="6" md="4" lg="3">
-                    <update-date v-model="endDate" label="End Date" icon="mdi-calendar"></update-date>
-                </v-col>
-
-                <v-col cols="10" sm="6" md="4" lg="3">
-                    <project-filter v-model="projectList"></project-filter>
-                    <v-spacer></v-spacer>
-                </v-col>
-                <v-col cols="10" sm="6" md="4" lg="3">
-                    <status-filter v-model="statusList"></status-filter>
-                    <v-spacer></v-spacer>
-                </v-col>
-                <v-col cols="10" sm="6" md="4" lg="3">
-                    <user-filter v-model="userList"></user-filter>
-                    <v-spacer></v-spacer>
-            </v-col>
-            </v-row>
-        </v-col>
-        <v-col cols="12">
-        <v-row justify="center">
-        <v-card class="rounded-lg" max-width="95%">
-            <v-card-title>
-                <v-col cols="12" md="6">
+    <v-row justify="center" class="px-3">
+        <v-card outlined>
+            <v-card-title class="ml-5 headline">
                 Entries
-                </v-col>
-                <v-spacer></v-spacer>
-                <v-col cols="12" md="6">
-                <v-text-field
-                    v-model="search"
-                    append-icon="mdi-magnify"
-                    label="Search"
-                    single-line
-                    hide-details
-                ></v-text-field>
-                </v-col>
             </v-card-title>
-            <v-data-table
-                v-model="selected"
-                :headers="headers"
-                :items="userEntries"
-                :search="search"
-                item-key="id"
-                group-by="user"
-                sort-by="date"
-                sort-desc
-                show-select
-                :loading="loading"
-                loading-text="Loading... Please wait"
-                no-results-text="No Matching Entries Found"
-                dense
-                class="px-2"
-            >
-                <template v-slot:top>
-                    <entry-status
-                        :selected="selected"
-                        status="approved"
-                        color="success"
-                        btnText="Approve Entries"
-                        @entriesUpdated="clearStatus"
-                    ></entry-status>
-                    <entry-status
-                        :selected="selected"
-                        status="flagged"
-                        color="error"
-                        btnText="Flag Entries"
-                        @entriesUpdated="clearStatus"
-                    ></entry-status>
-                </template>
-                <template v-slot:item.status="{ item }">
-                    <span :class="`${status(item.status).color}--text`">{{ status(item.status).type }}</span>
-                </template>
-                <template v-slot:item.project="{ item }">
-                    <span class="d-block text-truncate" style="max-width: 100px">{{ item.project }}</span>
-                </template>
-                <template v-slot:item.actions="{ item }">
-                    <v-icon small class="mr-2" @click="editEntry(item)">mdi-pencil</v-icon>
-                </template>
-            </v-data-table>
+            <v-card-actions class="d-flex justify-center font-weight-regular">
+                <v-col cols="12" md="10">
+                    <span class="d-flex justify-center title font-italic font-weight-regular">Choose Filters</span>
+                    <v-row justify="space-around" class="px-5">
+                        <v-col cols="10" sm="6" md="4" lg="3">
+                            <update-date v-model="startDate" label="Start Date" icon="mdi-calendar"></update-date>
+                            <v-spacer></v-spacer>
+                        </v-col>
+                        <v-col cols="10" sm="6" md="4" lg="3">
+                            <update-date v-model="endDate" label="End Date" icon="mdi-calendar"></update-date>
+                        </v-col>
+
+                        <v-col cols="10" sm="6" md="4" lg="3">
+                            <project-filter v-model="projectList"></project-filter>
+                            <v-spacer></v-spacer>
+                        </v-col>
+                        <v-col cols="10" sm="6" md="4" lg="3">
+                            <status-filter v-model="statusList"></status-filter>
+                            <v-spacer></v-spacer>
+                        </v-col>
+                        <v-col cols="10" sm="6" md="4" lg="3">
+                            <user-filter v-model="userList"></user-filter>
+                            <v-spacer></v-spacer>
+                    </v-col>
+                    </v-row>
+                </v-col>
+            </v-card-actions>
+            <v-card-text>
+                <v-col cols="12">
+                    <v-row justify="center">
+                        <v-card class="rounded-lg pt-2" max-width="95%">
+                            <v-data-table
+                                v-model="selected"
+                                :headers="headers"
+                                :items="userEntries"
+                                :search="search"
+                                item-key="id"
+                                group-by="user"
+                                sort-by="date"
+                                sort-desc
+                                show-select
+                                :loading="loading"
+                                loading-text="Loading... Please wait"
+                                no-results-text="No Matching Entries Found"
+                                dense
+                                class="px-2"
+                            >
+                                <template v-slot:top>
+                                    <entry-status
+                                        :selected="selected"
+                                        status="approved"
+                                        color="success"
+                                        btnText="Approve Entries"
+                                        @entriesUpdated="clearStatus"
+                                    ></entry-status>
+                                    <entry-status
+                                        :selected="selected"
+                                        status="flagged"
+                                        color="error"
+                                        btnText="Flag Entries"
+                                        @entriesUpdated="clearStatus"
+                                    ></entry-status>
+                                </template>
+                                <template v-slot:item.status="{ item }">
+                                    <span :class="`${status(item.status).color}--text`">{{ status(item.status).type }}</span>
+                                </template>
+                                <template v-slot:item.project="{ item }">
+                                    <span class="d-flex flex-wrap" style="max-width: 100px">{{ item.project }}</span>
+                                </template>
+                                <template v-slot:item.actions="{ item }">
+                                    <v-icon small class="mr-2" @click="editEntry(item)">mdi-pencil</v-icon>
+                                </template>
+                            </v-data-table>
+                        </v-card>
+                        <edit-entry :showModal="entryEditModal" @status="editModalStatus"></edit-entry>
+                    </v-row>
+                </v-col>
+            </v-card-text>
         </v-card>
-        <edit-entry :showModal="entryEditModal" @status="editModalStatus"></edit-entry>
-    </v-row>
-        </v-col>
     </v-row>
 </template>
 
@@ -125,7 +120,7 @@ export default {
             this.entryEditModal = val
         },
         editEntry (tableEntry) {
-            // set currentEntry in state to item
+            // Set currentEntry in state to item
             const currEntry = this.entries.filter(entry => entry.id === tableEntry.id)[0]
             this.setCurrentEntry(currEntry)
             this.editModalStatus(true)
