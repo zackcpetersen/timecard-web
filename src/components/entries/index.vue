@@ -1,12 +1,14 @@
 <template>
     <v-row justify="center" class="px-3">
         <v-card outlined>
-            <v-card-title class="ml-5 headline">
-                Entries
+            <v-card-title class="ml-5 headline d-flex justify-space-between">
+                <span>Entries</span>
+                <csv-export :filters="filters"></csv-export>
             </v-card-title>
             <v-card-actions class="d-flex justify-center font-weight-regular">
                 <v-col cols="12" md="10">
                     <span class="d-flex justify-center title font-italic font-weight-regular">Choose Filters</span>
+                    <v-divider class="my-5"></v-divider>
                     <v-row justify="space-around" class="px-5">
                         <v-col cols="10" sm="6" md="4" lg="3">
                             <update-date v-model="startDate" label="Start Date" icon="mdi-calendar"></update-date>
@@ -90,6 +92,7 @@
 import { mapMutations } from 'vuex'
 import editEntry from '@/components/entries/edit'
 import entryConstants from '@/constants/entries'
+import entryCsvExport from '@/components/entries/csvExport'
 import entryStatusUpdate from '@/components/entries/entryStatusUpdate'
 import projectFilter from '@/components/entries/projectFilter'
 import statusFilter from '@/components/entries/statusFilter'
@@ -106,6 +109,9 @@ export default {
             dialogDelete: false,
             userEntries: [],
             projectList: [],
+            apiProjList: [],
+            nullProjects: true,
+            allProjects: true,
             statusList: [],
             userList: [],
             startDate: null,
@@ -144,7 +150,7 @@ export default {
             const today = new Date()
             today.setDate(today.getDate() - numDays)
             return today.toLocaleDateString('en-CA')
-        }
+        },
     },
     computed: {
         headers () {
@@ -180,8 +186,30 @@ export default {
                 { text: 'Actions', value: 'actions', sortable: false, filterable: false}
             ]
         },
+        filters () {
+            return {
+                'users': this.userList,
+                'projects': this.apiProjList,
+                'statuses': this.statusList,
+                'start_date': this.startDate,
+                'end_date': this.endDate,
+                'null_projects': this.nullProjects,
+                'all_projects': this.allProjects
+            }
+        },
     },
     watch: {
+        projectList () {
+            this.apiProjList = [...this.projectList]
+            const index = this.apiProjList.indexOf(null)
+            if (index > -1 || !this.apiProjList.length) {
+                this.apiProjList.splice(index, 1)
+                this.nullProjects = true
+            } else {
+                this.nullProjects = false
+            }
+            this.allProjects = !this.apiProjList.length && index === -1;
+        },
         entries () {
             this.userEntries = this.entries.map(entry => {
                 const formattedEntry = {}
@@ -209,6 +237,7 @@ export default {
         entries: Array
     },
     components: {
+        'csv-export': entryCsvExport,
         'edit-entry': editEntry,
         'entry-status': entryStatusUpdate,
         'project-filter': projectFilter,
