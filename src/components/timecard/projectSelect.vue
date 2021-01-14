@@ -41,7 +41,7 @@ export default {
     },
     methods: {
         ...mapActions({
-            updateEntry: 'updateEntry'
+            updateEntry: 'updateTimecardEntry'
         })
     },
     watch: {

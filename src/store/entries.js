@@ -44,6 +44,12 @@ const actions = {
                 commit('UPDATE_ENTRIES', [response.data])
             })
     },
+    async updateTimecardEntry ({ commit }, updatedEntry) {
+        await axios.put(`/entries/${updatedEntry.id}/`, updatedEntry)
+            .then(response => {
+                commit('UPDATE_CURRENT_ENTRY', response.data)
+            })
+    },
     async entryStatusUpdate ({ commit }, entries) {
         await axios.post('/entry-status/', entries)
             .then(response => {

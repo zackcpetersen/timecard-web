@@ -11,11 +11,21 @@
                     <v-divider class="my-5"></v-divider>
                     <v-row justify="space-around" class="px-5">
                         <v-col cols="10" sm="6" md="4" lg="3">
-                            <update-date v-model="startDate" label="Start Date" icon="mdi-calendar"></update-date>
+                            <update-date
+                                v-model="startDate"
+                                label="Start Date"
+                                icon="mdi-calendar"
+                                :allowedDates="allowedStartDates"
+                            ></update-date>
                             <v-spacer></v-spacer>
                         </v-col>
                         <v-col cols="10" sm="6" md="4" lg="3">
-                            <update-date v-model="endDate" label="End Date" icon="mdi-calendar"></update-date>
+                            <update-date
+                                v-model="endDate"
+                                label="End Date" i
+                                con="mdi-calendar"
+                                :allowedDates="allowedEndDates"
+                            ></update-date>
                         </v-col>
 
                         <v-col cols="10" sm="6" md="4" lg="3">
@@ -122,6 +132,12 @@ export default {
         ...mapMutations({
             setCurrentEntry: 'SET_CURRENT_ENTRY'
         }),
+        allowedStartDates (val) {
+            return val <= this.endDate
+        },
+        allowedEndDates (val) {
+            return val >= this.startDate
+        },
         editModalStatus (val) {
             this.entryEditModal = val
         },

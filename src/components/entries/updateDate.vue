@@ -23,6 +23,7 @@
             v-if="showCal"
             v-model="inputVal"
             @click:date="$refs.menu.save(inputVal)"
+            :allowed-dates="allowedDates"
         ></v-date-picker>
     </v-menu>
 </template>
@@ -48,7 +49,8 @@ export default {
         value: String,
         label: String,
         icon: String,
-        rules: null
+        rules: null,
+        allowedDates: null
     }
 }
 </script>
