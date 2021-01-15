@@ -99,7 +99,7 @@
 </template>
 
 <script>
-import { mapMutations } from 'vuex'
+import { mapActions, mapMutations } from 'vuex'
 import editEntry from '@/components/entries/edit'
 import entryConstants from '@/constants/entries'
 import entryCsvExport from '@/components/entries/csvExport'
@@ -129,6 +129,9 @@ export default {
         }
     },
     methods: {
+        ...mapActions({
+            fetchEntries: 'fetchEntries'
+        }),
         ...mapMutations({
             setCurrentEntry: 'SET_CURRENT_ENTRY'
         }),
@@ -215,6 +218,20 @@ export default {
         },
     },
     watch: {
+        startDate () {
+            if (this.entries.length) {
+                // formatting so the day is correct
+                const formattedStartDate = this.startDate.replace(/-/g, '/').replace(/T.+/, '')
+                const start = new Date(formattedStartDate).toLocaleDateString('en-CA')
+                const earliestEntry = new Date(this.entries[this.entries.length - 1].start_time).toLocaleDateString('en-CA')
+                if (start < earliestEntry) {
+                    const data = {
+                        start_date: this.startDate
+                    }
+                    this.fetchEntries(data)
+                }
+            }
+        },
         projectList () {
             this.apiProjList = [...this.projectList]
             const index = this.apiProjList.indexOf(null)
