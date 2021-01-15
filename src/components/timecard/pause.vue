@@ -16,13 +16,14 @@
             <p v-if="paused && clockedIn" class="mb-0">Paused: {{ pauseTimeFormatted }}</p>
         </v-row>
         <v-row justify="center">
-            <p v-if="timePaused && clockedIn">Total Pause Time: {{ timePausedFormatted }}</p>
+            <p v-if="timePaused && clockedIn">Total Pause Time: {{ durationFormatted }}</p>
         </v-row>
     </div>
 </template>
 
 <script>
 import { mapActions } from 'vuex'
+import entryConstants from '@/constants/entries'
 
 export default {
     methods: {
@@ -40,17 +41,13 @@ export default {
     },
     computed: {
         timePaused () {
-            if (this.entry.time_paused_secs) {
-                return this.entry.time_paused_secs
-            }
-            return null
+            return !!this.entry.time_paused_secs
         },
         pauseTimeFormatted () {
-            const time = new Date(this.entry.start_pause)
-            return time.toLocaleTimeString()
+            return entryConstants.localeTime(this.entry.start_pause)
         },
-        timePausedFormatted () {
-            return new Date(this.entry.time_paused_secs * 1000).toISOString().substr(11, 8)
+        durationFormatted () {
+            return entryConstants.durationFormatted(this.entry.time_paused_secs)
         },
         activePause () {
             return this.paused ? this.pausedData : this.unPausedData

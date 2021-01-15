@@ -6,6 +6,7 @@ import entries from '@/store/entries'
 import projects from '@/store/projects'
 import projectImages from '@/store/projectImages'
 import snackbar from '@/store/snackbar'
+import users from '@/store/users'
 
 Vue.use(Vuex)
 
@@ -15,6 +16,7 @@ export default new Vuex.Store({
         entries,
         projects,
         projectImages,
-        snackbar
+        snackbar,
+        users
     }
 })
