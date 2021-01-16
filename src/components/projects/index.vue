@@ -5,14 +5,21 @@
                 <span class="text-h3">Projects</span>
                 <v-btn @click="createModalStatus(true)" color="green" fab><v-icon color="white">{{ createIcon }}</v-icon></v-btn>
             </v-card-title>
-            <v-card-actions class="d-flex justify-start ml-md-10 ml-sm-5" style="max-width: 400px;">
+            <v-card-actions class="d-flex flex-wrap justify-start ml-md-10 ml-sm-5" style="max-width: 600px;">
                 <v-text-field
                     v-model="search"
                     class="ma-4"
-                    placeholder="Search Projects"
+                    label="Search Projects"
                     prepend-inner-icon="mdi-magnify"
                     color="primary"
                 ></v-text-field>
+                <v-select
+                    label="Project Status"
+                    :items="statuses"
+                    v-model="projStatus"
+                    prepend-inner-icon="mdi-filter-outline"
+                    class="ma-4"
+                ></v-select>
             </v-card-actions>
             <v-divider class="mb-5 mx-5"></v-divider>
             <v-card-text v-if="filteredProjects.length">
@@ -25,7 +32,9 @@
                                         {{ project.name }}
                                     </v-card-title>
                                     <v-card-subtitle>
-                                        {{ project.description }}
+                                        <span :class="`d-block ${status(project.status).color}--text`"
+                                        >{{ status(project.status).status }}</span>
+                                        <span class="d-block">{{ project.description }}</span>
                                     </v-card-subtitle>
                                 </div>
                                 <v-avatar class="mr-md-5 mr-3 my-3" size="80" rounded v-if="project.project_images.length">
@@ -51,6 +60,7 @@
 <script>
 import { mapMutations } from 'vuex'
 import createProject from '@/components/projects/create'
+import projectConstants from '@/constants/projects'
 import editProject from '@/components/projects/edit'
 
 export default {
@@ -63,11 +73,16 @@ export default {
             search: '',
             page: 1,
             pageLength: 6,
+            projStatus: 'active',
+            statuses: projectConstants.statuses
         }
     },
     computed: {
+        projectType () {
+            return this.projects.filter(proj => proj.status === this.projStatus)
+        },
         filteredProjects () {
-            return this.projects.filter(proj => {
+            return this.projectType.filter(proj => {
                 return proj.name.toLowerCase().includes(this.search.toLowerCase())
                     || proj.description.toLowerCase().includes(this.search.toLowerCase())
             })
@@ -99,8 +114,13 @@ export default {
                 featured = project.project_images[0]
             }
             return featured.image
+        },
+        status (projStatus) {
+            const color = projStatus === 'active' ? 'green' : 'warning'
+            return {status: projStatus[0].toUpperCase() + projStatus.slice(1), color: color}
         }
     },
+    mixins: [projectConstants],
     props: {
         projects: Array
     },
