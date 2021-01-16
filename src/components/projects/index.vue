@@ -1,14 +1,23 @@
 <template>
-        <v-card class="py-5 rounded-lg" outlined>
+    <v-row justify="center" align="start" style="height: 100%;" class="mt-sm-16 pt-sm-16">
+        <v-card class="py-5 mx-2 mx-sm-4 rounded-lg" outlined width="100%">
             <v-card-title class="d-flex flex-no-wrap justify-sm-space-between justify-space-around align-center mx-md-10 mx-sm-1">
                 <span class="text-h3">Projects</span>
                 <v-btn @click="createModalStatus(true)" color="green" fab><v-icon color="white">{{ createIcon }}</v-icon></v-btn>
             </v-card-title>
-           
-            <v-divider class="my-5"></v-divider>
-            <v-card-text>
+            <v-card-actions class="d-flex justify-start ml-md-10 ml-sm-5" style="max-width: 400px;">
+                <v-text-field
+                    v-model="search"
+                    class="ma-4"
+                    placeholder="Search Projects"
+                    prepend-inner-icon="mdi-magnify"
+                    color="primary"
+                ></v-text-field>
+            </v-card-actions>
+            <v-divider class="mb-5 mx-5"></v-divider>
+            <v-card-text v-if="filteredProjects.length">
                 <v-row dense justify="center">
-                    <v-col cols="12" md="7" v-for="project in projects" :key="project.id">
+                    <v-col cols="11" xl="8" v-for="project in visiblePages" :key="project.id">
                         <v-card @click="updateProject(project)" class="rounded-md">
                             <div class="d-flex flex-no-wrap justify-space-between align-center">
                                 <div class="mx-md-5">
@@ -25,7 +34,13 @@
                             </div>
                         </v-card>
                     </v-col>
+                    <v-col cols="12">
+                        <v-pagination :length="pageNums" v-model="page" :total-visible="6" class="mt-3"></v-pagination>
+                    </v-col>
                 </v-row>
+            </v-card-text>
+            <v-card-text v-else class="d-flex flex-wrap justify-center text-h4 font-weight-light">
+                <span>No Projects!</span>
             </v-card-text>
             <create-project :showModal="projectCreateModal" @status="createModalStatus"></create-project>
             <edit-project :showModal="projectEditModal" @status="editModalStatus"></edit-project>
@@ -44,7 +59,24 @@ export default {
             currProject: null,
             createIcon: 'mdi-plus',
             projectCreateModal: false,
-            projectEditModal: false
+            projectEditModal: false,
+            search: '',
+            page: 1,
+            pageLength: 6,
+        }
+    },
+    computed: {
+        filteredProjects () {
+            return this.projects.filter(proj => {
+                return proj.name.toLowerCase().includes(this.search.toLowerCase())
+                    || proj.description.toLowerCase().includes(this.search.toLowerCase())
+            })
+        },
+        pageNums () {
+            return Math.ceil(this.filteredProjects.length / this.pageLength)
+        },
+        visiblePages () {
+            return this.filteredProjects.slice((this.page - 1) * this.pageLength, this.page * this.pageLength)
         }
     },
     methods: {

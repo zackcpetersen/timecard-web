@@ -79,7 +79,12 @@ export default {
                     'description': this.description
                 }
                 this.createProject(projData)
-                    .then(this.closeModal())
+                    .then(() => {
+                        this.closeModal()
+                        this.name = ''
+                        this.description = ''
+                        this.$refs.form.resetValidation()
+                    })
             }
         }
     },
