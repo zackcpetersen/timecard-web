@@ -1,5 +1,5 @@
 <template>
-    <v-row justify="center" class="px-3">
+    <v-row justify="space-around" align="start" style="height: 100%" class="px-3 mt-sm-16 pt-sm-16">
         <v-card outlined>
             <v-card-title class="ml-5 headline d-flex justify-space-between">
                 <span>Entries</span>
@@ -83,7 +83,7 @@
                                     <span :class="`${status(item.status).color}--text`">{{ status(item.status).type }}</span>
                                 </template>
                                 <template v-slot:item.project="{ item }">
-                                    <span class="d-flex flex-wrap" style="max-width: 100px">{{ item.project }}</span>
+                                    <span class="d-flex flex-wrap">{{ item.project }}</span>
                                 </template>
                                 <template v-slot:item.actions="{ item }">
                                     <v-icon small class="mr-2" @click="editEntry(item)">mdi-pencil</v-icon>
@@ -176,20 +176,20 @@ export default {
             return [
                 { text: 'User', value: 'user', align: 'start' },
                 {
-                    text: 'User Id', value: 'userId', align: ' d-none', filter: user => {
+                    text: 'User Id', value: 'userId', align: ' d-none', width: 0, filter: user => {
                         return this.userList.length ? this.userList.includes(user) : true
                     }
                 },
                 {
-                    text: 'Date', value: 'date', filter: date => {
+                    text: 'Date', value: 'date', width: 105, filter: date => {
                         return date >= this.startDate && this.endDate >= date
                     }
                 },
-                { text: 'Start Time', value: 'start_time', sortable: false },
-                { text: 'End Time', value: 'end_time', sortable: false },
+                { text: 'Start Time', value: 'start_time', width: 105, sortable: false },
+                { text: 'End Time', value: 'end_time', width: 105, sortable: false },
                 { text: 'Time Paused', value: 'time_paused' },
                 { text: 'Time Worked', value: 'time_worked' },
-                { text: 'Project', value: 'project' },
+                { text: 'Project', value: 'project', width: 105 },
                 {
                     text: 'Project Id', value: 'project_id', align: ' d-none', filter: project => {
                         return this.projectList.length ? this.projectList.includes(project) : true

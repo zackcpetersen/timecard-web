@@ -31,7 +31,21 @@
                                     counter="250"
                                     :rules="descriptionRules"
                                 ></v-textarea>
+                                <v-select
+                                    :items="types"
+                                    item-value="id"
+                                    item-text="name"
+                                    label="Project Type"
+                                    v-model="projectType"
+                                >
+                                </v-select>
                             </v-form>
+                            <v-btn
+                                color="primary"
+                                @click="projTypeModalStatus(true)"
+                            >
+                                <v-icon class="mr-1">mdi-plus</v-icon>New Project Type
+                            </v-btn>
                         </v-col>
                     </v-row>
                     <v-row justify="center">
@@ -44,48 +58,66 @@
                             color="blue darken-1"
                             text
                             @click="submit"
-                            v-if="!!name && !!description"
+                            v-if="!!name && !!description && !!projectType"
                         >Create</v-btn>
                     </v-row>
                 </v-container>
             </v-card-text>
         </v-card>
+        <project_types :showModal="projectTypeModal" @status="projTypeModalStatus"></project_types>
     </v-dialog>
 </template>
 
 <script>
 import { mapActions } from 'vuex'
 import { rules } from '@/mixins/rules'
+import projectTypes from '@/components/projects/projectTypes'
 
 export default {
     data () {
         return {
             name: '',
             description: '',
-            valid: true
+            projectType: '',
+            valid: true,
+            projectTypeModal: false,
         }
     },
     methods: {
         ...mapActions({
             createProject: 'createProject'
         }),
+        projTypeModalStatus (value) {
+            this.projectTypeModal = value
+        },
         closeModal () {
             this.$emit('status', false)
         },
         submit () {
             if (this.$refs.form.validate()) {
                 const projData = {
-                    'name': this.name,
-                    'description': this.description
+                    name: this.name,
+                    description: this.description,
+                    type: this.projectType
                 }
                 this.createProject(projData)
-                    .then(this.closeModal())
+                    .then(() => {
+                        this.closeModal()
+                        this.name = ''
+                        this.description = ''
+                        this.projectType = ''
+                        this.$refs.form.resetValidation()
+                    })
             }
         }
     },
     mixins: [rules],
     props: {
-        showModal: Boolean
+        showModal: Boolean,
+        types: Array
+    },
+    components: {
+        'project_types': projectTypes
     }
 }
 </script>

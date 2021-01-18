@@ -9,7 +9,7 @@
             <v-card-title>
                 <v-row justify="space-between" align="center">
                     <span class="headline">Edit Project</span>
-                    <v-btn @click="projDelete" class="white--text" color="red">REMOVE</v-btn>
+                    <v-btn @click="projDelete" class="white--text" color="red" :loading="loading">REMOVE</v-btn>
                 </v-row>
             </v-card-title>
             <v-card-text>
@@ -32,6 +32,15 @@
                                     :rules="descriptionRules"
                                     counter="250"
                                 ></v-textarea>
+                                <v-select
+                                    :items="types"
+                                    item-value="id"
+                                    item-text="name"
+                                    label="Project Type"
+                                    v-model="projectType"
+                                >
+                                </v-select>
+                                <v-select label="Status" :items="statuses" v-model="projStatus"></v-select>
                             </v-form>
                             <upload-image :imgData="projImgData" class="mb-5"></upload-image>
                             <image-list :images="images" :allowFeatured="true"></image-list>
@@ -48,6 +57,7 @@
                             text
                             @click="submit"
                             v-if="saveEnabled"
+                            :loading="loading"
                         >Update</v-btn>
                     </v-row>
                 </v-container>
@@ -60,6 +70,7 @@
 import { mapActions, mapGetters } from 'vuex'
 import { rules } from '@/mixins/rules'
 import imageList from '@/components/images/imageList'
+import projectConstants from '@/constants/projects'
 import uploadImage from '@/components/images/uploadImage'
 
 export default {
@@ -67,7 +78,11 @@ export default {
         return {
             projName: '',
             projDesc: '',
-            valid: true
+            projStatus: '',
+            projectType: '',
+            valid: true,
+            loading: false,
+            statuses: projectConstants.statuses
         }
     },
     computed: {
@@ -76,7 +91,10 @@ export default {
             getImagesByProject: 'getImagesByProject'
         }),
         saveEnabled () {
-            return this.name !== this.projName || this.description !== this.projDesc
+            return this.name !== this.projName
+                || this.description !== this.projDesc
+                || this.status !== this.projStatus
+                || this.type !== this.projectType
         },
         images () {
             return this.getImagesByProject(this.project.id)
@@ -97,6 +115,22 @@ export default {
                 this.projDesc = val
             }
         },
+        status: {
+            get () {
+                return this.project.status
+            },
+            set (val) {
+                this.projStatus = val
+            }
+        },
+        type: {
+            get () {
+                return this.project.type
+            },
+            set (val) {
+                this.projectType = val
+            }
+        },
         projImgData () {
             return {
                 'project': this.project.id,
@@ -107,6 +141,8 @@ export default {
         project () {
             this.projName = this.name
             this.projDesc = this.description
+            this.projStatus = this.status
+            this.projectType = this.type
         }
     },
     methods: {
@@ -118,28 +154,45 @@ export default {
             this.$emit('status', false)
         },
         projDelete () {
+            this.loading = true
             this.deleteProject(this.project.id)
-                .then(this.closeModal())
+                .then(() => {
+                    this.loading = false
+                    this.closeModal()
+                })
         },
         submit () {
             if (this.$refs.form.validate()) {
                 const projData = {
-                    'name': this.projName,
-                    'description': this.projDesc,
-                    'id': this.project.id
+                    name: this.projName,
+                    description: this.projDesc,
+                    status: this.projStatus.toLowerCase(),
+                    type: this.projectType,
+                    id: this.project.id
                 }
+                this.loading = true
                 this.updateProject(projData)
-                    .then(this.closeModal())
+                    .then(() => {
+                        this.projName = ''
+                        this.projDesc = ''
+                        this.projStatus = ''
+                        this.projectType = ''
+                        this.id = ''
+                        this.loading = false
+                        this.$refs.form.resetValidation()
+                        this.closeModal()
+                    })
             }
         }
     },
     props: {
-        showModal: Boolean
+        showModal: Boolean,
+        types: Array
     },
-    mixins: [rules],
+    mixins: [rules, projectConstants],
     components: {
         'image-list': imageList,
-        'upload-image': uploadImage
+        'upload-image': uploadImage,
     }
 }
 </script>

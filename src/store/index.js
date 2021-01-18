@@ -5,6 +5,7 @@ import auth from './authentication'
 import entries from '@/store/entries'
 import projects from '@/store/projects'
 import projectImages from '@/store/projectImages'
+import projectTypes from '@/store/projectTypes'
 import snackbar from '@/store/snackbar'
 import users from '@/store/users'
 
@@ -16,6 +17,7 @@ export default new Vuex.Store({
         entries,
         projects,
         projectImages,
+        projectTypes,
         snackbar,
         users
     }
