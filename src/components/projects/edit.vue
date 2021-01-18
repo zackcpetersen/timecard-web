@@ -32,6 +32,14 @@
                                     :rules="descriptionRules"
                                     counter="250"
                                 ></v-textarea>
+                                <v-select
+                                    :items="types"
+                                    item-value="id"
+                                    item-text="name"
+                                    label="Project Type"
+                                    v-model="projectType"
+                                >
+                                </v-select>
                                 <v-select label="Status" :items="statuses" v-model="projStatus"></v-select>
                             </v-form>
                             <upload-image :imgData="projImgData" class="mb-5"></upload-image>
@@ -61,8 +69,8 @@
 <script>
 import { mapActions, mapGetters } from 'vuex'
 import { rules } from '@/mixins/rules'
-import projectConstants from '@/constants/projects'
 import imageList from '@/components/images/imageList'
+import projectConstants from '@/constants/projects'
 import uploadImage from '@/components/images/uploadImage'
 
 export default {
@@ -71,6 +79,7 @@ export default {
             projName: '',
             projDesc: '',
             projStatus: '',
+            projectType: '',
             valid: true,
             loading: false,
             statuses: projectConstants.statuses
@@ -85,6 +94,7 @@ export default {
             return this.name !== this.projName
                 || this.description !== this.projDesc
                 || this.status !== this.projStatus
+                || this.type !== this.projectType
         },
         images () {
             return this.getImagesByProject(this.project.id)
@@ -113,6 +123,14 @@ export default {
                 this.projStatus = val
             }
         },
+        type: {
+            get () {
+                return this.project.type
+            },
+            set (val) {
+                this.projectType = val
+            }
+        },
         projImgData () {
             return {
                 'project': this.project.id,
@@ -124,6 +142,7 @@ export default {
             this.projName = this.name
             this.projDesc = this.description
             this.projStatus = this.status
+            this.projectType = this.type
         }
     },
     methods: {
@@ -145,10 +164,11 @@ export default {
         submit () {
             if (this.$refs.form.validate()) {
                 const projData = {
-                    'name': this.projName,
-                    'description': this.projDesc,
-                    'status': this.projStatus.toLowerCase(),
-                    'id': this.project.id
+                    name: this.projName,
+                    description: this.projDesc,
+                    status: this.projStatus.toLowerCase(),
+                    type: this.projectType,
+                    id: this.project.id
                 }
                 this.loading = true
                 this.updateProject(projData)
@@ -156,6 +176,7 @@ export default {
                         this.projName = ''
                         this.projDesc = ''
                         this.projStatus = ''
+                        this.projectType = ''
                         this.id = ''
                         this.loading = false
                         this.$refs.form.resetValidation()
@@ -165,12 +186,13 @@ export default {
         }
     },
     props: {
-        showModal: Boolean
+        showModal: Boolean,
+        types: Array
     },
     mixins: [rules, projectConstants],
     components: {
         'image-list': imageList,
-        'upload-image': uploadImage
+        'upload-image': uploadImage,
     }
 }
 </script>

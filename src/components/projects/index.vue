@@ -32,6 +32,7 @@
                                         {{ project.name }}
                                     </v-card-title>
                                     <v-card-subtitle>
+                                        <span class="d-block">{{ project.type_name }}</span>
                                         <span :class="`d-block ${status(project.status).color}--text`"
                                         >{{ status(project.status).status }}</span>
                                         <span class="d-block">{{ project.description }}</span>
@@ -51,17 +52,17 @@
             <v-card-text v-else class="d-flex flex-wrap justify-center text-h4 font-weight-light">
                 <span>No Projects!</span>
             </v-card-text>
-            <create-project :showModal="projectCreateModal" @status="createModalStatus"></create-project>
-            <edit-project :showModal="projectEditModal" @status="editModalStatus"></edit-project>
+            <create-project :showModal="projectCreateModal" :types="projectTypes" @status="createModalStatus"></create-project>
+            <edit-project :showModal="projectEditModal" :types="projectTypes" @status="editModalStatus"></edit-project>
         </v-card>
     </v-row>
 </template>
 
 <script>
-import { mapMutations } from 'vuex'
+import { mapActions, mapGetters, mapMutations } from 'vuex'
 import createProject from '@/components/projects/create'
-import projectConstants from '@/constants/projects'
 import editProject from '@/components/projects/edit'
+import projectConstants from '@/constants/projects'
 
 export default {
     data () {
@@ -72,12 +73,15 @@ export default {
             projectEditModal: false,
             search: '',
             page: 1,
-            pageLength: 6,
+            pageLength: 10,
             projStatus: 'active',
             statuses: projectConstants.statuses
         }
     },
     computed: {
+        ...mapGetters({
+            projectTypes: 'getProjectTypes'
+        }),
         projectType () {
             return this.projects.filter(proj => proj.status === this.projStatus)
         },
@@ -95,6 +99,9 @@ export default {
         }
     },
     methods: {
+        ...mapActions({
+            fetchProjectTypes: 'fetchProjectTypes'
+        }),
         ...mapMutations({
             setCurrentProject: 'SET_CURRENT_PROJECT'
         }),
@@ -119,6 +126,9 @@ export default {
             const color = projStatus === 'active' ? 'green' : 'warning'
             return {status: projStatus[0].toUpperCase() + projStatus.slice(1), color: color}
         }
+    },
+    created () {
+        this.fetchProjectTypes()
     },
     mixins: [projectConstants],
     props: {
