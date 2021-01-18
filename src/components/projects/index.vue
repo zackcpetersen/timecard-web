@@ -20,6 +20,16 @@
                     prepend-inner-icon="mdi-filter-outline"
                     class="ma-4"
                 ></v-select>
+                <v-select
+                    label="Project Types"
+                    :items="projectTypes"
+                    v-model="projTypes"
+                    prepend-inner-icon="mdi-filter-outline"
+                    class="ma-4"
+                    item-text="name"
+                    item-value="id"
+                    multiple
+                ></v-select>
             </v-card-actions>
             <v-divider class="mb-5 mx-5"></v-divider>
             <v-card-text v-if="filteredProjects.length">
@@ -75,18 +85,22 @@ export default {
             page: 1,
             pageLength: 10,
             projStatus: 'active',
-            statuses: projectConstants.statuses
+            statuses: projectConstants.statuses,
+            projTypes: ''
         }
     },
     computed: {
         ...mapGetters({
             projectTypes: 'getProjectTypes'
         }),
-        projectType () {
+        filteredByStatus () {
             return this.projects.filter(proj => proj.status === this.projStatus)
         },
+        filteredByType () {
+            return this.filteredByStatus.filter(proj => this.projTypes.includes(proj.type))
+        },
         filteredProjects () {
-            return this.projectType.filter(proj => {
+            return this.filteredByType.filter(proj => {
                 return proj.name.toLowerCase().includes(this.search.toLowerCase())
                     || proj.description.toLowerCase().includes(this.search.toLowerCase())
             })
@@ -125,6 +139,15 @@ export default {
         status (projStatus) {
             const color = projStatus === 'active' ? 'green' : 'warning'
             return {status: projStatus[0].toUpperCase() + projStatus.slice(1), color: color}
+        }
+    },
+    watch: {
+        projectTypes () {
+            if (this.projectTypes.length) {
+                const typeIds = []
+                this.projectTypes.forEach(type => typeIds.push(type.id))
+                this.projTypes = typeIds
+            }
         }
     },
     created () {

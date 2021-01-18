@@ -1,5 +1,5 @@
 <template>
-    <v-row justify="space-around" class="px-3">
+    <v-row justify="space-around" align="start" style="height: 100%" class="px-3 mt-sm-16 pt-sm-16">
         <v-card outlined>
             <v-card-title class="ml-5 headline d-flex justify-space-between">
                 <span>Entries</span>
