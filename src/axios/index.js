@@ -19,7 +19,7 @@ axios.interceptors.response.use(response => {
                 store.dispatch('authLogout', {})
                 break
             case 403:
-                store.dispatch('authLogout', {})
+                failedSnackbar({ heading: error.response.statusText, content: 'Permission Denied'})
                 break
             case 404:
                 failedSnackbar({ heading: error.message, content: error.response.config.url })
