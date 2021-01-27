@@ -102,7 +102,7 @@ export default {
                     time_paused: this.pauseTime
                 }
                 this.updateEntry(submitData)
-                    .then(this.closeModal())
+                    .then(() => {this.closeModal()})
             }
         }
     },

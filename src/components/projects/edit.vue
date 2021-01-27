@@ -157,9 +157,9 @@ export default {
             this.loading = true
             this.deleteProject(this.project.id)
                 .then(() => {
-                    this.loading = false
                     this.closeModal()
                 })
+            this.loading = false
         },
         submit () {
             if (this.$refs.form.validate()) {
@@ -178,10 +178,10 @@ export default {
                         this.projStatus = ''
                         this.projectType = ''
                         this.id = ''
-                        this.loading = false
                         this.$refs.form.resetValidation()
                         this.closeModal()
                     })
+                this.loading = false
             }
         }
     },

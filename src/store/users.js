@@ -10,7 +10,7 @@ const getters = {
 
 const actions = {
     async fetchUsers({ commit }) {
-        await axios.get('/users/')
+        await axios.get('/update-user/')
             .then(response => {
                 commit('SET_USERS', response.data)
             })

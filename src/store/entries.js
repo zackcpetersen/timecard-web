@@ -45,7 +45,7 @@ const actions = {
             })
     },
     async updateTimecardEntry ({ commit }, updatedEntry) {
-        await axios.put(`/entries/${updatedEntry.id}/`, updatedEntry)
+        await axios.put(`/update-entry/${updatedEntry.id}/`, updatedEntry)
             .then(response => {
                 commit('UPDATE_CURRENT_ENTRY', response.data)
             })
