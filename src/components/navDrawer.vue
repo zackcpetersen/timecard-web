@@ -1,7 +1,7 @@
 <template>
     <v-container>
         <v-list-item>
-            <v-list-item-avatar color="purple">
+            <v-list-item-avatar color="primary">
                 <img v-if="user.image" :src='user.image'>
                 <div v-else>
                     {{ user.initials }}
@@ -9,7 +9,7 @@
             </v-list-item-avatar>
             <v-list-item-content>
                 <v-list-item-title>
-                    {{ user.fullName }}
+                    {{ user.full_name }}
                 </v-list-item-title>
 
                 <v-list-item-subtitle>
@@ -21,7 +21,7 @@
         <v-list flat nav>
             <v-list-item v-for="page in pages" :key="page.title" :to="{ name: page.route }" exact>
                 <v-list-item-icon>
-                    <v-icon medium color="purple">{{ page.icon }}</v-icon>
+                    <v-icon medium color="primary">{{ page.icon }}</v-icon>
                 </v-list-item-icon>
 
                 <v-list-item-content>
@@ -38,6 +38,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 import logout from '@/components/auth/logout'
 
 export default {
@@ -51,13 +52,12 @@ export default {
                 { title: 'User Options', icon: 'mdi-account', route: ''},
                 { title: 'Admin', icon: 'mdi-cog', route: ''}
             ],
-            right: null,
-            user: {
-                fullName: 'Zack Petersen',
-                image: 'https://randomuser.me/api/portraits/men/9.jpg',
-                initials: 'ZP'
-            },
         }
+    },
+    computed: {
+        ...mapGetters({
+            user: 'getCurrentUser'
+        }),
     },
     components: {
         'logout': logout

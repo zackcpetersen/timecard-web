@@ -1,6 +1,6 @@
 <template>
     <v-btn
-        v-if="selected.length"
+        v-if="selected.length && isAdmin"
         @click="updateEntries"
         class="ml-4 mb-2"
         :color="color"
@@ -33,7 +33,8 @@ export default {
         selected: Array,
         color: String,
         status: String,
-        btnText: String
+        btnText: String,
+        isAdmin: Boolean,
     }
 }
 </script>

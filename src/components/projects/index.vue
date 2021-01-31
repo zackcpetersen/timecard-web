@@ -3,7 +3,7 @@
         <v-card class="py-5 mx-2 mx-sm-4 rounded-lg" outlined width="100%">
             <v-card-title class="d-flex flex-no-wrap justify-sm-space-between justify-space-around align-center mx-md-10 mx-sm-1">
                 <span class="text-h3">Projects</span>
-                <v-btn @click="createModalStatus(true)" color="green" fab><v-icon color="white">{{ createIcon }}</v-icon></v-btn>
+                <v-btn v-if="isAdmin" @click="createModalStatus(true)" color="green" fab><v-icon color="white">{{ createIcon }}</v-icon></v-btn>
             </v-card-title>
             <v-card-actions class="d-flex flex-wrap justify-start ml-md-10 ml-sm-5" style="max-width: 600px;">
                 <v-text-field
@@ -62,8 +62,8 @@
             <v-card-text v-else class="d-flex flex-wrap justify-center text-h4 font-weight-light">
                 <span>No Projects!</span>
             </v-card-text>
-            <create-project :showModal="projectCreateModal" :types="projectTypes" @status="createModalStatus"></create-project>
-            <edit-project :showModal="projectEditModal" :types="projectTypes" @status="editModalStatus"></edit-project>
+            <create-project v-if="isAdmin" :showModal="projectCreateModal" :types="projectTypes" @status="createModalStatus"></create-project>
+            <edit-project :currUser="currUser" :showModal="projectEditModal" :types="projectTypes" @status="editModalStatus"></edit-project>
         </v-card>
     </v-row>
 </template>
@@ -91,7 +91,8 @@ export default {
     },
     computed: {
         ...mapGetters({
-            projectTypes: 'getProjectTypes'
+            projectTypes: 'getProjectTypes',
+            currUser: 'getCurrentUser'
         }),
         filteredByStatus () {
             return this.projects.filter(proj => proj.status === this.projStatus)
@@ -110,6 +111,9 @@ export default {
         },
         visiblePages () {
             return this.filteredProjects.slice((this.page - 1) * this.pageLength, this.page * this.pageLength)
+        },
+        isAdmin () {
+            return this.currUser.is_admin
         }
     },
     methods: {

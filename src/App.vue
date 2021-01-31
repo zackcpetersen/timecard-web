@@ -15,14 +15,14 @@
         <v-main>
             <v-container fill-height>
                 <router-view />
-                <snackbar :snackbar="this.currentSnackbar"></snackbar>
+                <snackbar :snackbar="currentSnackbar"></snackbar>
             </v-container>
         </v-main>
     </v-app>
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 import navDrawer from '@/components/navDrawer'
 import snackbar from '@/components/snackbar'
 
@@ -32,12 +32,23 @@ export default {
             drawer: false
         }
     },
+    methods: {
+        ...mapActions({
+            fetchCurrentUser: 'fetchCurrentUser'
+        }),
+    },
     computed: {
         ...mapGetters({
-            currentSnackbar: 'getSnackbarMessage'
+            currentSnackbar: 'getSnackbarMessage',
+            authenticated: 'isAuthenticated'
         }),
         layout () {
             return (this.$route.meta.layout !== 'simple')
+        }
+    },
+    created () {
+        if (this.authenticated) {
+            this.fetchCurrentUser()
         }
     },
     components: {
