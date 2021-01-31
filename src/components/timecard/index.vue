@@ -33,7 +33,7 @@
             </v-expand-transition>
         </v-form>
         <v-expand-transition group>
-            <image-list :images="images" :allowFeatured="false"></image-list>
+            <image-list :canEdit="true" :images="images" :allowFeatured="false"></image-list>
         </v-expand-transition>
     </v-col>
 </template>
@@ -54,8 +54,12 @@ export default {
     },
     computed: {
         ...mapGetters({
-            getImagesByEntry: 'getImagesByEntry'
+            getImagesByEntry: 'getImagesByEntry',
+            currUser: 'getCurrentUser'
         }),
+        isAdmin() {
+            return this.currUser.is_admin
+        },
         images () {
             return this.getImagesByEntry(this.entry.id)
         },

@@ -9,7 +9,7 @@
             <v-card-title>
                 <v-row justify="space-between" align="center">
                     <span class="headline">Edit Image</span>
-                    <v-btn @click="imgDelete" class="white--text" color="red">REMOVE</v-btn>
+                    <v-btn v-if="canEdit" @click="imgDelete" class="white--text" color="red">REMOVE</v-btn>
                 </v-row>
             </v-card-title>
             <v-card-text>
@@ -23,6 +23,7 @@
                                     counter="50"
                                     :rules="nameRules"
                                     class="mb-3"
+                                    :disabled="!canEdit"
                                 ></v-text-field>
                                 <v-textarea
                                     label="Description"
@@ -32,8 +33,14 @@
                                     counter="250"
                                     :rules="descriptionRules"
                                     class="mb-3"
-                                    placeholder="Describe your image"></v-textarea>
-                                <v-checkbox v-if="allowFeatured" v-model="featured" :label="featuredLabel"></v-checkbox>
+                                    placeholder="Describe your image"
+                                    :disabled="!canEdit"
+                                ></v-textarea>
+                                <v-checkbox
+                                    v-if="allowFeatured && canEdit"
+                                    v-model="featured"
+                                    :label="featuredLabel"
+                                ></v-checkbox>
                             </v-form>
                             <v-card class="pa-2" elevation="3">
                                 <v-img :src="image.image" aspect-ratio="1" contain max-height="400"></v-img>
@@ -96,7 +103,7 @@ export default {
             }
         },
         imgDelete () {
-            this.deleteImage(this.image.id)
+            this.deleteImage(this.image.id).then(() => {this.closeModal()})
         },
         closeModal () {
             this.$emit('status', false)
@@ -149,7 +156,8 @@ export default {
     mixins: [rules],
     props: {
         active: Boolean,
-        allowFeatured: Boolean
+        allowFeatured: Boolean,
+        canEdit: Boolean
     }
 }
 </script>
