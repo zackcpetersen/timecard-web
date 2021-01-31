@@ -3,7 +3,7 @@
         <v-card outlined>
             <v-card-title class="ml-5 headline d-flex justify-space-between">
                 <span>Entries</span>
-                <csv-export :filters="filters"></csv-export>
+                <csv-export v-if="isAdmin" :filters="filters"></csv-export>
             </v-card-title>
             <v-card-actions class="d-flex justify-center font-weight-regular">
                 <v-col cols="12" md="10">
@@ -22,8 +22,8 @@
                         <v-col cols="10" sm="6" md="4" lg="3">
                             <update-date
                                 v-model="endDate"
-                                label="End Date" i
-                                con="mdi-calendar"
+                                label="End Date"
+                                icon="mdi-calendar"
                                 :allowedDates="allowedEndDates"
                             ></update-date>
                         </v-col>
@@ -36,7 +36,7 @@
                             <status-filter v-model="statusList"></status-filter>
                             <v-spacer></v-spacer>
                         </v-col>
-                        <v-col cols="10" sm="6" md="4" lg="3">
+                        <v-col v-if="isAdmin" cols="10" sm="6" md="4" lg="3">
                             <user-filter v-model="userList"></user-filter>
                             <v-spacer></v-spacer>
                     </v-col>
@@ -70,6 +70,7 @@
                                         color="success"
                                         btnText="Approve Entries"
                                         @entriesUpdated="clearStatus"
+                                        :isAdmin="isAdmin"
                                     ></entry-status>
                                     <entry-status
                                         :selected="selected"
@@ -77,6 +78,7 @@
                                         color="error"
                                         btnText="Flag Entries"
                                         @entriesUpdated="clearStatus"
+                                        :isAdmin="isAdmin"
                                     ></entry-status>
                                 </template>
                                 <template v-slot:item.status="{ item }">
@@ -90,7 +92,7 @@
                                 </template>
                             </v-data-table>
                         </v-card>
-                        <edit-entry :showModal="entryEditModal" @status="editModalStatus"></edit-entry>
+                        <edit-entry :isAdmin="isAdmin" :showModal="entryEditModal" @status="editModalStatus"></edit-entry>
                     </v-row>
                 </v-col>
             </v-card-text>
@@ -99,7 +101,7 @@
 </template>
 
 <script>
-import { mapActions, mapMutations } from 'vuex'
+import { mapActions, mapGetters, mapMutations } from 'vuex'
 import editEntry from '@/components/entries/edit'
 import entryConstants from '@/constants/entries'
 import entryCsvExport from '@/components/entries/csvExport'
@@ -172,6 +174,12 @@ export default {
         },
     },
     computed: {
+        ...mapGetters({
+            currUser: 'getCurrentUser'
+        }),
+        isAdmin () {
+            return this.currUser.is_admin
+        },
         headers () {
             return [
                 { text: 'User', value: 'user', align: 'start' },

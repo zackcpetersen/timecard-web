@@ -12,7 +12,10 @@
             <v-card-text>
                 <v-form ref="form" v-model="valid">
                     <v-text-field v-model="newType" counter="50" :rules="nameRules" label="Name"></v-text-field>
+                    <div class="d-flex justify-space-between">
                     <v-btn @click="submit" color="primary">Create</v-btn>
+                    <v-btn text @click="closeModal" class="pa-0">Close</v-btn>
+                    </div>
                 </v-form>
             </v-card-text>
         </v-card>

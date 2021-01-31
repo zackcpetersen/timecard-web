@@ -8,8 +8,9 @@
         <v-card>
             <v-card-title>
                 <v-row justify="space-between" align="center">
-                    <span class="headline">Edit Project</span>
-                    <v-btn @click="projDelete" class="white--text" color="red" :loading="loading">REMOVE</v-btn>
+                    <span v-if="!isAdmin" class="headline">Project Details</span>
+                    <span v-else class="headline">Edit Project</span>
+                    <v-btn v-if="isAdmin" @click="projDelete" class="white--text" color="red" :loading="loading">REMOVE</v-btn>
                 </v-row>
             </v-card-title>
             <v-card-text>
@@ -23,6 +24,7 @@
                                     :rules="nameRules"
                                     counter="50"
                                     class="mb-3"
+                                    :disabled="!isAdmin"
                                 ></v-text-field>
                                 <v-textarea
                                     label="Description"
@@ -31,6 +33,7 @@
                                     v-model="description"
                                     :rules="descriptionRules"
                                     counter="250"
+                                    :disabled="!isAdmin"
                                 ></v-textarea>
                                 <v-select
                                     :items="types"
@@ -38,11 +41,17 @@
                                     item-text="name"
                                     label="Project Type"
                                     v-model="projectType"
+                                    :disabled="!isAdmin"
                                 >
                                 </v-select>
-                                <v-select label="Status" :items="statuses" v-model="projStatus"></v-select>
+                                <v-select
+                                    label="Status"
+                                    :items="statuses"
+                                    v-model="projStatus"
+                                    :disabled="!isAdmin"
+                                ></v-select>
                             </v-form>
-                            <upload-image :imgData="projImgData" class="mb-5"></upload-image>
+                            <upload-image v-if="isAdmin" :imgData="projImgData" class="mb-5"></upload-image>
                             <image-list :images="images" :allowFeatured="true"></image-list>
                         </v-col>
                     </v-row>
@@ -90,6 +99,9 @@ export default {
             project: 'getCurrentProject',
             getImagesByProject: 'getImagesByProject'
         }),
+        isAdmin () {
+            return this.currUser.is_admin
+        },
         saveEnabled () {
             return this.name !== this.projName
                 || this.description !== this.projDesc
@@ -157,9 +169,9 @@ export default {
             this.loading = true
             this.deleteProject(this.project.id)
                 .then(() => {
-                    this.loading = false
                     this.closeModal()
                 })
+            this.loading = false
         },
         submit () {
             if (this.$refs.form.validate()) {
@@ -178,16 +190,17 @@ export default {
                         this.projStatus = ''
                         this.projectType = ''
                         this.id = ''
-                        this.loading = false
                         this.$refs.form.resetValidation()
                         this.closeModal()
                     })
+                this.loading = false
             }
         }
     },
     props: {
         showModal: Boolean,
-        types: Array
+        types: Array,
+        currUser: Object
     },
     mixins: [rules, projectConstants],
     components: {

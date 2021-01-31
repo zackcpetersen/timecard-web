@@ -19,7 +19,11 @@ axios.interceptors.response.use(response => {
                 store.dispatch('authLogout', {})
                 break
             case 403:
-                store.dispatch('authLogout', {})
+                if (error.response.data.detail === 'Invalid token.') {
+                    store.dispatch('authLogout', {})
+                    break
+                }
+                failedSnackbar({ heading: error.response.statusText, content: 'Access Denied'})
                 break
             case 404:
                 failedSnackbar({ heading: error.message, content: error.response.config.url })

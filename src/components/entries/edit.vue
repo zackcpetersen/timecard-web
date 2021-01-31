@@ -9,22 +9,47 @@
             <v-card-title class="d-flex justify-center align-center">
                 <span class="headline">Edit Entry - {{ entryUser }}</span>
             </v-card-title>
-            <span class="d-block d-flex justify-center">{{ entry.project_name }}</span>
+            <span v-if="entry.project_name" class="d-block d-flex justify-center">{{ entry.project_name }}</span>
+            <span v-else class="d-block d-flex justify-center error--text">No Project Assigned</span>
             <span :class="`${status.color}--text d-block d-flex justify-center font-italic mb-2`">{{ status.type }}</span>
             <v-card-text>
                 <v-form ref="form" v-model="valid">
                     <v-row justify="center">
                         <v-col cols="10">
-                            <v-textarea v-model="notes" placeholder="Entry Notes" outlined></v-textarea>
-                            <update-date v-model="startDate" :rules="required" label="Entry Date" icon="mdi-calendar"></update-date>
-                            <update-time v-model="startTime" :rules="required" label="Start Time" icon="mdi-clock-time-nine-outline"></update-time>
-                            <update-time v-model="endTime" :rules="required" label="End Time" icon="mdi-clock-time-five-outline"></update-time>
+                            <v-textarea
+                                v-if="isAdmin"
+                                v-model="notes"
+                                placeholder="Entry Notes"
+                                outlined
+                            ></v-textarea>
+                            <update-date
+                                v-model="startDate"
+                                :rules="required"
+                                label="Entry Date"
+                                icon="mdi-calendar"
+                                :disabled="!isAdmin"
+                            ></update-date>
+                            <update-time
+                                v-model="startTime"
+                                :rules="required"
+                                label="Start Time"
+                                icon="mdi-clock-time-nine-outline"
+                                :disabled="!isAdmin"
+                            ></update-time>
+                            <update-time
+                                v-model="endTime"
+                                :rules="required"
+                                label="End Time"
+                                icon="mdi-clock-time-five-outline"
+                                :disabled="!isAdmin"
+                            ></update-time>
                             <v-text-field
                                 v-model="pauseTime"
                                 label="Time Paused"
                                 prepend-icon="mdi-pause-circle-outline"
                                 placeholder="01:00:00"
                                 :rules="durationRules"
+                                :disabled="!isAdmin"
                             ></v-text-field>
                             <span class="d-block d-flex justify-center">Created: {{ displayLocaleDateTime(entry.created_at) }}</span>
                             <span class="d-block d-flex justify-center">Updated: {{ displayLocaleDateTime(entry.updated_at) }}</span>
@@ -102,7 +127,7 @@ export default {
                     time_paused: this.pauseTime
                 }
                 this.updateEntry(submitData)
-                    .then(this.closeModal())
+                    .then(() => {this.closeModal()})
             }
         }
     },
@@ -157,7 +182,8 @@ export default {
     },
     mixins: [rules],
     props: {
-        showModal: Boolean
+        showModal: Boolean,
+        isAdmin: Boolean
     },
     components: {
         'update-time': updateTime,

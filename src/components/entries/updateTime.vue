@@ -8,6 +8,7 @@
         max-width="290"
         :nudge-right="30"
         offset-y
+        :disabled="disabled"
     >
         <template v-slot:activator="{ on, attrs }">
             <v-text-field
@@ -18,6 +19,7 @@
                 v-bind="attrs"
                 v-on="on"
                 :rules="rules"
+                :disabled="disabled"
             ></v-text-field>
         </template>
         <v-time-picker
@@ -51,7 +53,8 @@ export default {
         value: String,
         label: String,
         icon: String,
-        rules: Array
+        rules: Array,
+        disabled: Boolean,
     }
 }
 </script>
