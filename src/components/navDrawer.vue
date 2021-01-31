@@ -2,10 +2,10 @@
     <v-container>
         <v-list-item>
             <v-list-item-avatar color="primary">
-                <img v-if="user.image" :src='user.image'>
-                <div v-else>
-                    {{ user.initials }}
-                </div>
+                <v-img v-if="user.image" :src="user.image"></v-img>
+                <span v-else>
+                    {{ user.initials.toUpperCase() }}
+                </span>
             </v-list-item-avatar>
             <v-list-item-content>
                 <v-list-item-title>
