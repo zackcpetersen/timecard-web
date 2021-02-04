@@ -34,8 +34,15 @@ export default {
     },
     methods: {
         ...mapActions({
-            fetchCurrentUser: 'fetchCurrentUser'
+            fetchCurrentUser: 'fetchCurrentUser',
+            fetchUsers: 'fetchUsers'
         }),
+        getUserData () {
+            if (this.authenticated) {
+                this.fetchCurrentUser()
+                this.fetchUsers()
+            }
+        }
     },
     computed: {
         ...mapGetters({
@@ -47,8 +54,11 @@ export default {
         }
     },
     created () {
-        if (this.authenticated) {
-            this.fetchCurrentUser()
+        this.getUserData()
+    },
+    watch: {
+        authenticated () {
+            this.getUserData()
         }
     },
     components: {

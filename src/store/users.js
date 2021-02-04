@@ -11,6 +11,19 @@ const getters = {
 }
 
 const actions = {
+    async createUser({ commit }, newUser) {
+        await axios.post('/users/', newUser)
+            .then(response => {
+                commit('ADD_USER', response.data)
+                console.log(response.data)
+            })
+    },
+    async updateUser({ commit }, updatedUser) {
+        await axios.put(`/update-user/${updatedUser.id}`, updatedUser)
+            .then(response => {
+                commit('UPDATE_USER', response.data)
+            })
+    },
     async fetchUsers({ commit }) {
         await axios.get('/update-user/')
             .then(response => {
@@ -18,7 +31,7 @@ const actions = {
             })
     },
     async fetchCurrentUser({ commit }) {
-        await axios.get('current-user')
+        await axios.get('/current-user/')
             .then(response => {
                 commit('SET_CURRENT_USER', response.data)
             })
@@ -26,6 +39,13 @@ const actions = {
 }
 
 const mutations = {
+    ADD_USER: (state, user) => (state.users.unshift(user)),
+    UPDATE_USER: (state, updatedUser) => {
+        const index = state.users.findIndex(user => user.id === updatedUser.id)
+        if (index !== -1) {
+            state.users.splice(index, 1, updatedUser)
+        }
+    },
     SET_USERS: (state, users) => state.users = users,
     SET_CURRENT_USER: (state, user) => state.currentUser = user
 }
