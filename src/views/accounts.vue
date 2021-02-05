@@ -1,5 +1,5 @@
 <template>
-    <accounts :allUsers="allUsers" :currUser="currUser"></accounts>
+    <accounts :users="filteredUsers" :isSuperuser="isSuperuser"></accounts>
 </template>
 
 <script>
@@ -14,6 +14,12 @@ export default {
         }),
         isSuperuser () {
             return this.currUser.is_superuser
+        },
+        filteredUsers () {
+            if (this.isSuperuser) {
+                return this.allUsers
+            }
+            return this.allUsers.filter(user => this.currUser.id === user.id)
         }
     },
     methods: {

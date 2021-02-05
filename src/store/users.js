@@ -3,11 +3,13 @@ import axios from '@/axios'
 const state = {
     users: [],
     currentUser: {},
+    editableUser: {}
 }
 
 const getters = {
     getUsers: state => state.users,
-    getCurrentUser: state => state.currentUser
+    getCurrentUser: state => state.currentUser,
+    getEditableUser: state => state.editableUser
 }
 
 const actions = {
@@ -15,11 +17,10 @@ const actions = {
         await axios.post('/users/', newUser)
             .then(response => {
                 commit('ADD_USER', response.data)
-                console.log(response.data)
             })
     },
     async updateUser({ commit }, updatedUser) {
-        await axios.put(`/update-user/${updatedUser.id}`, updatedUser)
+        await axios.put(`/update-user/${updatedUser.id}/`, updatedUser)
             .then(response => {
                 commit('UPDATE_USER', response.data)
             })
@@ -47,7 +48,8 @@ const mutations = {
         }
     },
     SET_USERS: (state, users) => state.users = users,
-    SET_CURRENT_USER: (state, user) => state.currentUser = user
+    SET_CURRENT_USER: (state, user) => state.currentUser = user,
+    SET_EDITABLE_USER: (state, user) => state.editableUser = user
 }
 
 export default {

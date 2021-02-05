@@ -20,7 +20,7 @@
             <v-card-text>
                 <v-row dense justify="center">
                     <v-col cols="11" xl="8" v-for="user in searchUsers" :key="user.id">
-                        <v-card @click="updateUser(user)" class="rounded-md">
+                        <v-card @click="setEditableAndUpdate(user)" class="rounded-md">
                             <div class="d-flex flex-no-wrap justify-space-between align-center">
                                 <div class="mx-md-5">
                                     <v-card-title class="headline">
@@ -39,13 +39,27 @@
                     </v-col>
                 </v-row>
             </v-card-text>
-            <create-user v-if="isSuperuser" :showModal="userCreateModal" @status="createModalStatus"></create-user>
-<!--            <update-user></update-user>-->
+            <create-user
+                v-if="isSuperuser"
+                :showModal="userCreateModal"
+                :isSuperuser="isSuperuser"
+                :editableUser="editableUser"
+                :creating="true"
+                @status="createModalStatus"
+            ></create-user>
+            <create-user
+                :showModal="userEditModal"
+                :isSuperuser="isSuperuser"
+                :editableUser="editableUser"
+                :creating="false"
+                @status="editModalStatus"
+            ></create-user>
         </v-card>
     </v-row>
 </template>
 
 <script>
+import { mapGetters, mapMutations } from 'vuex'
 import createUser from '@/components/accounts/create'
 
 export default {
@@ -57,13 +71,17 @@ export default {
         }
     },
     methods: {
+        ...mapMutations({
+            setEditableUser: 'SET_EDITABLE_USER'
+        }),
         userInitials (user) {
             if (user.initials) {
                 return user.initials.toUpperCase()
             }
         },
-        updateUser (user) {
-            console.log(user)
+        setEditableAndUpdate (user) {
+            this.setEditableUser(user)
+            this.editModalStatus(true)
         },
         createModalStatus (value) {
             this.userCreateModal = value
@@ -82,26 +100,18 @@ export default {
         }
     },
     computed: {
-        isSuperuser () {
-            return this.currUser.is_superuser
-        },
-        filteredUsers () {
-            return this.isSuperuser ? this.allUsers : [this.currUser]
-        },
+        ...mapGetters({
+            editableUser: 'getEditableUser'
+        }),
         searchUsers () {
-            // if (this.filteredUsers.length) {
-            return this.filteredUsers.filter(user => {
-                // if (user.full_name) {
+            return this.users.filter(user => {
                 return user.full_name.toLowerCase().includes(this.search.toLowerCase())
-                // }
             })
-            // }
-            // return this.currUser
         },
     },
     props: {
-        allUsers: Array,
-        currUser: Object
+        users: Array,
+        isSuperuser: Boolean
     },
     components: {
         'create-user': createUser
