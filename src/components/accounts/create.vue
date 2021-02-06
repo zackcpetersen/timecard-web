@@ -103,43 +103,31 @@ export default {
 
                 // TODO add as form data for image
                 const userData = {
+                    id: this.editableUser.id ? this.editableUser.id : null,
                     first_name: this.firstName,
                     last_name: this.lastName,
                     email: this.email,
                     is_admin: this.admin,
                     is_superuser: this.superuser,
                     // TODO need to actually figure out password handling
-                    password: 'admin'
-                }
-                if (this.editableUser.id) {
-                    userData['id'] = this.editableUser.id
-                }
-                if (this.image) {
-                    userData['image'] = this.image
+                    password: 'admin',
+                    image: this.image
                 }
                 if (this.creating) {
                     this.createUser(userData)
-                        .then(() => {
-                            this.closeModal()
-                            this.clearForm()
-                        })
+                        .then(() => {this.clearForm()})
                 } else if (this.isSuperuser) {
                     this.superUserUpdate(userData)
-                        .then(() => {
-                            this.closeModal()
-                            this.clearForm()
-                        })
+                        .then(() => {this.clearForm()})
                 } else {
                     this.updateUser(userData)
-                        .then(() => {
-                            this.closeModal()
-                            this.clearForm()
-                        })
+                        .then(() => {this.clearForm()})
                 }
                 this.loading = false
             }
         },
         clearForm () {
+            this.closeModal()
             this.firstName = ''
             this.lastName = ''
             this.email = ''
