@@ -19,6 +19,12 @@ const actions = {
                 commit('ADD_USER', response.data)
             })
     },
+    async superUserUpdateUser({ commit }, updatedUser) {
+        await axios.put(`/users/${updatedUser.id}/`, updatedUser)
+            .then(response => {
+                commit('UPDATE_USER', response.data)
+            })
+    },
     async updateUser({ commit }, updatedUser) {
         await axios.put(`/update-user/${updatedUser.id}/`, updatedUser)
             .then(response => {
@@ -49,7 +55,8 @@ const mutations = {
     },
     SET_USERS: (state, users) => state.users = users,
     SET_CURRENT_USER: (state, user) => state.currentUser = user,
-    SET_EDITABLE_USER: (state, user) => state.editableUser = user
+    SET_EDITABLE_USER: (state, user) => state.editableUser = user,
+    RESET_EDITABLE_USER: state => state.editableUser = {}
 }
 
 export default {

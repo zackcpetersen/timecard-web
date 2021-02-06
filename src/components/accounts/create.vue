@@ -77,6 +77,7 @@ export default {
             adminDisabled: false,
             superuser: false,
             loading: false,
+            image: null
         }
     },
     computed: {
@@ -93,7 +94,8 @@ export default {
     methods: {
         ...mapActions({
             createUser: 'createUser',
-            updateUser: 'updateUser'
+            updateUser: 'updateUser',
+            superUserUpdate: 'superUserUpdateUser'
         }),
         submit () {
             if (this.$refs.form.validate()) {
@@ -121,6 +123,12 @@ export default {
                             this.closeModal()
                             this.clearForm()
                         })
+                } else if (this.isSuperuser) {
+                    this.superUserUpdate(userData)
+                        .then(() => {
+                            this.closeModal()
+                            this.clearForm()
+                        })
                 } else {
                     this.updateUser(userData)
                         .then(() => {
@@ -137,6 +145,7 @@ export default {
             this.email = ''
             this.admin = false
             this.superuser = false
+            this.image = null
             this.$refs.form.resetValidation()
         },
         closeModal () {

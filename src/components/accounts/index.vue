@@ -72,7 +72,8 @@ export default {
     },
     methods: {
         ...mapMutations({
-            setEditableUser: 'SET_EDITABLE_USER'
+            setEditableUser: 'SET_EDITABLE_USER',
+            resetEditableUser: 'RESET_EDITABLE_USER'
         }),
         userInitials (user) {
             if (user.initials) {
@@ -84,6 +85,7 @@ export default {
             this.editModalStatus(true)
         },
         createModalStatus (value) {
+            this.resetEditableUser()
             this.userCreateModal = value
         },
         editModalStatus (value) {
