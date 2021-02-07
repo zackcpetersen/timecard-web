@@ -39,28 +39,28 @@
                     </v-col>
                 </v-row>
             </v-card-text>
-            <create-user
+            <account
                 v-if="isSuperuser"
                 :showModal="userCreateModal"
                 :isSuperuser="isSuperuser"
                 :editableUser="editableUser"
                 :creating="true"
                 @status="createModalStatus"
-            ></create-user>
-            <create-user
+            ></account>
+            <account
                 :showModal="userEditModal"
                 :isSuperuser="isSuperuser"
                 :editableUser="editableUser"
                 :creating="false"
                 @status="editModalStatus"
-            ></create-user>
+            ></account>
         </v-card>
     </v-row>
 </template>
 
 <script>
 import { mapGetters, mapMutations } from 'vuex'
-import createUser from '@/components/accounts/create'
+import userAccount from '@/components/accounts/userAccount'
 
 export default {
     data () {
@@ -116,7 +116,7 @@ export default {
         isSuperuser: Boolean
     },
     components: {
-        'create-user': createUser
+        'account': userAccount
     }
 }
 </script>
