@@ -42,10 +42,6 @@ export default {
                 submitData.append('first_name', this.user.first_name)
                 submitData.append('last_name', this.user.last_name)
                 submitData.append('email', this.user.email)
-                // submitData.append('is_admin', this.user.is_admin)
-                // submitData.append('is_superuser', this.user.is_superuser)
-                // // TODO need to actually figure out password handling
-                // submitData.append('password', 'admin')
                 submitData.append('image', this.selectedFile)
                 this.updateUser(submitData)
                     .then(() => {this.selectedFile = ''})

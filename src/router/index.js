@@ -31,14 +31,6 @@ const routes = [
             requiresAuth: true
         }
     },
-    // {
-    //     path: '/projects/:id/',
-    //     name: 'ProjectView',
-    //     component: ProjectView,
-    //     meta: {
-    //         requiresAuth: true
-    //     }
-    // },
     {
         path: '/entries/',
         name: 'Entries',
@@ -55,14 +47,6 @@ const routes = [
             requiresAuth: true
         }
     },
-    // {
-    //     path: '/admin/',
-    //     name: 'Admin',
-    //     component: Admin,
-    //     meta: {
-    //         requiresAuth: true
-    //     }
-    // }
 ]
 
 const router = new VueRouter({
