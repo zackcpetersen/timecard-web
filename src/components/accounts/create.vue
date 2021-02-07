@@ -49,7 +49,7 @@
                                     <v-checkbox :disabled="adminDisabled" v-model="admin" label="Admin" class="d-inline-block"></v-checkbox>
                                     <v-checkbox v-model="superuser" label="Owner" class="d-inline-block ml-5"></v-checkbox>
                                 </div>
-                                <upload-image :imgButtonText="imgButtonText" :user="editableUser"></upload-image>
+                                <upload-image v-if="!creating" :imgButtonText="imgButtonText" :user="editableUser"></upload-image>
                             </v-form>
                             <div class="d-flex justify-center mt-5">
                                 <v-btn text color="blue darken-1" @click="closeModal" class="mx-2">Close</v-btn>
@@ -88,10 +88,13 @@ export default {
             return this.editableUser.image ? 'Update Image' : 'Add Image'
         },
         canSubmit () {
-            if (this.isSuperuser) {
-                return this.firstName && this.lastName && this.email && this.valid
-            }
-            return this.firstName && this.lastName // TODO && this.image
+            console.log(this.admin !== this.editableUser.is_admin)
+            return (this.firstName !== this.editableUser.first_name)
+                || (this.lastName !== this.editableUser.last_name)
+                || (this.email !== this.editableUser.email)
+                || (this.admin !== this.editableUser.is_admin)
+                || (this.superuser !== this.editableUser.is_superuser)
+                && this.valid
         }
     },
     methods: {
@@ -103,8 +106,6 @@ export default {
         submit () {
             if (this.$refs.form.validate()) {
                 this.loading = true
-
-                // TODO add as form data for image
                 const userData = new FormData()
                 userData.append('id', this.editableUser.id ? this.editableUser.id : null)
                 userData.append('first_name', this.firstName)
@@ -142,7 +143,7 @@ export default {
         },
     },
     updated () {
-        if (!this.firstName && this.editableUser) {
+        if (!this.firstName && this.editableUser.id) {
             this.firstName = this.editableUser.first_name
             this.lastName = this.editableUser.last_name
             this.email = this.editableUser.email
