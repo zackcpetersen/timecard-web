@@ -9,19 +9,20 @@
             <v-card-title>
                 <v-row justify="space-between">
                     <span v-if="creating" class="headline ml-5">Add User</span>
-                    <span v-else class="headline ml-5">Update User</span>
+                    <span v-else class="headline ml-5">Update User - {{ editableUser.full_name }}</span>
                 </v-row>
             </v-card-title>
             <v-card-text>
                 <v-container>
                     <v-row>
                         <v-col cols="12">
-                            <v-img
-                                v-if="editableUser.image"
-                                :src="editableUser.image"
-                                class="rounded-circle"
-                                max-height="100px;"
-                            ></v-img>
+                            <v-row justify="center" v-if="editableUser.image">
+                                <v-avatar size="150">
+                                    <v-img
+                                    :src="editableUser.image"
+                                ></v-img>
+                                </v-avatar>
+                            </v-row>
                             <v-form ref="form" v-model="valid">
                                 <v-text-field
                                     label="First name"
@@ -48,7 +49,7 @@
                                     <v-checkbox :disabled="adminDisabled" v-model="admin" label="Admin" class="d-inline-block"></v-checkbox>
                                     <v-checkbox v-model="superuser" label="Owner" class="d-inline-block ml-5"></v-checkbox>
                                 </div>
-                                <v-btn v-if="!creating">{{ imgButtonText }}</v-btn>
+                                <upload-image :imgButtonText="imgButtonText" :user="editableUser"></upload-image>
                             </v-form>
                             <div class="d-flex justify-center mt-5">
                                 <v-btn text color="blue darken-1" @click="closeModal" class="mx-2">Close</v-btn>
@@ -65,6 +66,8 @@
 <script>
 import { mapActions } from 'vuex'
 import { rules } from '@/mixins/rules'
+
+import userImage from '@/components/accounts/userImage'
 
 export default {
     data () {
@@ -102,17 +105,15 @@ export default {
                 this.loading = true
 
                 // TODO add as form data for image
-                const userData = {
-                    id: this.editableUser.id ? this.editableUser.id : null,
-                    first_name: this.firstName,
-                    last_name: this.lastName,
-                    email: this.email,
-                    is_admin: this.admin,
-                    is_superuser: this.superuser,
-                    // TODO need to actually figure out password handling
-                    password: 'admin',
-                    image: this.image
-                }
+                const userData = new FormData()
+                userData.append('id', this.editableUser.id ? this.editableUser.id : null)
+                userData.append('first_name', this.firstName)
+                userData.append('last_name', this.lastName)
+                userData.append('email', this.email)
+                userData.append('is_admin', this.admin)
+                userData.append('is_superuser', this.superuser)
+                // TODO need to actually figure out password handling
+                userData.append('password', 'admin')
                 if (this.creating) {
                     this.createUser(userData)
                         .then(() => {this.clearForm()})
@@ -140,19 +141,19 @@ export default {
             this.$emit('status', false)
         },
     },
+    updated () {
+        if (!this.firstName && this.editableUser) {
+            this.firstName = this.editableUser.first_name
+            this.lastName = this.editableUser.last_name
+            this.email = this.editableUser.email
+            this.admin = this.editableUser.is_admin
+            this.superuser = this.editableUser.is_superuser
+        }
+    },
     watch: {
         superuser () {
             this.admin = this.superuser
             this.adminDisabled = this.superuser
-        },
-        editableUser () {
-            if (this.editableUser) {
-                this.firstName = this.editableUser.first_name
-                this.lastName = this.editableUser.last_name
-                this.email = this.editableUser.email
-                this.admin = this.editableUser.is_admin
-                this.superuser = this.editableUser.is_superuser
-            }
         }
     },
     mixins: [rules],
@@ -164,6 +165,9 @@ export default {
             required: false
         },
         creating: Boolean
+    },
+    components: {
+        'upload-image': userImage
     }
 }
 </script>

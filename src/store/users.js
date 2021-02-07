@@ -20,13 +20,13 @@ const actions = {
             })
     },
     async superUserUpdateUser({ commit }, updatedUser) {
-        await axios.put(`/users/${updatedUser.id}/`, updatedUser)
+        await axios.put(`/users/${updatedUser.get('id')}/`, updatedUser)
             .then(response => {
                 commit('UPDATE_USER', response.data)
             })
     },
     async updateUser({ commit }, updatedUser) {
-        await axios.put(`/update-user/${updatedUser.id}/`, updatedUser)
+        await axios.put(`/update-user/${updatedUser.get('id')}/`, updatedUser)
             .then(response => {
                 commit('UPDATE_USER', response.data)
             })
@@ -51,6 +51,9 @@ const mutations = {
         const index = state.users.findIndex(user => user.id === updatedUser.id)
         if (index !== -1) {
             state.users.splice(index, 1, updatedUser)
+        }
+        if (state.editableUser.id === updatedUser.id) {
+            state.editableUser = updatedUser
         }
     },
     SET_USERS: (state, users) => state.users = users,
