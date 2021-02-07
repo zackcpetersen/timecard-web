@@ -2,10 +2,8 @@
     <v-container>
         <v-list-item>
             <v-list-item-avatar color="primary">
-                <img v-if="user.image" :src='user.image'>
-                <div v-else>
-                    {{ user.initials }}
-                </div>
+                <v-img v-if="user && user.image" :src="user.image"></v-img>
+                <span v-else class="white--text">{{ userInitials }}</span>
             </v-list-item-avatar>
             <v-list-item-content>
                 <v-list-item-title>
@@ -49,15 +47,24 @@ export default {
                 { title: 'Track Time', icon: 'mdi-clock', route: 'Timecard'},
                 { title: 'Projects', icon: 'mdi-home-variant', route: 'Projects'},
                 { title: 'Entries', icon: 'mdi-format-list-text', route: 'Entries'},
-                { title: 'User Options', icon: 'mdi-account', route: ''},
-                { title: 'Admin', icon: 'mdi-cog', route: ''}
+                { title: 'Account', icon: 'mdi-account', route: 'Account'},
             ],
         }
     },
     computed: {
         ...mapGetters({
-            user: 'getCurrentUser'
+            currUser: 'getCurrentUser',
+            allUsers: 'getUsers'
         }),
+        user () {
+            return this.allUsers.filter(user => user.id === this.currUser.id)[0] || this.currUser
+        },
+        userInitials () {
+            if (this.user.id) {
+                return this.user.initials.toUpperCase()
+            }
+            return ''
+        },
     },
     components: {
         'logout': logout

@@ -52,7 +52,7 @@
                                 ></v-select>
                             </v-form>
                             <upload-image v-if="isAdmin" :imgData="projImgData" class="mb-5"></upload-image>
-                            <image-list :images="images" :allowFeatured="true"></image-list>
+                            <image-list :canEdit="isAdmin" :images="images" :allowFeatured="true"></image-list>
                         </v-col>
                     </v-row>
                     <v-row justify="center">

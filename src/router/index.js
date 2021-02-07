@@ -31,14 +31,6 @@ const routes = [
             requiresAuth: true
         }
     },
-    // {
-    //     path: '/projects/:id/',
-    //     name: 'ProjectView',
-    //     component: ProjectView,
-    //     meta: {
-    //         requiresAuth: true
-    //     }
-    // },
     {
         path: '/entries/',
         name: 'Entries',
@@ -47,22 +39,14 @@ const routes = [
             requiresAuth: true
         }
     },
-    // {
-    //     path: '/user/',
-    //     name: 'User',
-    //     component: User,
-    //     meta: {
-    //         requiresAuth: true
-    //     }
-    // },
-    // {
-    //     path: '/admin/',
-    //     name: 'Admin',
-    //     component: Admin,
-    //     meta: {
-    //         requiresAuth: true
-    //     }
-    // }
+    {
+        path: '/account/',
+        name: 'Account',
+        component: () => import('@/views/accounts'),
+        meta: {
+            requiresAuth: true
+        }
+    },
 ]
 
 const router = new VueRouter({

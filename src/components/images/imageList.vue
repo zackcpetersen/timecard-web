@@ -42,7 +42,12 @@
                 </v-slide-group>
             </v-sheet>
         </v-row>
-        <image-edit-modal :active="showModal" :allowFeatured="allowFeatured" @status="modalStatus"></image-edit-modal>
+        <image-edit-modal
+            :canEdit="canEdit"
+            :active="showModal"
+            :allowFeatured="allowFeatured"
+            @status="modalStatus"
+        ></image-edit-modal>
     </div>
 </template>
 
@@ -71,7 +76,8 @@ export default {
     },
     props: {
         images: Array,
-        allowFeatured: Boolean
+        allowFeatured: Boolean,
+        canEdit: Boolean
     },
     components: {
         'image-edit-modal': imageEditModal
