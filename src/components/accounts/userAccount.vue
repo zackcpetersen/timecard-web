@@ -88,7 +88,9 @@ export default {
             return this.editableUser.image ? 'Update Image' : 'Add Image'
         },
         canSubmit () {
-            console.log(this.admin !== this.editableUser.is_admin)
+            if (this.creating) {
+                return this.firstName && this.lastName && this.email && this.valid
+            }
             return (this.firstName !== this.editableUser.first_name)
                 || (this.lastName !== this.editableUser.last_name)
                 || (this.email !== this.editableUser.email)

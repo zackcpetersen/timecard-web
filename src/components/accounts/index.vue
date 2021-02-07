@@ -43,7 +43,7 @@
                 v-if="isSuperuser"
                 :showModal="userCreateModal"
                 :isSuperuser="isSuperuser"
-                :editableUser="editableUser"
+                :editableUser="{}"
                 :creating="true"
                 @status="createModalStatus"
             ></account>
