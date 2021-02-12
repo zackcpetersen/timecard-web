@@ -26,16 +26,18 @@
                     >
                     </v-text-field>
                     <v-slide-x-transition>
-                        <v-btn v-if="loginEnabled" @click="submitForm" color="primary" class="mt-3">Login</v-btn>
+                        <v-btn v-if="loginEnabled" @click="submitForm" color="primary" class="mt-3" :loading="loading">Login</v-btn>
                     </v-slide-x-transition>
                 </v-form>
+                <v-btn v-if="showForgotPass" text small @click="forgotPass" class="mt-5">Forgot Password?</v-btn>
+                <div>{{ passResetMsg }}</div>
             </v-card-text>
         </v-card>
     </v-row>
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex'
+import { mapActions } from 'vuex'
 import { rules } from '@/mixins/rules'
 
 export default {
@@ -44,25 +46,43 @@ export default {
             valid: true,
             email: '',
             password: '',
+            loading: false,
+            passResetMsg: '',
+            showForgotPass: true
         }
     },
     computed: {
-        ...mapGetters({
-            formStatus: 'getAuthStatus'
-        }),
         loginEnabled () {
             return !!this.email && !!this.password && this.valid
         }
     },
     methods: {
-        ...mapActions({ login: 'authLogin' }),
+        ...mapActions({
+            login: 'authLogin',
+            resetPass: 'forgotPassword'
+        }),
+        forgotPass () {
+            if (/.+@.+\..+/.test(this.email)) {
+                const data = { email: this.email }
+                this.resetPass(data).then(() => {
+                    this.passResetMsg = `Check ${this.email} for a temporary password`
+                    this.showForgotPass = false
+                })
+            } else {
+                this.passResetMsg = 'Enter your email above to reset your password'
+            }
+        },
         submitForm () {
+            this.loading = true
             if (this.$refs.form.validate()) {
                 this.login({
                     username: this.email,
                     password: this.password
+                }).then(() => {
+                    this.password = ''
                 })
             }
+            this.loading = false
         }
     },
     mixins: [rules]

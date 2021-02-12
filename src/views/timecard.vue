@@ -11,14 +11,16 @@ export default {
         ...mapActions({
             fetchEntries: 'fetchEntries',
             fetchProjects: 'fetchProjects',
-            fetchProjectImages: 'fetchProjectImages'
+            fetchProjectImages: 'fetchProjectImages',
+            fetchCurrentUser: 'fetchCurrentUser'
         })
     },
     computed: {
         ...mapGetters({
             currentEntry: 'getCurrentEntry',
             getEntries: 'getEntries',
-            projects: 'getProjects'
+            projects: 'getProjects',
+            currUser: 'getCurrentUser'
         }),
         entry () {
             const today = new Date().toDateString()
@@ -35,6 +37,14 @@ export default {
         this.fetchEntries()
         this.fetchProjects()
         this.fetchProjectImages()
+        this.fetchCurrentUser()
+    },
+    watch: {
+        currUser () {
+            if (!this.currUser.pass_valid) {
+                this.$router.push({ name: 'PasswordReset' })
+            }
+        }
     },
     components: {
         'timecard': timecard

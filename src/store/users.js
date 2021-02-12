@@ -3,13 +3,14 @@ import axios from '@/axios'
 const state = {
     users: [],
     currentUser: {},
-    editableUser: {}
+    editableUser: {},
 }
 
 const getters = {
     getUsers: state => state.users,
     getCurrentUser: state => state.currentUser,
-    getEditableUser: state => state.editableUser
+    getEditableUser: state => state.editableUser,
+    userPassReset: state => !!state.currentUser
 }
 
 const actions = {

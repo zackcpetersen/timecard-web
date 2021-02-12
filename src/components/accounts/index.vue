@@ -44,6 +44,7 @@
                 :showModal="userCreateModal"
                 :isSuperuser="isSuperuser"
                 :editableUser="{}"
+                :currUser="currUser"
                 :creating="true"
                 @status="createModalStatus"
             ></account>
@@ -51,6 +52,7 @@
                 :showModal="userEditModal"
                 :isSuperuser="isSuperuser"
                 :editableUser="editableUser"
+                :currUser="currUser"
                 :creating="false"
                 @status="editModalStatus"
             ></account>
@@ -103,7 +105,8 @@ export default {
     },
     computed: {
         ...mapGetters({
-            editableUser: 'getEditableUser'
+            editableUser: 'getEditableUser',
+            currUser: 'getCurrentUser'
         }),
         searchUsers () {
             return this.users.filter(user => {

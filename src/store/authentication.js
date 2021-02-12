@@ -4,6 +4,8 @@ import router from "@/router";
 const state = {
     token: localStorage.getItem('user-token') || '',
     status: '',
+    passwordReset: false,
+    forgot_pass_reset: false,
 }
 
 const getters = {
@@ -35,8 +37,16 @@ const actions = {
             delete axios.defaults.headers.common.Authorization
             resolve()
         }).then(() => {
-            router.push({ name: 'login' })
+            router.push({ name: 'Login' })
         })
+    },
+    async resetPassword ({ commit }, passData) {
+        await axios.post('/reset-password/', passData)
+            .then(() => { commit('PASSWORD_RESET') })
+    },
+    async forgotPassword ({ commit }, email) {
+        await axios.post('/forgot-password/', email)
+            .then(() => { commit('FORGOT_PASS_EMAIL_SENT') })
     }
 }
 
@@ -48,7 +58,9 @@ const mutations = {
     RESET_AUTH_STATE: (state) => {
         state.status = ''
         state.token = ''
-    }
+    },
+    PASSWORD_RESET: (state) => (state.passwordReset = true),
+    FORGOT_PASS_EMAIL_SENT: (state) => (state.forgot_pass_reset = true)
 }
 
 export default {
