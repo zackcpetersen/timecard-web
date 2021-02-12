@@ -49,7 +49,8 @@
                                     <v-checkbox :disabled="adminDisabled" v-model="admin" label="Admin" class="d-inline-block"></v-checkbox>
                                     <v-checkbox v-model="superuser" label="Owner" class="d-inline-block ml-5"></v-checkbox>
                                 </div>
-                                <upload-image v-if="!creating" :imgButtonText="imgButtonText" :user="editableUser"></upload-image>
+                                <v-btn v-if="objectOwner" @click="resetPasswordModal(true)" class="d-block mb-2">Change Password</v-btn>
+                                <upload-image v-if="!creating" :imgButtonText="imgButtonText" :user="editableUser" class="d-block"></upload-image>
                             </v-form>
                             <div class="d-flex justify-center mt-5">
                                 <v-btn text color="blue darken-1" @click="closeModal" class="mx-2">Close</v-btn>
@@ -60,6 +61,7 @@
                 </v-container>
             </v-card-text>
         </v-card>
+        <password-reset :currUser="currUser" :showModal="passwordModalStatus" @status="resetPasswordModal" :redirect="false"></password-reset>
     </v-dialog>
 </template>
 
@@ -67,6 +69,7 @@
 import { mapActions } from 'vuex'
 import { rules } from '@/mixins/rules'
 
+import passwordReset from '@/components/auth/passwordReset'
 import userImage from '@/components/accounts/userImage'
 
 export default {
@@ -80,12 +83,16 @@ export default {
             adminDisabled: false,
             superuser: false,
             loading: false,
-            image: null
+            image: null,
+            passwordModalStatus: false,
         }
     },
     computed: {
         imgButtonText () {
             return this.editableUser.image ? 'Update Image' : 'Add Image'
+        },
+        objectOwner () {
+            return this.currUser.id === this.editableUser.id
         },
         canSubmit () {
             if (this.creating) {
@@ -105,6 +112,9 @@ export default {
             updateUser: 'updateUser',
             superUserUpdate: 'superUserUpdateUser'
         }),
+        resetPasswordModal (val) {
+            this.passwordModalStatus = val
+        },
         submit () {
             if (this.$refs.form.validate()) {
                 this.loading = true
@@ -115,8 +125,6 @@ export default {
                 userData.append('email', this.email)
                 userData.append('is_admin', this.admin)
                 userData.append('is_superuser', this.superuser)
-                // TODO need to actually figure out password handling
-                userData.append('password', 'admin')
                 if (this.creating) {
                     this.createUser(userData)
                         .then(() => {this.clearForm()})
@@ -167,10 +175,12 @@ export default {
             type: Object,
             required: false
         },
+        currUser: Object,
         creating: Boolean
     },
     components: {
-        'upload-image': userImage
+        'upload-image': userImage,
+        'password-reset': passwordReset
     }
 }
 </script>

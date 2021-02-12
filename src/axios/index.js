@@ -11,6 +11,9 @@ axios.interceptors.response.use(response => {
     if (response.config.method === 'delete') {
         successfulSnackbar({ heading: 'Deleted Successfully' })
     }
+    if (response.config.url === '/reset-password/') {
+        successfulSnackbar({ heading: 'Password', content: 'Changed Successfully!'})
+    }
     return response
 }, error => {
     if (error.response) {

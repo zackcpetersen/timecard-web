@@ -7,20 +7,29 @@ Vue.use(VueRouter)
 
 const routes = [
     {
+        path: '/login/',
+        name: 'Login',
+        component: () => import('@/views/login'),
+        meta: {
+            layout: 'simple',
+            requiresAuth: false
+        }
+    },
+    {
+        path: '/reset-password/',
+        name: 'PasswordReset',
+        component: () => import('@/views/passwordReset'),
+        meta: {
+            layout: 'simple',
+            requiresAuth: true
+        }
+    },
+    {
         path: '/',
         name: 'Timecard',
         component: () => import('@/views/timecard'),
         meta: {
             requiresAuth: true
-        }
-    },
-    {
-        path: '/login/',
-        name: 'login',
-        component: () => import('@/views/login'),
-        meta: {
-            layout: 'simple',
-            requiresAuth: false
         }
     },
     {
@@ -61,7 +70,7 @@ router.beforeEach((to, from, next) => {
             next()
             return
         }
-        next({ name: 'login' })
+        next({ name: 'Login' })
     } else {
         next()
     }
