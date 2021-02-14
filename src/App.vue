@@ -41,7 +41,8 @@ export default {
     computed: {
         ...mapGetters({
             currentSnackbar: 'getSnackbarMessage',
-            authenticated: 'isAuthenticated'
+            authenticated: 'isAuthenticated',
+            currUser: 'getCurrentUser'
         }),
         layout () {
             return (this.$route.meta.layout !== 'simple')
@@ -53,6 +54,11 @@ export default {
     watch: {
         authenticated () {
             this.getUserData()
+        },
+        currUser () {
+            if (!this.currUser.pass_valid) {
+                this.$router.push({ name: 'PasswordReset' })
+            }
         }
     },
     components: {
