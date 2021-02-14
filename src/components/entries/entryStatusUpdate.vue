@@ -4,6 +4,7 @@
         @click="updateEntries"
         class="ml-4 mb-2"
         :color="color"
+        :loading="loading"
     >{{ btnText }}</v-btn>
 </template>
 
@@ -11,12 +12,20 @@
 import { mapActions } from 'vuex'
 
 export default {
+    data () {
+        return {
+            loading: false
+        }
+    },
     methods: {
         ...mapActions({
             entryStatusUpdate: 'entryStatusUpdate'
         }),
+        emitEntries () {
+            this.loading = false
+            this.$emit('entriesUpdated')
+        },
         updateEntries () {
-            // could pass loading = true to parent
             const newEntries = { entries: [], status: this.status }
             this.selected.forEach(entry => {
                 if (entry.end_time) {
@@ -24,8 +33,10 @@ export default {
                 }
             })
             if (newEntries.entries.length) {
+                this.loading = true
                 this.entryStatusUpdate(newEntries)
-                    .then(this.$emit('entriesUpdated'))
+                    .then(() => this.emitEntries())
+                    .catch(() => this.loading = false)
             }
         }
     },

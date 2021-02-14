@@ -9,7 +9,7 @@
             <v-card-title>
                 <v-row justify="space-between" align="center">
                     <span class="headline">Edit Image</span>
-                    <v-btn v-if="canEdit" @click="imgDelete" class="white--text" color="red">REMOVE</v-btn>
+                    <v-btn v-if="canEdit" @click="imgDelete" class="white--text" color="red" :loading="loading">REMOVE</v-btn>
                 </v-row>
             </v-card-title>
             <v-card-text>
@@ -58,6 +58,7 @@
                             text
                             @click="updateImg"
                             v-if="saveEnabled"
+                            :loading="loading"
                         >Save</v-btn>
                     </v-row>
                 </v-container>
@@ -78,7 +79,8 @@ export default {
             imgFeatured: '',
             activeImg: false,
             featuredLabel: 'Featured Image (Shown on project list - only one per project)',
-            valid: true
+            valid: true,
+            loading: false
         }
     },
     methods: {
@@ -88,25 +90,24 @@ export default {
         }),
         updateImg () {
             if (this.$refs.form.validate()) {
+                this.loading = true
                 let imgData = {id: this.image.id}
-                if (this.imgName) {
-                    imgData['name'] = this.imgName
-                }
-                if (this.imgDesc) {
-                    imgData['description'] = this.imgDesc
-                }
-                if (this.imgFeatured) {
-                    imgData['featured'] = this.imgFeatured
-                }
+                if (this.imgName) {imgData['name'] = this.imgName}
+                if (this.imgDesc) {imgData['description'] = this.imgDesc}
+                if (this.imgFeatured) {imgData['featured'] = this.imgFeatured}
                 this.updateImage(imgData)
-                    .then(this.closeModal())
+                    .then(() => this.closeModal())
+                    .catch(() => this.loading = false)
             }
         },
         imgDelete () {
-            this.deleteImage(this.image.id).then(() => {this.closeModal()})
+            this.deleteImage(this.image.id)
+                .then(() => this.closeModal())
+                .catch(() => this.loading = false)
         },
         closeModal () {
             this.$emit('status', false)
+            this.loading = false
         }
     },
     computed: {

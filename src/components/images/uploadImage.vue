@@ -5,6 +5,7 @@
                    color="secondary"
                    style="min-width: 13em;"
                    elevation="3"
+                   :loading="loading"
                    ripple x-large rounded text>
                 <v-row justify="start"><v-col cols="auto"><v-icon color="primary">{{ imagesBtn.icon }}</v-icon></v-col></v-row>
                 <v-row><v-col>{{ imagesBtn.text }}</v-col></v-row>
@@ -28,6 +29,7 @@ export default {
         return {
             selectedFile: '',
             imagesBtn: {text: 'Add Images', icon: 'mdi-image-multiple-outline'},
+            loading: false
         }
     },
     methods: {
@@ -40,6 +42,7 @@ export default {
         uploadFile(e) {
             this.selectedFile = e.target.files[0]
             if (this.selectedFile) {
+                this.loading = true
                 const submitData = new FormData()
                 submitData.append('image', this.selectedFile)
                 submitData.append('name', this.selectedFile.name)
@@ -48,6 +51,8 @@ export default {
                     submitData.append('entry', this.imgData.entryId)
                 }
                 this.addImage(submitData)
+                    .then(() => this.loading = false)
+                    .catch(() => this.loading = false)
             }
         }
     },

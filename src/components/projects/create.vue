@@ -58,6 +58,7 @@
                             color="blue darken-1"
                             text
                             @click="submit"
+                            :loading="loading"
                             v-if="!!name && !!description && !!projectType"
                         >Create</v-btn>
                     </v-row>
@@ -81,6 +82,7 @@ export default {
             projectType: '',
             valid: true,
             projectTypeModal: false,
+            loading: false
         }
     },
     methods: {
@@ -92,9 +94,11 @@ export default {
         },
         closeModal () {
             this.$emit('status', false)
+            this.loading = false
         },
         submit () {
             if (this.$refs.form.validate()) {
+                this.loading = true
                 const projData = {
                     name: this.name,
                     description: this.description,
@@ -102,12 +106,12 @@ export default {
                 }
                 this.createProject(projData)
                     .then(() => {
-                        this.closeModal()
                         this.name = ''
                         this.description = ''
                         this.projectType = ''
                         this.$refs.form.resetValidation()
-                    })
+                        this.closeModal()
+                    }).catch(() => this.loading = false)
             }
         }
     },

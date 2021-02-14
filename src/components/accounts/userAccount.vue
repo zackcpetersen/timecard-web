@@ -128,14 +128,16 @@ export default {
                 if (this.creating) {
                     this.createUser(userData)
                         .then(() => {this.clearForm()})
+                        .catch(() => this.loading = false)
                 } else if (this.isSuperuser) {
                     this.superUserUpdate(userData)
                         .then(() => {this.clearForm()})
+                        .catch(() => this.loading = false)
                 } else {
                     this.updateUser(userData)
                         .then(() => {this.clearForm()})
+                        .catch(() => this.loading = false)
                 }
-                this.loading = false
             }
         },
         clearForm () {
@@ -147,6 +149,7 @@ export default {
             this.superuser = false
             this.image = null
             this.$refs.form.resetValidation()
+            this.loading = false
         },
         closeModal () {
             this.$emit('status', false)

@@ -58,7 +58,7 @@
                 </v-form>
                 <div class="d-flex justify-center">
                     <v-btn @click="closeModal" color="primary" text>Close</v-btn>
-                    <v-btn @click="submitForm" v-if="saveEnabled" color="primary" text>Save</v-btn>
+                    <v-btn @click="submitForm" v-if="saveEnabled" color="primary" text :loading="loading">Save</v-btn>
                 </div>
             </v-card-text>
         </v-card>
@@ -80,7 +80,8 @@ export default {
             startDate: '',
             startTime: '',
             endTime: '',
-            pauseTime: ''
+            pauseTime: '',
+            loading: false,
         }
     },
     methods: {
@@ -103,6 +104,7 @@ export default {
         },
         closeModal () {
             this.$emit('status', false)
+            this.loading = false
         },
         formatAPITime (date, time) {
             const hour = time.split(':')[0]
@@ -116,6 +118,7 @@ export default {
         },
         submitForm () {
             if (this.$refs.form.validate()) {
+                this.loading = true
                 const startTime = this.formatAPITime(this.startDate, this.startTime)
                 const endTime = this.formatAPITime(this.startDate, this.endTime)
 
@@ -128,6 +131,7 @@ export default {
                 }
                 this.updateEntry(submitData)
                     .then(() => {this.closeModal()})
+                    .catch(() => this.loading = false)
             }
         }
     },

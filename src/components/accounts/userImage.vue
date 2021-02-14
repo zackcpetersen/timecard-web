@@ -34,9 +34,9 @@ export default {
             this.$refs.file.click()
         },
         uploadFile(e) {
-            this.loading = true
             this.selectedFile = e.target.files[0]
             if (this.selectedFile) {
+                this.loading = true
                 const submitData = new FormData()
                 submitData.append('id', this.user.id)
                 submitData.append('first_name', this.user.first_name)
@@ -44,9 +44,11 @@ export default {
                 submitData.append('email', this.user.email)
                 submitData.append('image', this.selectedFile)
                 this.updateUser(submitData)
-                    .then(() => {this.selectedFile = ''})
+                    .then(() => {
+                        this.selectedFile = ''
+                        this.loading = false
+                    }).catch(() => this.loading = false)
             }
-            this.loading = false
         }
     },
     props: {
