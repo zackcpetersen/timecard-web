@@ -17,7 +17,7 @@ export const rules = {
             ],
             descriptionRules: [
                 v => /^[A-Za-z0-9\s.]+$/.test(v) || 'Only alphanumeric characters, spaces, and periods allowed',
-                v => (v && v.length <= 250) || 'Name must be less than 250 characters',
+                v => (v ? v.length <= 250 : true) || 'Description must be less than 250 characters',
             ],
             durationRules: [
                 v => !!v || 'Duration is required',

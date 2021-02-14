@@ -124,7 +124,7 @@ export default {
         },
         description: {
             get () {
-                return this.image.description
+                return this.image.description || null
             },
             set (newDesc) {
                 this.imgDesc = newDesc

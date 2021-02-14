@@ -51,7 +51,6 @@
                                 v-model="selected"
                                 :headers="headers"
                                 :items="userEntries"
-                                :search="search"
                                 item-key="id"
                                 group-by="user"
                                 sort-by="date"
@@ -114,7 +113,6 @@ import userFilter from '@/components/entries/userFilter'
 export default {
     data () {
         return {
-            search: '',
             loading: true,
             selected: [],
             entryEditModal: false,

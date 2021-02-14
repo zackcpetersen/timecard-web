@@ -33,14 +33,12 @@ axios.interceptors.response.use(response => {
                 break
             case 400:
                 if (error.response.data.non_field_errors) {
-                    console.log(error.response.data.non_field_errors[0])
                     failedSnackbar({ heading: 'Login Failed', content: error.response.data.non_field_errors[0]})
                     return Promise.reject(error)
                 }
                 failedSnackbar({ heading: error.message, content: error.response.data })
                 return Promise.reject(error)
             case 409:
-                console.log(error.message)
                 failedSnackbar({ heading: error.response.data.detail, content: error.message })
                 break
             case 500:
