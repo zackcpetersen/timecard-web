@@ -1,8 +1,7 @@
 <template>
     <v-col>
         <v-row justify="center">
-            <p v-if="entry.user">Welcome {{ entry.user.first_name }}!</p>
-            <p v-else>Welcome!</p>
+            <p>Welcome {{ currUser.first_name }}!</p>
         </v-row>
         <v-row justify="center">
             <p>Today is {{ formattedDate }}</p>

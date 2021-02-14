@@ -1,6 +1,5 @@
 const entryConstants = {
     status(status) {
-        // TODO could run unclosed entry check here and update db
         const statusData = {}
 
         if (status === 'approved') {
