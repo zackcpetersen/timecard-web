@@ -164,17 +164,18 @@ export default {
         }),
         closeModal () {
             this.$emit('status', false)
+            this.loading = false
         },
         projDelete () {
             this.loading = true
             this.deleteProject(this.project.id)
                 .then(() => {
                     this.closeModal()
-                })
-            this.loading = false
+                }).catch(() => this.loading = false)
         },
         submit () {
             if (this.$refs.form.validate()) {
+                this.loading = true
                 const projData = {
                     name: this.projName,
                     description: this.projDesc,
@@ -182,7 +183,6 @@ export default {
                     type: this.projectType,
                     id: this.project.id
                 }
-                this.loading = true
                 this.updateProject(projData)
                     .then(() => {
                         this.projName = ''
@@ -192,8 +192,7 @@ export default {
                         this.id = ''
                         this.$refs.form.resetValidation()
                         this.closeModal()
-                    })
-                this.loading = false
+                    }).catch(() => this.loading = false)
             }
         }
     },

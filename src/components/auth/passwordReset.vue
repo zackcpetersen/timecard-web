@@ -9,7 +9,7 @@
                     <!-- TODO add rules for password security -->
                     <v-text-field prepend-icon="mdi-lock" v-model="password" label="New Password" type="password"></v-text-field>
                     <v-text-field prepend-icon="mdi-lock" v-model="confirmPassword" label="Confirm Password" type="password"></v-text-field>
-                    <v-btn @click="closeModal">Close</v-btn>
+                    <v-btn @click="closeModal" v-if="!redirect">Close</v-btn>
                     <v-btn v-if="passMatch" @click="submitForm" color="primary" class="ml-2">Change Password</v-btn>
                 </v-form>
             </v-card-text>

@@ -39,13 +39,6 @@ export default {
         this.fetchProjectImages()
         this.fetchCurrentUser()
     },
-    watch: {
-        currUser () {
-            if (!this.currUser.pass_valid) {
-                this.$router.push({ name: 'PasswordReset' })
-            }
-        }
-    },
     components: {
         'timecard': timecard
     },

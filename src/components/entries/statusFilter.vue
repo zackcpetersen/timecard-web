@@ -18,6 +18,7 @@ export default {
     data () {
         return {
             statusList: [],
+            // TODO this can't be hardcoded - check projects for good implementation
             statuses: [
                 { name: 'Active', id: 'active' },
                 { name: 'Approved', id: 'approved' },

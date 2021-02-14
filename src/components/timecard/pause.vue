@@ -1,13 +1,16 @@
 <template>
     <div>
         <v-row justify="center" class="mb-2">
-            <v-btn color="secondary"
-                   style="width: 13em;"
-                   v-if="clockedIn"
-                   v-model="pause"
-                   @click="pauseToggle"
-                   ripple x-large rounded text
-                   elevation="3">
+            <v-btn
+                color="secondary"
+                style="width: 13em;"
+                v-if="clockedIn"
+                v-model="pause"
+                @click="pauseToggle"
+                ripple x-large rounded text
+                elevation="3"
+                :loading="loading"
+            >
                 <v-row justify="start"><v-col cols="auto"><v-icon color="primary">{{ activePause.icon }}</v-icon></v-col></v-row>
                 <v-row><v-col cols="auto">{{ activePause.text }}</v-col></v-row>
             </v-btn>
@@ -26,6 +29,14 @@ import { mapActions } from 'vuex'
 import entryConstants from '@/constants/entries'
 
 export default {
+    data () {
+        return {
+            pausedData: {text: 'Resume', icon: 'mdi-play-circle-outline'},
+            unPausedData: {text: 'Pause', icon: 'mdi-pause-circle-outline'},
+            pause: this.paused,
+            loading: false
+        }
+    },
     methods: {
         ...mapActions({
             startPause: 'startPause',
@@ -33,9 +44,15 @@ export default {
         }),
         pauseToggle () {
             if (!this.paused) {
+                this.loading = true
                 this.startPause({})
+                    .then(() => this.loading = false)
+                    .catch(() => this.loading = false)
             } else {
+                this.loading = true
                 this.endPause({})
+                    .then(() => this.loading = false)
+                    .catch(() => this.loading = false)
             }
         }
     },
@@ -52,13 +69,6 @@ export default {
         activePause () {
             return this.paused ? this.pausedData : this.unPausedData
         },
-    },
-    data () {
-        return {
-            pausedData: {text: 'Resume', icon: 'mdi-play-circle-outline'},
-            unPausedData: {text: 'Pause', icon: 'mdi-pause-circle-outline'},
-            pause: this.paused
-        }
     },
     props: {
         entry: Object,

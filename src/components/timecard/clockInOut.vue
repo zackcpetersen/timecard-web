@@ -1,12 +1,15 @@
 <template>
     <div>
         <v-row justify="center" class="mb-2 mt-8">
-            <v-btn color="secondary"
-                   style="width: 13em;"
-                   v-model="clockIn"
-                   @click="clockInToggle"
-                   ripple x-large rounded text
-                   elevation="3">
+            <v-btn
+                color="secondary"
+                style="width: 13em;"
+                v-model="clockIn"
+                @click="clockInToggle"
+                ripple x-large rounded text
+                elevation="3"
+                :loading="loading"
+            >
                 <v-row justify="start"><v-col cols="auto"><v-icon color="primary">{{ activeClock.icon }}</v-icon></v-col></v-row>
                 <v-row><v-col cols="auto">{{ activeClock.text }}</v-col></v-row>
             </v-btn>
@@ -26,6 +29,7 @@ export default {
             clockIn: this.clockedIn,
             clockedInData: {text: 'Clock-In', icon: 'mdi-clock-time-nine-outline'},
             clockedOutData: {text: 'Clock-Out', icon: 'mdi-stop-circle-outline'},
+            loading: false
         }
     },
     methods: {
@@ -35,9 +39,15 @@ export default {
         }),
         clockInToggle () {
             if (!this.clockedIn) {
+                this.loading = true
                 this.startTime({})
+                    .then(() => this.loading = false)
+                    .catch(() => this.loading = false)
             } else {
+                this.loading = true
                 this.endTime()
+                    .then(() => this.loading = false)
+                    .catch(() => this.loading = false)
             }
         },
     },

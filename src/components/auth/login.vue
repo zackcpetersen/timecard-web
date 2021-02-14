@@ -29,7 +29,7 @@
                         <v-btn v-if="loginEnabled" @click="submitForm" color="primary" class="mt-3" :loading="loading">Login</v-btn>
                     </v-slide-x-transition>
                 </v-form>
-                <v-btn v-if="showForgotPass" text small @click="forgotPass" class="mt-5">Forgot Password?</v-btn>
+                <v-btn v-if="showForgotPass" text small @click="forgotPass" class="mt-5" :loading="loading">Forgot Password?</v-btn>
                 <div>{{ passResetMsg }}</div>
             </v-card-text>
         </v-card>
@@ -63,11 +63,14 @@ export default {
         }),
         forgotPass () {
             if (/.+@.+\..+/.test(this.email)) {
+                this.loading = true
                 const data = { email: this.email }
-                this.resetPass(data).then(() => {
-                    this.passResetMsg = `Check ${this.email} for a temporary password`
-                    this.showForgotPass = false
-                })
+                this.resetPass(data)
+                    .then(() => {
+                        this.passResetMsg = `Check ${this.email} for a temporary password`
+                        this.showForgotPass = false
+                        this.loading = false
+                    }).catch(() => {this.loading = false})
             } else {
                 this.passResetMsg = 'Enter your email above to reset your password'
             }

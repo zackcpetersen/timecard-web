@@ -34,6 +34,9 @@ export default {
         })
     },
     watch: {
+        userList () {
+            this.$emit('input', this.userList)
+        },
         getUsers () {
             this.users = this.getUsers.map(user => {
                 const formattedUser = {}

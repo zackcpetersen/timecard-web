@@ -40,21 +40,21 @@ export default {
         }),
         closeModal () {
             this.$emit('status', false)
+            this.loading = false
         },
         submit () {
             if (this.$refs.form.validate()) {
+                this.loading = true
                 const data = {
                     name: this.newType,
                     id: this.projType ? this.projType.id : null
                 }
-                this.loading = true
                 this.createType(data)
                     .then(() => {
                         this.newType = ''
-                        this.loading = false
                         this.$refs.form.resetValidation()
                         this.closeModal()
-                    })
+                    }).catch(() => this.loading = false)
             }
         }
     },
