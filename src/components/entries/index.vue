@@ -113,7 +113,6 @@ import userFilter from '@/components/entries/userFilter'
 export default {
     data () {
         return {
-            loading: true,
             selected: [],
             entryEditModal: false,
             dialogDelete: false,
@@ -269,11 +268,11 @@ export default {
 
                 return formattedEntry
             })
-            this.loading = false
         }
     },
     props: {
-        entries: Array
+        entries: Array,
+        loading: Boolean
     },
     components: {
         'csv-export': entryCsvExport,

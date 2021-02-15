@@ -39,7 +39,7 @@ axios.interceptors.response.use(response => {
                 failedSnackbar({ heading: error.message, content: error.response.data })
                 return Promise.reject(error)
             case 409:
-                failedSnackbar({ heading: error.response.data.detail, content: error.message })
+                failedSnackbar({ content: error.response.data.detail })
                 break
             case 500:
                 failedSnackbar({ heading: error.message, content: error.response.statusText })
