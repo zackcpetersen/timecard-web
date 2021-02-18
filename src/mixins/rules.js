@@ -10,6 +10,12 @@ export const rules = {
                 v => v.length <= 99 || 'Password must be less than 99 characters',
                 v => (v || '').indexOf(' ') < 0 || 'No spaces are allowed'
             ],
+            createPassRules: [
+                v => !!v || 'Password is required',
+                v => v.length >= 8 || 'Password must be greater than 8 characters',
+                v => v.length <= 99 || 'Password must be less than 99 characters',
+                v => (v || '').indexOf(' ') < 0 || 'No spaces are allowed'
+            ],
             nameRules: [
                 v => !!v || 'Name is required',
                 v => /^[A-Za-z0-9\s.]+$/.test(v) || 'Only alphanumeric characters, spaces, and periods allowed',

@@ -87,9 +87,8 @@ const mutations = {
     SET_ENTRIES: (state, entries) => {
         state.entries = entries
         if (state.entries.length) {
-            // Set currentEntry to last entry in project list
-            // TODO change sorting in backend and grab first or last here
-            state.currentEntry = entries.reduce((a, b) => a.id > b.id ? a : b)
+            // Set currentEntry to most recent entry (sorting on backend)
+            state.currentEntry = entries[0]
         }
     },
     SET_CURRENT_ENTRY: (state, entry) => (state.currentEntry = entry),

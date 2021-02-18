@@ -35,13 +35,17 @@ export default {
     methods: {
         ...mapActions({
             startTime: 'startTime',
-            endTime: 'endTime'
+            endTime: 'endTime',
+            updateEntry: 'updateTimecardEntry'
         }),
         clockInToggle () {
             if (!this.clockedIn) {
                 this.loading = true
                 this.startTime({})
-                    .then(() => this.loading = false)
+                    .then(() => {
+                        this.loading = false
+                        this.geoLocate()
+                    })
                     .catch(() => this.loading = false)
             } else {
                 this.loading = true
@@ -50,6 +54,26 @@ export default {
                     .catch(() => this.loading = false)
             }
         },
+        geoSuccess (position) {
+            const geoData = { ...this.entry }
+            geoData['loc_latitude'] = position.coords.latitude.toFixed(6)
+            geoData['loc_longitude'] = position.coords.longitude.toFixed(6)
+            this.updateEntry(geoData)
+        },
+        geoError (error) {
+            console.log(error)
+            const geoData = { ...this.entry }
+            geoData['loc_errors'] = error.message
+            this.updateEntry(geoData)
+        },
+        geoLocate () {
+            const options = {
+                enableHighAccuracy: true,
+                maximumAge: 30000,
+                timeout: 30000
+            }
+            navigator.geolocation.getCurrentPosition(this.geoSuccess, this.geoError, options)
+        }
     },
     computed: {
         activeClock () {

@@ -6,11 +6,10 @@
             </v-card-title>
             <v-card-text>
                 <v-form v-model="valid" ref="form">
-                    <!-- TODO add rules for password security -->
-                    <v-text-field prepend-icon="mdi-lock" v-model="password" label="New Password" type="password"></v-text-field>
+                    <v-text-field :rules="createPassRules" prepend-icon="mdi-lock" v-model="password" label="New Password" type="password"></v-text-field>
                     <v-text-field prepend-icon="mdi-lock" v-model="confirmPassword" label="Confirm Password" type="password"></v-text-field>
                     <v-btn @click="closeModal" v-if="!redirect">Close</v-btn>
-                    <v-btn v-if="passMatch" @click="submitForm" color="primary" class="ml-2">Change Password</v-btn>
+                    <v-btn :disabled="!passMatch" @click="submitForm" color="primary" class="ml-2">Change Password</v-btn>
                 </v-form>
             </v-card-text>
         </v-card>
@@ -19,6 +18,7 @@
 
 <script>
 import { mapActions } from 'vuex'
+import { rules } from '@/mixins/rules'
 
 export default {
     data () {
@@ -59,6 +59,7 @@ export default {
             }
         }
     },
+    mixins: [rules],
     props: {
         currUser: Object,
         showModal: Boolean,
