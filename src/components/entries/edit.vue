@@ -9,9 +9,15 @@
             <v-card-title class="d-flex justify-center align-center">
                 <span class="headline">Edit Entry - {{ entryUser }}</span>
             </v-card-title>
+            <!-- TODO Update project should be possible here -->
             <span v-if="entry.project_name" class="d-block d-flex justify-center">{{ entry.project_name }}</span>
             <span v-else class="d-block d-flex justify-center error--text">No Project Assigned</span>
             <span :class="`${status.color}--text d-block d-flex justify-center font-italic mb-2`">{{ status.type }}</span>
+            <div v-if="isSuperuser">
+                <span v-for="location in entry.locations" :key="location.id" class="d-flex justify-center align-center">
+                    <v-btn text :href="gmapsLocation(location)" target="_blank" class="mx-2 text-overline">{{ formattedTime(location.created_at) }} - {{ location.loc_latitude }}, {{ location.loc_longitude }}</v-btn>
+                </span>
+            </div>
             <v-card-text>
                 <v-form ref="form" v-model="valid">
                     <v-row justify="center">
@@ -88,6 +94,12 @@ export default {
         ...mapActions({
             updateEntry: 'updateEntry'
         }),
+        gmapsLocation (location) {
+            return 'https://www.google.com/maps/search/?api=1&query='
+                + location.loc_latitude
+                + ','
+                + location.loc_longitude
+        },
         formattedTime (time) {
             if (time) {
                 time = new Date(time)
@@ -187,7 +199,8 @@ export default {
     mixins: [rules],
     props: {
         showModal: Boolean,
-        isAdmin: Boolean
+        isAdmin: Boolean,
+        isSuperuser: Boolean
     },
     components: {
         'update-time': updateTime,

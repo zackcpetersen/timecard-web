@@ -29,14 +29,15 @@ export default {
             clockIn: this.clockedIn,
             clockedInData: {text: 'Clock-In', icon: 'mdi-clock-time-nine-outline'},
             clockedOutData: {text: 'Clock-Out', icon: 'mdi-stop-circle-outline'},
-            loading: false
+            loading: false,
+            tmpEntry: null
         }
     },
     methods: {
         ...mapActions({
             startTime: 'startTime',
             endTime: 'endTime',
-            updateEntry: 'updateTimecardEntry'
+            addEntryLocation: 'addEntryLocation'
         }),
         clockInToggle () {
             if (!this.clockedIn) {
@@ -50,21 +51,28 @@ export default {
             } else {
                 this.loading = true
                 this.endTime()
-                    .then(() => this.loading = false)
+                    .then(() => {
+                        this.loading = false
+                        this.geoLocate()
+                    })
                     .catch(() => this.loading = false)
             }
         },
         geoSuccess (position) {
-            const geoData = { ...this.entry }
-            geoData['loc_latitude'] = position.coords.latitude.toFixed(6)
-            geoData['loc_longitude'] = position.coords.longitude.toFixed(6)
-            this.updateEntry(geoData)
+            const geoData = {
+                entry: this.tmpEntry.id,
+                loc_latitude: position.coords.latitude.toFixed(6),
+                loc_longitude: position.coords.longitude.toFixed(6)
+            }
+            this.addEntryLocation(geoData)
         },
         geoError (error) {
             console.log(error)
-            const geoData = { ...this.entry }
-            geoData['loc_errors'] = error.message
-            this.updateEntry(geoData)
+            const geoErrors = {
+                entry: this.tmpEntry.id,
+                loc_errors: error.message
+            }
+            this.addEntryLocation(geoErrors)
         },
         geoLocate () {
             const options = {
@@ -83,6 +91,13 @@ export default {
             const time = new Date(this.entry.start_time)
             return time.toLocaleTimeString()
         },
+    },
+    watch: {
+        entry () {
+            if (this.entry.id) {
+                this.tmpEntry = { ...this.entry }
+            }
+        }
     },
     props: {
         entry: Object,
