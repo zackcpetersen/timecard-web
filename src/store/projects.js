@@ -30,10 +30,12 @@ const actions = {
             })
     },
     async deleteProject ({ commit }, projId) {
-        await axios.delete(`/projects/${projId}/`)
-            .then(() => {
-                commit('REMOVE_PROJECT', projId)
-            })
+        if (confirm('Are you sure you\'d like to delete this project?')) {
+            await axios.delete(`/projects/${projId}/`)
+                .then(() => {
+                    commit('REMOVE_PROJECT', projId)
+                })
+        }
     }
 }
 

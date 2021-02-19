@@ -35,10 +35,12 @@ const actions = {
             })
     },
     async deleteImage ({ commit }, imageId) {
-        await axios.delete(`/project-images/${imageId}/`)
-            .then(() => {
-                commit('REMOVE_IMAGE', imageId)
-            })
+        if(confirm('Are you sure you want to delete this image?')) {
+            await axios.delete(`/project-images/${imageId}/`)
+                .then(() => {
+                    commit('REMOVE_IMAGE', imageId)
+                })
+        }
     }
 }
 

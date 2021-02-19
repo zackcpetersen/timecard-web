@@ -1,6 +1,7 @@
 import Axios from 'axios'
-import { failedSnackbar, successfulSnackbar } from '@/mixins/snackbar-messages'
 import store from '@/store/index'
+
+import { failedSnackbar, successfulSnackbar } from '@/mixins/snackbar-messages'
 
 const axios = Axios.create({
     baseURL: 'http://127.0.0.1:8000/api/'
