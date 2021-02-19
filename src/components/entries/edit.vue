@@ -9,13 +9,19 @@
             <v-card-title class="d-flex justify-center align-center">
                 <span class="headline">Edit Entry - {{ entryUser }}</span>
             </v-card-title>
-            <!-- TODO Update project should be possible here -->
-            <span v-if="entry.project_name" class="d-block d-flex justify-center">{{ entry.project_name }}</span>
-            <span v-else class="d-block d-flex justify-center error--text">No Project Assigned</span>
+            <project-select :entry="entry"></project-select>
             <span :class="`${status.color}--text d-block d-flex justify-center font-italic mb-2`">{{ status.type }}</span>
             <div v-if="isSuperuser">
                 <span v-for="location in entry.locations" :key="location.id" class="d-flex justify-center align-center">
-                    <v-btn text :href="gmapsLocation(location)" target="_blank" class="mx-2 text-overline">{{ formattedTime(location.created_at) }} - {{ location.loc_latitude }}, {{ location.loc_longitude }}</v-btn>
+                    <v-btn
+                        text
+                        v-if="location.loc_latitude"
+                        :href="gMapsLocation(location)"
+                        target="_blank"
+                        class="mx-2 text-overline"
+                    >{{ readableTime(location.created_at) }} - {{ location.loc_latitude }}, {{ location.loc_longitude }}
+                    </v-btn>
+                    <span v-if="location.loc_errors">{{ readableTime(location.created_at) }} - Location Error: {{ location.loc_errors }}</span>
                 </span>
             </div>
             <v-card-text>
@@ -75,6 +81,7 @@
 import { mapActions, mapGetters } from 'vuex'
 import { rules } from '@/mixins/rules'
 import entryConstants from '@/constants/entries'
+import projectSelect from '@/components/timecard/projectSelect'
 import updateDate from '@/components/entries/updateDate'
 import updateTime from '@/components/entries/updateTime'
 
@@ -94,7 +101,10 @@ export default {
         ...mapActions({
             updateEntry: 'updateEntry'
         }),
-        gmapsLocation (location) {
+        readableTime (time) {
+            return new Date(time).toLocaleTimeString()
+        },
+        gMapsLocation (location) {
             return 'https://www.google.com/maps/search/?api=1&query='
                 + location.loc_latitude
                 + ','
@@ -204,7 +214,8 @@ export default {
     },
     components: {
         'update-time': updateTime,
-        'update-date': updateDate
+        'update-date': updateDate,
+        'project-select': projectSelect
     }
 }
 </script>

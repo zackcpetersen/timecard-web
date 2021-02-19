@@ -25,9 +25,9 @@
                 ></upload-image>
             </v-expand-transition>
             <v-expand-transition group>
-                <project-select v-if="clockedIn"
-                                :clockedIn="clockedIn"
-                               :entry="entry"
+                <project-select
+                    v-if="clockedIn"
+                    :entry="entry"
                 ></project-select>
             </v-expand-transition>
         </v-form>
