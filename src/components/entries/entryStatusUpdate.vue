@@ -1,8 +1,9 @@
 <template>
     <v-btn
-        v-if="selected.length && isAdmin"
+        v-if="isAdmin"
+        :disabled="!selected.length"
         @click="updateEntries"
-        class="ml-4 mb-2"
+        class="ml-2 mb-2 mt-2"
         :color="color"
         :loading="loading"
     >{{ btnText }}</v-btn>

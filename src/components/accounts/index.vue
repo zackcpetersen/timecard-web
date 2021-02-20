@@ -1,5 +1,5 @@
 <template>
-    <v-row justify="center" align="start" style="height: 100%;" class="mt-sm-16 pt-sm-16">
+    <v-row justify="center" align="start" style="height: 100%;" class="mt-md-5 pt-md-5 mt-xl-16 pt-xl-16">
         <v-card class="py-5 mx-2 mx-sm-4 rounded-lg" outlined width="100%">
             <v-card-title class="d-flex flex-no-wrap justify-sm-space-between justify-space-around align-center mx-md-10 mx-sm-1">
                 <span v-if="isSuperuser" class="text-h3">Users</span>
