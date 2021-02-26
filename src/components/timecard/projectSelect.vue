@@ -17,6 +17,7 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex'
+import projConstants from '@/constants/projects'
 
 export default {
     data () {
@@ -37,8 +38,12 @@ export default {
                 this.project = project
             },
         },
+        projects () {
+            const activeProj = projConstants.statuses[0].value
+            return this.getProjects.filter(proj => proj.status === activeProj)
+        },
         ...mapGetters({
-            projects: 'getProjects'
+            getProjects: 'getProjects'
         })
     },
     methods: {
