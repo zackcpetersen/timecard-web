@@ -1,7 +1,7 @@
 <template>
     <v-autocomplete
         v-model="projectList"
-        :items="projects"
+        :items="getProjects"
         item-text="name"
         item-value="id"
         multiple
@@ -26,11 +26,6 @@ export default {
         ...mapGetters({
             getProjects: 'getProjects'
         }),
-        projects () {
-            const projects = this.getProjects
-            projects.unshift({name: 'No Project', id: null})
-            return projects
-        }
     },
     methods: {
         ...mapActions({

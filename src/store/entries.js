@@ -4,6 +4,7 @@ const state = {
     currentEntry: {},
     entries : [],
     currentEntryImages: [],
+    currentLocation: {},
     csvDownloaded: false
 }
 
@@ -48,6 +49,12 @@ const actions = {
         await axios.put(`/update-entry/${updatedEntry.id}/`, updatedEntry)
             .then(response => {
                 commit('UPDATE_CURRENT_ENTRY', response.data)
+            })
+    },
+    async addEntryLocation ({ commit }, locData) {
+        await axios.post('/entry-location/', locData)
+            .then(response => {
+                commit('ADD_ENTRY_LOCATION', response.data)
             })
     },
     async entryStatusUpdate ({ commit }, entries) {
@@ -96,6 +103,7 @@ const mutations = {
     UPDATE_ENTRIES: (state, updatedEntries) => {
         state.entries = state.entries.map(existing => updatedEntries.find(updated => updated.id === existing.id) || existing)
     },
+    ADD_ENTRY_LOCATION: (state, locData) => state.currentLocation = locData,
     REMOVE_CURRENT_ENTRY: state => state.currentEntry = {},
     CSV_DOWNLOADED: (state, status) => state.csvDownloaded = status
 }

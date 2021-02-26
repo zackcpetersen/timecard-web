@@ -1,9 +1,9 @@
 <template>
-    <v-row justify="space-around" align="start" style="height: 100%" class="px-3 mt-sm-16 pt-sm-16">
+    <v-row justify="space-around" align="start" style="height: 100%" class="px-3 mt-md-5 pt-md-5 mt-xl-16 pt-xl-16">
         <v-card outlined>
             <v-card-title class="ml-5 headline d-flex justify-space-between">
                 <span>Entries</span>
-                <csv-export v-if="isAdmin" :filters="filters"></csv-export>
+                <csv-export v-if="isAdmin && entries.length" :filters="filters"></csv-export>
             </v-card-title>
             <v-card-actions class="d-flex justify-center font-weight-regular">
                 <v-col cols="12" md="10">
@@ -91,7 +91,12 @@
                                 </template>
                             </v-data-table>
                         </v-card>
-                        <edit-entry :isAdmin="isAdmin" :showModal="entryEditModal" @status="editModalStatus"></edit-entry>
+                        <edit-entry
+                            :isSuperuser="isSuperUser"
+                            :isAdmin="isAdmin"
+                            :showModal="entryEditModal"
+                            @status="editModalStatus"
+                        ></edit-entry>
                     </v-row>
                 </v-col>
             </v-card-text>
@@ -176,6 +181,9 @@ export default {
         }),
         isAdmin () {
             return this.currUser.is_admin
+        },
+        isSuperUser () {
+            return this.currUser.is_superuser
         },
         headers () {
             return [

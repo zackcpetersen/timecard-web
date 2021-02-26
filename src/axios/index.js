@@ -1,6 +1,7 @@
 import Axios from 'axios'
-import { failedSnackbar, successfulSnackbar } from '@/mixins/snackbar-messages'
 import store from '@/store/index'
+
+import { failedSnackbar, successfulSnackbar } from '@/mixins/snackbar-messages'
 
 const axios = Axios.create({
     baseURL: 'http://127.0.0.1:8000/api/'
@@ -9,10 +10,13 @@ const axios = Axios.create({
 axios.interceptors.response.use(response => {
     // if (response.config.showSuccessfulSnackbar) {}
     if (response.config.method === 'delete') {
-        successfulSnackbar({ heading: 'Deleted Successfully' })
+        successfulSnackbar({ heading: 'Deleted Successfully!' })
     }
     if (response.config.url === '/reset-password/') {
-        successfulSnackbar({ heading: 'Password', content: 'Changed Successfully!'})
+        successfulSnackbar({ content: 'Password Changed Successfully!'})
+    }
+    if (response.config.url.includes('/update-entry/')) {
+        successfulSnackbar({content: 'Entry Updated!'})
     }
     return response
 }, error => {

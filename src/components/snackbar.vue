@@ -16,7 +16,7 @@
             <v-col cols="8">
                 <v-row dense class="d-flex justify-space-around align-center">
                     <span class="white--text text-subtitle-1 font-weight-bold">{{ snackbar.heading }}</span>
-                    <span class="white--text">{{ snackbar.content }}</span>
+                    <span class="white--text text-center">{{ snackbar.content }}</span>
                 </v-row>
             </v-col>
             <v-col cols="1">
