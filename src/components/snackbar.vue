@@ -6,6 +6,7 @@
         shaped
         elevation="3"
         transition="slide-y-reverse-transition"
+        centered
     >
         <v-row align="center" justify="space-between" dense>
             <v-col cols="1">
