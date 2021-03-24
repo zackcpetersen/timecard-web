@@ -3,7 +3,6 @@
         <v-card elevation="12" outlined shaped style="width: 80%">
 
             <v-card-title>Login</v-card-title>
-            <p>HELLO CAN YOU SEE ME</p>
 
             <v-card-text>
                 <v-form v-model="valid" ref="form" @submit.prevent="submitForm">
