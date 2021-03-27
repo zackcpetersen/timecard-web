@@ -5,7 +5,8 @@
         max-width="800px"
         transition="slide-y-reverse-transition"
     >
-        <v-card>
+        <div class="d-flex justify-space-around">
+        <v-card max-width="92%">
             <v-card-title class="d-flex justify-center align-center">
                 <span class="headline">Edit Entry - {{ entryUser }}</span>
             </v-card-title>
@@ -74,6 +75,7 @@
                 </div>
             </v-card-text>
         </v-card>
+        </div>
     </v-dialog>
 </template>
 
