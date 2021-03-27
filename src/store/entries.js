@@ -2,7 +2,8 @@ import axios from '@/axios'
 
 const state = {
     currentEntry: {},
-    entries : [],
+    entries: [],
+    userEntries: [],
     currentEntryImages: [],
     currentLocation: {},
     csvDownloaded: false
@@ -10,7 +11,8 @@ const state = {
 
 const getters = {
     getCurrentEntry: state => state.currentEntry,
-    getEntries: state => state.entries
+    getEntries: state => state.entries,
+    getUserEntries: state => state.userEntries,
 }
 
 const actions = {
@@ -87,15 +89,24 @@ const actions = {
                 commit('SET_ENTRIES', response.data)
             })
     },
+    async fetchUserEntries ({ commit }) {
+        await axios.get('/user-entries/')
+            .then(response => {
+                commit('SET_USER_ENTRIES', response.data)
+            })
+    },
 }
 
 const mutations = {
     ADD_ENTRY: (state, entry) => state.entries.push(entry),
     SET_ENTRIES: (state, entries) => {
         state.entries = entries
-        if (state.entries.length) {
+    },
+    SET_USER_ENTRIES: (state, entries) => {
+        state.userEntries = entries
+        if (state.userEntries.length) {
             // Set currentEntry to most recent entry (sorting on backend)
-            state.currentEntry = entries[0]
+            state.currentEntry = state.userEntries[0]
         }
     },
     SET_CURRENT_ENTRY: (state, entry) => (state.currentEntry = entry),

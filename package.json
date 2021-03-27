@@ -5,7 +5,8 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint"
+    "lint": "vue-cli-service lint",
+    "deploy": "aws --region us-west-2 --profile timecard-frontend --region us-west-2 s3 sync ./dist s3://timecard-frontend-prod --delete"
   },
   "dependencies": {
     "axios": "^0.21.0",

@@ -3,8 +3,10 @@ import store from '@/store/index'
 
 import { failedSnackbar, successfulSnackbar } from '@/mixins/snackbar-messages'
 
+const development = process.env.NODE_ENV !== 'production'
+
 const axios = Axios.create({
-    baseURL: 'http://127.0.0.1:8000/api/'
+    baseURL: development ? 'http://127.0.0.1:8000/api/' : 'https://backend.projecttimecard.com/api/'
 })
 
 axios.interceptors.response.use(response => {

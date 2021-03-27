@@ -9,7 +9,7 @@ import timecard from '@/components/timecard/index'
 export default {
     methods: {
         ...mapActions({
-            fetchEntries: 'fetchEntries',
+            fetchUserEntries: 'fetchUserEntries',
             fetchProjects: 'fetchProjects',
             fetchProjectImages: 'fetchProjectImages',
             fetchCurrentUser: 'fetchCurrentUser'
@@ -18,7 +18,6 @@ export default {
     computed: {
         ...mapGetters({
             currentEntry: 'getCurrentEntry',
-            getEntries: 'getEntries',
             projects: 'getProjects',
             currUser: 'getCurrentUser'
         }),
@@ -34,7 +33,7 @@ export default {
         }
     },
     created () {
-        this.fetchEntries()
+        this.fetchUserEntries()
         this.fetchProjects()
         this.fetchProjectImages()
         this.fetchCurrentUser()
