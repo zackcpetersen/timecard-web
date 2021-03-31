@@ -7,6 +7,7 @@ import { mapActions, mapGetters } from 'vuex'
 import accounts from '@/components/accounts/index'
 
 export default {
+    title: "Accounts",
     computed: {
         ...mapGetters({
             allUsers: 'getUsers',

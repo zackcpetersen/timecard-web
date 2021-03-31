@@ -7,6 +7,7 @@ import { mapActions, mapGetters } from 'vuex'
 import projects from '@/components/projects/index'
 
 export default {
+    title: "Projects",
     methods: {
         ...mapActions({
             fetchProjects: 'fetchProjects',

@@ -7,6 +7,7 @@ import { mapActions, mapGetters } from 'vuex'
 import timecard from '@/components/timecard/index'
 
 export default {
+    title: "Timecard",
     methods: {
         ...mapActions({
             fetchUserEntries: 'fetchUserEntries',

@@ -56,6 +56,11 @@ const routes = [
             requiresAuth: true
         }
     },
+    {
+        path: '*',
+        name: 'PageNotFound',
+        component: () => import('@/views/pageNotFound')
+    }
 ]
 
 const router = new VueRouter({

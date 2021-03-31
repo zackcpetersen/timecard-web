@@ -7,6 +7,7 @@ import { mapGetters } from 'vuex'
 import passwordReset from '@/components/auth/passwordReset'
 
 export default {
+    title: "Password Reset",
     computed: {
         ...mapGetters({
             currUser: 'getCurrentUser'
