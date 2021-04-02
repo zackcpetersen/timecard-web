@@ -76,16 +76,16 @@ export default {
             }
         },
         submitForm () {
-            this.loading = true
             if (this.$refs.form.validate()) {
+                this.loading = true
                 this.login({
                     username: this.email,
                     password: this.password
                 }).then(() => {
                     this.password = ''
-                })
+                    this.loading = false
+                }).catch(() => this.loading = false)
             }
-            this.loading = false
         }
     },
     watch: {
