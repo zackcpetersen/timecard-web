@@ -87,7 +87,7 @@
                                     <span class="d-flex flex-wrap">{{ item.project }}</span>
                                 </template>
                                 <template v-slot:item.actions="{ item }">
-                                    <v-icon small class="mr-2" @click="editEntry(item)">mdi-pencil</v-icon>
+                                    <v-icon color="primary" class="mr-2" @click="editEntry(item)">mdi-pencil</v-icon>
                                 </template>
                             </v-data-table>
                         </v-card>

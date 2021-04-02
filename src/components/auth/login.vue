@@ -88,6 +88,11 @@ export default {
             this.loading = false
         }
     },
+    watch: {
+        email () {
+            this.email = this.email.toLowerCase()
+        }
+    },
     mixins: [rules]
 }
 </script>

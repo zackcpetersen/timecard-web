@@ -53,7 +53,7 @@
                                 <upload-image v-if="!creating" :imgButtonText="imgButtonText" :user="editableUser" class="d-block"></upload-image>
                             </v-form>
                             <div class="d-flex justify-center mt-5">
-                                <v-btn text color="blue darken-1" @click="closeModal" class="mx-2">Close</v-btn>
+                                <v-btn text color="blue darken-1" @click="clearForm" class="mx-2">Close</v-btn>
                                 <v-btn v-if="canSubmit" :loading="loading" text color="blue darken-1" @click="submit" class="mx-2">Save</v-btn>
                             </div>
                         </v-col>
@@ -141,7 +141,6 @@ export default {
             }
         },
         clearForm () {
-            this.closeModal()
             this.firstName = ''
             this.lastName = ''
             this.email = ''
@@ -150,6 +149,7 @@ export default {
             this.image = null
             this.$refs.form.resetValidation()
             this.loading = false
+            this.closeModal()
         },
         closeModal () {
             this.$emit('status', false)
@@ -168,7 +168,17 @@ export default {
         superuser () {
             this.admin = this.superuser
             this.adminDisabled = this.superuser
-        }
+        },
+        editableUser () {
+            if (this.editableUser.id) {
+                this.firstName = this.editableUser.first_name
+                this.lastName = this.editableUser.last_name
+                this.email = this.editableUser.email
+                this.admin = this.editableUser.is_admin
+                this.superuser = this.editableUser.is_superuser
+                this.image = this.editableUser.image
+            }
+        },
     },
     mixins: [rules],
     props: {

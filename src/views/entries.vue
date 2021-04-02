@@ -7,6 +7,7 @@ import { mapActions, mapGetters } from 'vuex'
 import entries from '@/components/entries/index'
 
 export default {
+    title: "Entries",
     data () {
         return {
             loading: false
