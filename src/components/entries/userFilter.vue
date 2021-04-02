@@ -8,7 +8,7 @@
         label="User"
     >
         <template v-slot:prepend>
-            <v-icon>mdi-account-outline</v-icon>
+            <v-icon color="primary">mdi-account-outline</v-icon>
         </template>
     </v-autocomplete>
 </template>

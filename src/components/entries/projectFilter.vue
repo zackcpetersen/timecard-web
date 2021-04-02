@@ -8,7 +8,7 @@
         label="Project"
     >
         <template v-slot:prepend>
-            <v-icon>mdi-home-variant-outline</v-icon>
+            <v-icon color="primary">mdi-home-variant-outline</v-icon>
         </template>
     </v-autocomplete>
 </template>

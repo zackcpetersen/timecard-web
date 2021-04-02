@@ -8,7 +8,7 @@
         label="Status"
     >
         <template v-slot:prepend>
-            <v-icon>mdi-check-box-outline</v-icon>
+            <v-icon color="primary">mdi-check-box-outline</v-icon>
         </template>
     </v-autocomplete>
 </template>
