@@ -2,11 +2,10 @@
     <v-dialog
         v-model="showModal"
         persistent
-        max-width="800px"
         transition="slide-y-reverse-transition"
     >
         <div class="d-flex justify-space-around">
-        <v-card max-width="92%">
+        <v-card class="px-3">
             <v-card-title class="d-flex justify-center align-center">
                 <span class="headline">Edit Entry - {{ entryUser }}</span>
             </v-card-title>
@@ -51,7 +50,6 @@
                             ></update-time>
                             <update-time
                                 v-model="endTime"
-                                :rules="required"
                                 label="End Time"
                                 icon="mdi-clock-time-five-outline"
                                 :disabled="!isAdmin"
@@ -131,14 +129,16 @@ export default {
             this.loading = false
         },
         formatAPITime (date, time) {
-            const hour = time.split(':')[0]
-            const minute = time.split(':')[1]
+            if (time) {
+                const hour = time.split(':')[0]
+                const minute = time.split(':')[1]
 
-            const entryDate = new Date(date + 'T00:00:00')
-            entryDate.setHours(hour)
-            entryDate.setMinutes(minute)
+                const entryDate = new Date(date + 'T00:00:00')
+                entryDate.setHours(hour)
+                entryDate.setMinutes(minute)
 
-            return entryDate
+                return entryDate
+            }
         },
         submitForm () {
             if (this.$refs.form.validate()) {
