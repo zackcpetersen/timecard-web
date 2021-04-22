@@ -7,7 +7,7 @@
             <v-app-bar-nav-icon class="ml-5" x-large @click.stop="drawer = !drawer" />
         </v-app-bar>
         <v-main>
-            <v-container fill-height>
+            <v-container>
                 <router-view />
                 <snackbar :snackbar="currentSnackbar"></snackbar>
             </v-container>

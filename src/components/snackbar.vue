@@ -6,7 +6,6 @@
         shaped
         elevation="3"
         transition="slide-y-reverse-transition"
-        centered
     >
         <v-row align="center" justify="space-between" dense>
             <v-col cols="1">
@@ -56,3 +55,13 @@ export default {
     }
 }
 </script>
+
+<style scoped>
+.v-snack.v-snack--top {
+    bottom: auto;
+}
+
+.v-snack.v-snack--bottom {
+    top: auto;
+}
+</style>
