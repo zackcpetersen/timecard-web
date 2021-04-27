@@ -1,5 +1,10 @@
 <template>
-    <v-btn @click="exportTable" color="primary" :loading="loading">Export Table</v-btn>
+    <v-btn
+        @click="exportSelected"
+        color="primary"
+        :loading="loading"
+        :disabled="!entryIds.length"
+    >Export Selected</v-btn>
 </template>
 
 <script>
@@ -15,14 +20,14 @@ export default {
         ...mapActions({
             entryCsvExport: 'entryCsvExport'
         }),
-        exportTable () {
-            this.entryCsvExport(this.filters)
+        exportSelected () {
+            this.entryCsvExport({entries: this.entryIds})
                 .then(() => this.loading = false)
                 .catch(() => this.loading = false)
         }
     },
     props: {
-        filters: Object,
+        entryIds: Array,
     }
 }
 </script>

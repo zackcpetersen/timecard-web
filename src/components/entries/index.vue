@@ -3,7 +3,6 @@
         <v-card outlined>
             <v-card-title class="ml-5 headline d-flex justify-space-between">
                 <span>Entries</span>
-                <csv-export v-if="isAdmin && entries.length" :filters="filters"></csv-export>
             </v-card-title>
             <v-card-actions class="d-flex justify-center font-weight-regular">
                 <v-col cols="12" md="10">
@@ -63,6 +62,7 @@
                                 class="px-2"
                             >
                                 <template v-slot:top>
+                                    <csv-export v-if="isAdmin" :entryIds="currentEntryIds"></csv-export>
                                     <entry-status
                                         :selected="selected"
                                         status="approved"
@@ -122,6 +122,7 @@ export default {
             entryEditModal: false,
             dialogDelete: false,
             userEntries: [],
+            currentEntryIds: [],
             projectList: [],
             apiProjList: [],
             nullProjects: true,
@@ -218,17 +219,6 @@ export default {
                 { text: 'Actions', value: 'actions', sortable: false, filterable: false}
             ]
         },
-        filters () {
-            return {
-                'users': this.userList,
-                'projects': this.apiProjList,
-                'statuses': this.statusList,
-                'start_date': this.startDate,
-                'end_date': this.endDate,
-                'null_projects': this.nullProjects,
-                'all_projects': this.allProjects
-            }
-        },
     },
     watch: {
         startDate () {
@@ -275,6 +265,11 @@ export default {
                 formattedEntry['updated_at'] = this.dateTime(entry.updated_at)
 
                 return formattedEntry
+            })
+        },
+        selected () {
+            this.currentEntryIds = this.selected.map(entry => {
+                return entry.id
             })
         }
     },
