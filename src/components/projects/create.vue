@@ -59,7 +59,7 @@
                             text
                             @click="submit"
                             :loading="loading"
-                            v-if="!!name && !!description && !!projectType"
+                            :disabled="!name || !projectType"
                         >Create</v-btn>
                     </v-row>
                 </v-container>
