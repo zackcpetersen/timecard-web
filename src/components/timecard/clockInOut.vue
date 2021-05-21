@@ -67,7 +67,6 @@ export default {
             this.addEntryLocation(geoData)
         },
         geoError (error) {
-            console.log(error)
             const geoErrors = {
                 entry: this.tmpEntry.id,
                 loc_errors: error.message
@@ -77,7 +76,7 @@ export default {
         geoLocate () {
             const options = {
                 enableHighAccuracy: true,
-                maximumAge: 30000,
+                maximumAge: 0,
                 timeout: 30000
             }
             navigator.geolocation.getCurrentPosition(this.geoSuccess, this.geoError, options)
