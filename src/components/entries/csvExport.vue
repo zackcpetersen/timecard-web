@@ -22,13 +22,20 @@ export default {
             entryCsvExport: 'entryCsvExport'
         }),
         exportSelected () {
-            this.entryCsvExport({entries: this.entryIds})
+            const data = {
+                entries: this.entryIds,
+                start_date: this.startDate,
+                end_date: this.endDate
+            }
+            this.entryCsvExport(data)
                 .then(() => this.loading = false)
                 .catch(() => this.loading = false)
         }
     },
     props: {
         entryIds: Array,
+        startDate: String,
+        endDate: String,
     }
 }
 </script>

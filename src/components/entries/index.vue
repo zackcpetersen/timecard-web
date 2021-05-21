@@ -63,7 +63,7 @@
                                 class="px-2"
                             >
                                 <template v-slot:top>
-                                    <csv-export v-if="isAdmin" :entryIds="currentEntryIds"></csv-export>
+                                    <csv-export v-if="isAdmin" :entryIds="currentEntryIds" :startDate="startDate" :endDate="endDate"></csv-export>
                                     <entry-status
                                         :selected="selected"
                                         status="approved"
