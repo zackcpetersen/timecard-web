@@ -4,6 +4,7 @@
         color="primary"
         :loading="loading"
         :disabled="!entryIds.length"
+        class="ml-2 my-1"
     >Export Selected</v-btn>
 </template>
 

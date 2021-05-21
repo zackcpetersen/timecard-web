@@ -3,7 +3,7 @@
         v-if="isAdmin"
         :disabled="!selected.length"
         @click="updateEntries"
-        class="ml-2 mb-2 mt-2"
+        class="ml-2 my-1"
         :color="color"
         :loading="loading"
     >{{ btnText }}</v-btn>
