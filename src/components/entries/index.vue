@@ -51,9 +51,10 @@
                                 :headers="headers"
                                 :items="userEntries"
                                 item-key="id"
-                                group-by="date"
                                 sort-by="date"
                                 sort-desc
+                                group-by="date"
+                                group-desc
                                 show-select
                                 :loading="loading"
                                 loading-text="Loading... Please wait"
