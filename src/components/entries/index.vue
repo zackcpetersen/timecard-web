@@ -51,7 +51,7 @@
                                 :headers="headers"
                                 :items="userEntries"
                                 item-key="id"
-                                group-by="user"
+                                group-by="date"
                                 sort-by="date"
                                 sort-desc
                                 show-select
