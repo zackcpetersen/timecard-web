@@ -222,17 +222,19 @@ export default {
     },
     watch: {
         startDate () {
+            let earliestEntry = null
             if (this.entries.length) {
-                // formatting so the day is correct
-                const formattedStartDate = this.startDate.replace(/-/g, '/').replace(/T.+/, '')
-                const start = new Date(formattedStartDate).toLocaleDateString('en-CA')
-                const earliestEntry = new Date(this.entries[this.entries.length - 1].start_time).toLocaleDateString('en-CA')
-                if (start < earliestEntry) {
-                    const data = {
-                        start_date: this.startDate
-                    }
-                    this.fetchEntries(data)
+                earliestEntry = new Date(this.entries[this.entries.length - 1].start_time).toLocaleDateString('en-CA')
+            }
+            // formatting so the day is correct
+            const formattedStartDate = this.startDate.replace(/-/g, '/').replace(/T.+/, '')
+            const start = new Date(formattedStartDate).toLocaleDateString('en-CA')
+            // const earliestEntry = new Date(this.entries[this.entries.length - 1].start_time).toLocaleDateString('en-CA')
+            if (start < earliestEntry || !earliestEntry) {
+                const data = {
+                    start_date: this.startDate
                 }
+                this.fetchEntries(data)
             }
         },
         projectList () {
