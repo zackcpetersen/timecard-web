@@ -51,9 +51,10 @@
                                 :headers="headers"
                                 :items="userEntries"
                                 item-key="id"
-                                group-by="user"
                                 sort-by="date"
                                 sort-desc
+                                group-by="date"
+                                group-desc
                                 show-select
                                 :loading="loading"
                                 loading-text="Loading... Please wait"
@@ -175,6 +176,17 @@ export default {
             today.setDate(today.getDate() - numDays)
             return today.toLocaleDateString('en-CA')
         },
+        backendDate (date) {
+            const formatted = date.replace(/-/g, '/').replace(/T.+/, '')
+            return new Date(formatted).toLocaleDateString('en-CA')
+        },
+        fetchNewEntries () {
+            const data = {
+                start_date: this.startDate,
+                end_date: this.endDate
+            }
+            this.fetchEntries(data)
+        }
     },
     computed: {
         ...mapGetters({
@@ -222,17 +234,21 @@ export default {
     },
     watch: {
         startDate () {
+            let earliestEntry = null
             if (this.entries.length) {
-                // formatting so the day is correct
-                const formattedStartDate = this.startDate.replace(/-/g, '/').replace(/T.+/, '')
-                const start = new Date(formattedStartDate).toLocaleDateString('en-CA')
-                const earliestEntry = new Date(this.entries[this.entries.length - 1].start_time).toLocaleDateString('en-CA')
-                if (start < earliestEntry) {
-                    const data = {
-                        start_date: this.startDate
-                    }
-                    this.fetchEntries(data)
-                }
+                earliestEntry = new Date(this.entries[this.entries.length - 1].start_time).toLocaleDateString('en-CA')
+            }
+            if (this.backendDate(this.startDate) < earliestEntry || !earliestEntry) {
+                this.fetchNewEntries()
+            }
+        },
+        endDate () {
+            let latestEntry = null
+            if (this.entries.length) {
+                latestEntry = new Date(this.entries[0].start_time).toLocaleDateString('en-CA')
+            }
+            if (this.backendDate(this.endDate) > latestEntry || !latestEntry) {
+                this.fetchNewEntries()
             }
         },
         projectList () {
