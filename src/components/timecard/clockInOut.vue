@@ -29,7 +29,6 @@ export default {
             clockIn: this.clockedIn,
             clockedInData: {text: 'Clock-In', icon: 'mdi-clock-time-nine-outline'},
             clockedOutData: {text: 'Clock-Out', icon: 'mdi-stop-circle-outline'},
-            loading: false,
             tmpEntry: null
         }
     },
@@ -100,7 +99,8 @@ export default {
     },
     props: {
         entry: Object,
-        clockedIn: Boolean
+        clockedIn: Boolean,
+        loading: Boolean
     }
 }
 </script>

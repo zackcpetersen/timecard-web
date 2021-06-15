@@ -10,6 +10,7 @@
             <clock-in-out
                 :clockedIn="clockedIn"
                 :entry="entry"
+                :loading="loading"
             ></clock-in-out>
             <v-expand-transition group>
                 <pause v-if="clockedIn"
@@ -92,6 +93,7 @@ export default {
     },
     props: {
         entry: Object,
+        loading: Boolean
     }
 }
 </script>
