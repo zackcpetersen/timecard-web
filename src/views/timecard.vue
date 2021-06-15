@@ -1,5 +1,5 @@
 <template>
-    <timecard :entry="entry"></timecard>
+    <timecard :entry="entry" :loading="loading"></timecard>
 </template>
 
 <script>
@@ -8,6 +8,11 @@ import timecard from '@/components/timecard/index'
 
 export default {
     title: "Timecard",
+    data () {
+        return {
+            loading: false
+        }
+    },
     methods: {
         ...mapActions({
             fetchUserEntries: 'fetchUserEntries',
@@ -34,7 +39,10 @@ export default {
         }
     },
     created () {
+        this.loading = true
         this.fetchUserEntries()
+            .then(() => this.loading = false)
+            .catch(() => this.loading = false)
         this.fetchProjects()
         this.fetchProjectImages()
         this.fetchCurrentUser()

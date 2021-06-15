@@ -26,10 +26,10 @@
                     >
                     </v-text-field>
                     <v-slide-x-transition>
-                        <v-btn v-if="loginEnabled" @click="submitForm" color="primary" class="mt-3" :loading="loading">Login</v-btn>
+                        <v-btn v-if="loginEnabled" @click="submitForm" color="primary" class="mt-3" :loading="signInLoading">Login</v-btn>
                     </v-slide-x-transition>
                 </v-form>
-                <v-btn v-if="showForgotPass" text small @click="forgotPass" class="mt-5" :loading="loading">Forgot Password?</v-btn>
+                <v-btn v-if="showForgotPass" text small @click="forgotPass" class="mt-5" :loading="resetPassLoading">Forgot Password?</v-btn>
                 <div>{{ passResetMsg }}</div>
             </v-card-text>
         </v-card>
@@ -46,7 +46,8 @@ export default {
             valid: true,
             email: '',
             password: '',
-            loading: false,
+            resetPassLoading: false,
+            signInLoading: false,
             passResetMsg: '',
             showForgotPass: true
         }
@@ -63,28 +64,28 @@ export default {
         }),
         forgotPass () {
             if (/.+@.+\..+/.test(this.email)) {
-                this.loading = true
+                this.resetPassLoading = true
                 const data = { email: this.email }
                 this.resetPass(data)
                     .then(() => {
                         this.passResetMsg = `Check ${this.email} for a temporary password`
                         this.showForgotPass = false
-                        this.loading = false
-                    }).catch(() => {this.loading = false})
+                        this.resetPassLoading = false
+                    }).catch(() => {this.resetPassLoading = false})
             } else {
                 this.passResetMsg = 'Enter your email above to reset your password'
             }
         },
         submitForm () {
             if (this.$refs.form.validate()) {
-                this.loading = true
+                this.signInLoading = true
                 this.login({
                     username: this.email,
                     password: this.password
                 }).then(() => {
                     this.password = ''
-                    this.loading = false
-                }).catch(() => this.loading = false)
+                    this.signInLoading = false
+                }).catch(() => this.signInLoading = false)
             }
         }
     },

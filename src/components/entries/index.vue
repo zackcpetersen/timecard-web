@@ -185,7 +185,10 @@ export default {
                 start_date: this.startDate,
                 end_date: this.endDate
             }
+            this.loading = true
             this.fetchEntries(data)
+                .then(() => this.loading = false)
+                .catch(() => this.loading = false)
         }
     },
     computed: {
