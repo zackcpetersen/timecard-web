@@ -8,7 +8,7 @@
                 @click="clockInToggle"
                 ripple x-large rounded text
                 elevation="3"
-                :loading="loading"
+                :loading="loadingState"
             >
                 <v-row justify="start"><v-col cols="auto"><v-icon color="primary">{{ activeClock.icon }}</v-icon></v-col></v-row>
                 <v-row><v-col cols="auto">{{ activeClock.text }}</v-col></v-row>
@@ -29,7 +29,8 @@ export default {
             clockIn: this.clockedIn,
             clockedInData: {text: 'Clock-In', icon: 'mdi-clock-time-nine-outline'},
             clockedOutData: {text: 'Clock-Out', icon: 'mdi-stop-circle-outline'},
-            tmpEntry: null
+            tmpEntry: null,
+            loadingState: true
         }
     },
     methods: {
@@ -40,21 +41,21 @@ export default {
         }),
         clockInToggle () {
             if (!this.clockedIn) {
-                this.loading = true
+                this.loadingState = true
                 this.startTime({})
                     .then(() => {
-                        this.loading = false
+                        this.loadingState = false
                         this.geoLocate()
                     })
-                    .catch(() => this.loading = false)
+                    .catch(() => this.loadingState = false)
             } else {
-                this.loading = true
+                this.loadingState = true
                 this.endTime()
                     .then(() => {
-                        this.loading = false
+                        this.loadingState = false
                         this.geoLocate()
                     })
-                    .catch(() => this.loading = false)
+                    .catch(() => this.loadingState = false)
             }
         },
         geoSuccess (position) {
@@ -95,6 +96,9 @@ export default {
             if (this.entry.id) {
                 this.tmpEntry = { ...this.entry }
             }
+        },
+        loading () {
+            this.loadingState = this.loading
         }
     },
     props: {
