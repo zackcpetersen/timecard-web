@@ -113,16 +113,11 @@ export default {
                 'entryId': this.entry.id
             }
         },
-        entryCommentChanged: {
-            get() {
-                if (this.entry.comments) {
-                    return this.entryComment !== this.entry.comments
-                }
-                return !!this.entryComment
-            },
-            set(value) {
-                return value
+        entryCommentChanged() {
+            if (this.entry.comments) {
+                return this.entryComment !== this.entry.comments
             }
+            return !!this.entryComment
         },
     },
     methods: {
