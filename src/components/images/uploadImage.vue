@@ -1,6 +1,6 @@
 <template>
     <div>
-        <v-row justify="center" class="mb-2">
+        <v-row justify="center" class="mb-2 mt-4">
             <v-btn @click="selectImage"
                    color="secondary"
                    style="min-width: 13em;"

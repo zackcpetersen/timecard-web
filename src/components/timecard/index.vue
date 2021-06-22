@@ -12,34 +12,62 @@
                 :entry="entry"
                 :loading="loading"
             ></clock-in-out>
-            <v-expand-transition group>
+            <v-expand-transition>
                 <pause v-if="clockedIn"
                        :clockedIn="clockedIn"
                        :entry="entry"
                        :paused="paused"
                 ></pause>
             </v-expand-transition>
-            <v-expand-transition group>
+            <v-expand-transition>
                 <upload-image
                     v-if="clockedIn && entryProject"
                     :imgData="entryImgData"
                 ></upload-image>
             </v-expand-transition>
-            <v-expand-transition group>
+            <v-expand-transition>
                 <project-select
                     v-if="clockedIn"
                     :entry="entry"
                 ></project-select>
             </v-expand-transition>
+            <v-expand-transition>
+                <v-row justify="center">
+                    <v-col lg="5" md="6" sm="6">
+                        <v-textarea
+                            v-if="clockedIn"
+                            v-model="entryComment"
+                            label="Add comments here"
+                            outlined
+                            clearable
+                            rows="4"
+                            counter="255"
+                            :loading="updateCommentLoading"
+                            dense
+                        ></v-textarea>
+                    </v-col>
+                </v-row>
+            </v-expand-transition>
+            <v-slide-x-transition>
+                <div class="d-flex justify-center">
+                    <v-btn
+                        v-if="entryCommentChanged"
+                        color="primary"
+                        @click="updateComment"
+                        class="mb-8"
+                    >Update Comment</v-btn>
+                </div>
+            </v-slide-x-transition>
         </v-form>
-        <v-expand-transition group>
+        <v-expand-transition>
             <image-list :canEdit="true" :images="images" :allowFeatured="false"></image-list>
         </v-expand-transition>
     </v-col>
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
+import { successfulSnackbar } from '@/mixins/snackbar-messages'
 import clockInOut from '@/components/timecard/clockInOut'
 import imageList from '@/components/images/imageList'
 import pause from '@/components/timecard/pause'
@@ -50,6 +78,8 @@ export default {
     data () {
         return {
             valid: true,
+            entryComment: null,
+            updateCommentLoading: false,
         }
     },
     computed: {
@@ -82,6 +112,38 @@ export default {
                 'type': 'entry',
                 'entryId': this.entry.id
             }
+        },
+        entryCommentChanged: {
+            get() {
+                if (this.entry.comments) {
+                    return this.entryComment !== this.entry.comments
+                }
+                return !!this.entryComment
+            },
+            set(value) {
+                return value
+            }
+        },
+    },
+    methods: {
+        ...mapActions({
+            updateEntry: 'updateEntry'
+        }),
+        updateComment () {
+            this.updateCommentLoading = true
+            const updatedEntry = {...this.entry}
+            updatedEntry.comments = this.entryComment
+            this.updateEntry(updatedEntry)
+                .then(() => {
+                    this.$store.commit('SET_CURRENT_ENTRY', updatedEntry)
+                    this.updateCommentLoading = false
+                    successfulSnackbar({content: 'Comment Updated Successfully'})
+                }).catch(() => this.updateCommentLoading = false)
+        }
+    },
+    watch: {
+        entry () {
+            this.entryComment = this.entry.comments ? this.entry.comments : null
         }
     },
     components: {

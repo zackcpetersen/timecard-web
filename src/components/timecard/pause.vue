@@ -19,7 +19,7 @@
             <p v-if="paused && clockedIn" class="mb-0">Paused: {{ pauseTimeFormatted }}</p>
         </v-row>
         <v-row justify="center">
-            <p v-if="timePaused && clockedIn">Total Pause Time: {{ durationFormatted }}</p>
+            <p v-if="timePaused && clockedIn" class="mb-0">Total Pause Time: {{ durationFormatted }}</p>
         </v-row>
     </div>
 </template>
